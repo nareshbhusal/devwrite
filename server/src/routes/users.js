@@ -137,16 +137,39 @@ const upload = multer({
             return cb(new Error('Please upload valid image files'));
         }
     }
-})
+});
 
-// Post user avatar 
+// Post user avatar
 router.post(':/id/avatar', upload.single('avatar'), async(req, res) => {
     res.send('uploaded');
 })
 
 // delete a user
-router.delete('/:id', async (req, res) => {
-    res.send('deleted');
+//delete
+router.get('/:id/delete', async (req, res) => {
+
+    if (req.session.user.id !=req.params.id) {
+        const errors = [{ err: 'Can\'t perform this action as you are not logged in as this user!' }];
+        return res.send(errors);
+    }
+    try {
+        const user = await User.destroy({
+            where: {
+                id: req.session.user.id
+            }
+        });
+        if (!user) {
+            return res.send({ msg: 'User never existed...that\'s awkward!' })
+        } else {
+            return res.send({ msg: 'Deleted successfully!' })
+        }
+        
+    } catch(err) {
+        console.log(err);
+        const errors = [];
+        errors.push({ err: 'Couldn\'t delete user' });
+        return res.send(errors);
+    }
 })
 
 module.exports = router;
