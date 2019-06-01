@@ -10,6 +10,8 @@ const uuid = require('uuid');
 
 //import routes
 const usersRoute = require('./routes/users');
+const postsRoute = require('./routes/posts');
+const authRoute = require('./routes/auth');
 
 // create redis client
 let client = redis.createClient();
@@ -48,8 +50,10 @@ const port = process.env.PORT || 5000;
 app.get('/', (req, res)=>{
     res.send('hi there!')
 })
+app.use('/', authRoute);
 
 app.use('/users', usersRoute);
+app.use('/posts', postsRoute);
 
 app.listen(port, () => {
     console.log(`listening at port ${port}`);
