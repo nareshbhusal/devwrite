@@ -16,7 +16,8 @@ router.get('/', async (req, res) => {
 })
 
 // Create a post
-router.post('/', async (req, res) => {
+//post
+router.get('/', async (req, res) => {
     //const post = req.body || {};
     let post = { ...req.query };
     post.user = req.session.user.id;
@@ -28,6 +29,8 @@ router.post('/', async (req, res) => {
     try {
         post = { ...req.query };
         post.user = req.session.user.id;
+        // add timestamp
+        post.time = new Date().getTime();
         post = await Post.create(post);
         console.log('CREATED THE POST');
         // get the user
@@ -78,7 +81,7 @@ router.get('/:id', async (req, res) => {
 })
 
 // Edit the creds of a post by id 
-//post
+//put
 router.get('/:id/edit', async (req, res) => {
     try {
         // const upDatedPost = req.body || {};
