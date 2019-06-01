@@ -12,6 +12,9 @@ const user = db.define('user', {
     email: {
         type: Sequelize.STRING
     },
+    password: {
+        type: Sequelize.STRING
+    },
     website: {
         type: Sequelize.STRING
     },
