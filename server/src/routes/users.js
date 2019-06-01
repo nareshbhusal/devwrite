@@ -14,11 +14,28 @@ router.get('/', async (req, res) => {
     }
 })
 
+router.get('/me', async (req, res) => {
+    try {
+        const user = await User.findOne({
+            where: {
+                id: req.session.user.id
+            }
+        });
+        return res.send(user);
+    } catch(err) {
+        console.log(err);
+        const errors = [];
+        errors.push({ err: 'Something went wrong fetching your profile :(' });
+        return res.send(errors);
+    }
+})
+
 // Register a user
 //post
 router.get('/register', async (req, res) => {
     // const user = { ...req.body } || {};
     const user = { ...req.query };
+    console.log(user);
 
     // server side validation
     const errors = [];
@@ -29,7 +46,9 @@ router.get('/register', async (req, res) => {
 
     // see if email already exists
     const userInRecords = await User.findOne({
-        email: user.email
+        where: {
+            email: user.email
+        }
     });
     console.log(userInRecords); //
     if (userInRecords) {
@@ -59,12 +78,51 @@ router.get('/register', async (req, res) => {
 
 // Get a particular user by its id
 router.get('/:id', async (req, res) => {
-    res.send('user with id '+req.params.id)
+    try {
+        const id = req.params.id;
+        const user = await User.findOne({
+            where: {
+                id: id
+            }
+        });
+        if (user) {
+            return res.send(user);
+        } else {
+            const errors = [{ err: '404. User not found' }]
+            return res.send(errors);
+        }
+    } catch(err) {
+        console.log(err);
+        return res.send(404);
+    }
 })
 
 // Edit the creds of a user by id 
-router.post('/:id/edit', async (req, res) => {
-    res.send('user with id '+req.params.id+' edited!')
+//put
+router.get('/:id/edit', async (req, res) => {
+    //const updatedUserValues = req.body;
+    if (req.session.user.id !=req.params.id) {
+        const errors = [{ err: 'Can\'t perform this action as you are not logged in as this user!' }];
+        return res.send(errors);
+    }
+    const updatedUserValues = { ...req.query };
+    console.log(updatedUserValues);
+    try {
+        await User.update(
+            { ...updatedUserValues },
+            {
+                where: {
+                id: req.params.id
+            }
+        }
+        );
+    } catch(err) {
+        console.log(err);
+        const errors = [];
+        errors.push({ err: 'Something went wrong updating the user' });
+        return res.send(errors);
+    }
+    return res.send('user with id '+req.params.id+' edited!')
 })
 
 const upload = multer({

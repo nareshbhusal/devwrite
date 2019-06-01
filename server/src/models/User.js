@@ -37,6 +37,9 @@ const user = db.define('user', {
     commentedPosts: {
         // object with comment body, created time & edited time of the comment and id of the post
         type: Sequelize.JSON
+    },
+    session_ids: {
+        type: Sequelize.STRING
     }
 })
 
