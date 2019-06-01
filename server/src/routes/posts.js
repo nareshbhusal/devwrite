@@ -3,21 +3,20 @@ const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
 
-// router.get('/', async (req, res) => {
-//     try {
-//         const posts = await Post.findAll();
-//         if (!posts.length) {
-//             return res.send('404. No posts found!');
-//         }
-//         return posts;
-//     } catch(err) {
-//         console.log(err);
-//     }
-// })
+router.get('/', async (req, res) => {
+    try {
+        const posts = await Post.findAll();
+        if (!posts.length) {
+            return res.send('404. No posts found!');
+        }
+        return posts;
+    } catch(err) {
+        console.log(err);
+    }
+})
 
 // Create a post
-//post
-router.get('/', async (req, res) => {
+router.post('/', async (req, res) => {
     //const post = req.body || {};
     let post = { ...req.query };
     post.user = req.session.user.id;
@@ -62,12 +61,45 @@ router.get('/', async (req, res) => {
 
 // Get a particular post by its id
 router.get('/:id', async (req, res) => {
-    res.send('post with id '+req.params.id)
+    try {
+        const post = await Post.findOne({
+            where: {
+                id: req.params.id
+            }
+        });
+        if (!post) {
+            return res.send('404! no such post found');
+        }
+        return res.status(300).send(post);
+    } catch(err) {
+        console.log(err);
+        res.send('Something went wrong!');
+    }
 })
 
 // Edit the creds of a post by id 
-router.post('/:id/edit', async (req, res) => {
-    res.send('post with id '+req.params.id+' edited!')
+//post
+router.get('/:id/edit', async (req, res) => {
+    try {
+        // const upDatedPost = req.body || {};
+        const upDatedPost = { ...req.query };
+        const post = await Post.update(
+            { ...upDatedPost },
+            {
+                where: {
+                user: req.session.user.id,
+                id: req.params.id
+            }
+        }
+        );
+        if (!post) {
+            return res.send('This is awkward..hmmm...')
+        }
+        return res.send({ msg: 'Updated the post' });
+    } catch(err) {
+        console.log(err);
+        return res.send('Something went wrong')
+    }
 })
 
 // delete a post
