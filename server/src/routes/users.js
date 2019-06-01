@@ -5,7 +5,13 @@ const User  = require('../models/User');
 
 // Get all users
 router.get('/', async (req, res) => {
-    res.send('users');
+    try {
+        const users = await User.findAll();
+        return res.send(users);
+    } catch(err) {
+        console.log(err);
+        return res.send(404);
+    }
 })
 
 // Register a user
