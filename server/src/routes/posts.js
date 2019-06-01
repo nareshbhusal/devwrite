@@ -81,9 +81,12 @@ router.get('/:id', async (req, res) => {
 // Edit the creds of a post by id 
 //put
 router.get('/:id/edit', async (req, res) => {
+    
     try {
         // const upDatedPost = req.body || {};
         const upDatedPost = { ...req.query };
+        // add edit timestamp
+        upDatedPost.editedAt = new Date().getTime();
         const post = await Post.update(
             { ...upDatedPost },
             {
@@ -96,6 +99,7 @@ router.get('/:id/edit', async (req, res) => {
         if (!post) {
             return res.send('This is awkward..hmmm...')
         }
+        console.log(post);
         return res.send({ msg: 'Updated the post' });
     } catch(err) {
         console.log(err);

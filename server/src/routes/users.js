@@ -50,7 +50,6 @@ router.get('/register', async (req, res) => {
             email: user.email
         }
     });
-    console.log(userInRecords); //
     if (userInRecords) {
         errors.push({ err: 'Email is already in use!' })
         return res.send(errors);
@@ -58,7 +57,7 @@ router.get('/register', async (req, res) => {
 
     // attach timestamp and session_id
     user.session_ids = req.sessionID.toString();
-    user.createAt = new Date().getTime();
+    user.createdAt = new Date().getTime();
     
     let newUser;
     try {
