@@ -107,6 +107,75 @@ router.get('/:id/edit', async (req, res) => {
     }
 })
 
+//Post a comment on a post
+//post
+router.get('/:id/comment', async (req, res) => {
+
+    // Add the comment to both user model and the post model
+
+    // const comment = req.body || {};
+    let comment = { ...req.query } || {};
+    const errors= [];
+    if (!comment.comment) {
+        errors.push({ err: 'Provide a comment body' });
+    }
+    try {
+        //comment = req.body || {};
+        let comment = { ...req.query } || {};
+        const user = await User.findOne({
+            where: {
+                id: req.session.user.id
+            }
+        });
+        let comments = JSON.parse(user.commentedPosts) || [];
+        comment = {
+            comment: comment.comment,
+            createdAt: new Date().getTime(),
+            post: req.params.id
+        }
+        comments.push(comment);
+        comments = await JSON.stringify(comments);
+
+        // Push this to user table's commentedPosts column
+        await User.update(
+            { 
+                commentedPosts: comments
+            },
+            {
+                where: {
+                    id: req.session.user.id
+                }
+            }
+        )
+
+        // Push also to the post table
+        const post = await Post.findOne({
+            where: {
+                id: req.params.id
+            }
+        });
+        delete comment.post;
+        comment.user = req.session.user.id;
+        comments = await JSON.parse(post.comments) || [];
+        comments.push(comment);
+        comments = await JSON.stringify(comments);
+        await Post.update(
+            { 
+                comments: comments 
+            },
+            {
+                where: {
+                    id: req.params.id
+            }
+        }
+        );
+        return res.send({ msg: 'Commented posted' });
+    } catch(err) {
+        console.log(err);
+        return res.send('Something went wrong while commenting');
+    }
+})
+
 // delete a post
 router.delete('/:id', async (req, res) => {
     res.send('deleted');
