@@ -5,9 +5,11 @@ const RedisStore = require('connect-redis')(session);
 
 const cors = require('cors');
 const db = require('./config/database');
-
 const app = express();
 const uuid = require('uuid');
+
+//import routes
+const usersRoute = require('./routes/users');
 
 // create redis client
 let client = redis.createClient();
@@ -42,9 +44,12 @@ db.authenticate()
 
 const port = process.env.PORT || 5000;
 
+// Set routes
 app.get('/', (req, res)=>{
-    res.send('hii!')
+    res.send('hi there!')
 })
+
+app.use('/users', usersRoute);
 
 app.listen(port, () => {
     console.log(`listening at port ${port}`);
