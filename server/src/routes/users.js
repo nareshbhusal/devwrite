@@ -1,6 +1,7 @@
 const express = require('express');
 const multer = require('multer');
 const router = express.Router();
+const User  = require('../models/User');
 
 // Get all users
 router.get('/', async (req, res) => {
@@ -8,8 +9,46 @@ router.get('/', async (req, res) => {
 })
 
 // Register a user
-router.post('/register', async (req, res) => {
-    res.send('create a post');
+//post
+router.get('/register', async (req, res) => {
+    // const user = { ...req.body } || {};
+    const user = { ...req.query };
+
+    // server side validation
+    const errors = [];
+    if (!user.name || !user.password || !user.email) {
+        errors.push({ err: 'Please fill all fields' });
+        return res.send(errors);
+    }
+
+    // see if email already exists
+    const userInRecords = await User.findOne({
+        email: user.email
+    });
+    console.log(userInRecords); //
+    if (userInRecords) {
+        errors.push({ err: 'Email is already in use!' })
+        return res.send(errors);
+    }
+
+    // attach timestamp and session_id
+    user.session_ids = req.sessionID.toString();
+    user.createAt = new Date().getTime();
+    
+    let newUser;
+    try {
+        newUser = await User.create(user);
+    } catch(err) {
+        console.log(err);
+        return res.status(500).send('Something went wrong creating user :(')
+    }
+
+    // Successful registeration
+    // set a cookie
+    req.session.user = {};
+    req.session.user.id = newUser.id;
+    req.session.sessionID = req.sessionID;
+    return res.send(req.session);
 })
 
 // Get a particular user by its id

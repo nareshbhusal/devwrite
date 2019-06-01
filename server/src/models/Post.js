@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 const db = require('../config/database');
 
 const user = db.define('post', {
+
     title: {
         type: Sequelize.STRING
     },
@@ -30,7 +31,6 @@ const user = db.define('post', {
     likedBy: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)
     }
-
 })
 
 module.exports = user;

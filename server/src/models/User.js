@@ -2,13 +2,14 @@ const Sequelize = require('sequelize');
 const db = require('../config/database');
 
 const user = db.define('user', {
-    id: {
-        type: Sequelize.INTEGER
-    },
+
     name: {
         type: Sequelize.STRING
     },
     about: {
+        type: Sequelize.STRING
+    },
+    email: {
         type: Sequelize.STRING
     },
     website: {
@@ -24,7 +25,7 @@ const user = db.define('user', {
     createdAt: {
         type: Sequelize.INTEGER
     },
-    folowers: {
+    followers: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)
     },
     following: {
@@ -32,6 +33,10 @@ const user = db.define('user', {
     },
     likedPosts: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)
+    },
+    commentedPosts: {
+        // object with comment body, created time & edited time of the comment and id of the post
+        type: Sequelize.JSON
     }
 })
 
