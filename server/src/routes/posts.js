@@ -3,17 +3,18 @@ const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
 
-router.get('/', async (req, res) => {
-    try {
-        const posts = await Post.findAll();
-        if (!posts.length) {
-            return res.send('404. No posts found!');
-        }
-        return posts;
-    } catch(err) {
-        console.log(err);
-    }
-})
+// router.get('/', async (req, res) => {
+//     try {
+//         const posts = await Post.findAll();
+//         if (!posts.length) {
+//             return res.send('404. No posts found!');
+//         }
+//         return res.send(posts);
+//     } catch(err) {
+//         console.log(err);
+//         return res.send('Something went wrong fetching posts');
+//     }
+// })
 
 // Create a post
 //post
@@ -30,20 +31,17 @@ router.get('/', async (req, res) => {
         post = { ...req.query };
         post.user = req.session.user.id;
         // add timestamp
-        post.time = new Date().getTime();
+        post.createdAt = new Date().getTime();
         post = await Post.create(post);
-        console.log('CREATED THE POST');
         // get the user
         const user = await User.findOne({
             where: {
                 id: req.session.user.id
             }
         })
-        console.log('FOUND THE USER');
         // update the posts id column in the database on user table
         let posts = user.posts || [];
         posts.push(parseInt(post.id));
-        console.log(posts);
 
         await User.update(
             { 

@@ -23,10 +23,10 @@ const user = db.define('post', {
         type: Sequelize.JSON
     },
     createdAt: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
     editedAt: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
     likedBy: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)

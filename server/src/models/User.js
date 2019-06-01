@@ -26,7 +26,7 @@ const user = db.define('user', {
         type: Sequelize.ARRAY(Sequelize.INTEGER)
     },
     createdAt: {
-        type: Sequelize.INTEGER
+        type: Sequelize.STRING
     },
     followers: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)
