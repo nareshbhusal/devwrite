@@ -3,18 +3,18 @@ const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
 
-// router.get('/', async (req, res) => {
-//     try {
-//         const posts = await Post.findAll();
-//         if (!posts.length) {
-//             return res.send('404. No posts found!');
-//         }
-//         return res.send(posts);
-//     } catch(err) {
-//         console.log(err);
-//         return res.send('Something went wrong fetching posts');
-//     }
-// })
+router.get('/', async (req, res) => {
+    try {
+        const posts = await Post.findAll();
+        if (!posts.length) {
+            return res.send('404. No posts found!');
+        }
+        return res.send(posts);
+    } catch(err) {
+        console.log(err);
+        return res.send('Something went wrong fetching posts');
+    }
+})
 
 // Create a post
 //post
@@ -61,26 +61,26 @@ router.get('/', async (req, res) => {
 })
 
 // Get a particular post by its id
-router.get('/:id', async (req, res) => {
-    try {
-        const post = await Post.findOne({
-            where: {
-                id: req.params.id
-            }
-        });
-        if (!post) {
-            return res.send('404! no such post found');
-        }
-        return res.status(300).send(post);
-    } catch(err) {
-        console.log(err);
-        res.send('Something went wrong!');
-    }
-})
+// router.get('/:id', async (req, res) => {
+//     try {
+//         const post = await Post.findOne({
+//             where: {
+//                 id: req.params.id
+//             }
+//         });
+//         if (!post) {
+//             return res.send('404! no such post found');
+//         }
+//         return res.status(300).send(post);
+//     } catch(err) {
+//         console.log(err);
+//         res.send('Something went wrong!');
+//     }
+// })
 
 // Edit the creds of a post by id 
 //put
-router.get('/:id/edit', async (req, res) => {
+router.post('/:id/edit', async (req, res) => {
     
     try {
         // const upDatedPost = req.body || {};
@@ -298,13 +298,8 @@ router.get('/:id/comment/:timestamp/delete', async(req, res) => {
         }
         comments = comments || [];
         const commentIndex = comments.findIndex(comment => {
-            console.log('timestamp', timestamp);
-            console.log('userId', userId)
-            console.log('comment.user', comment.user);
             return comment.createdAt == timestamp && userId == comment.user 
         });
-        console.log(commentIndex);
-        console.log(comments[commentIndex])
         if (!commentIndex<0) {
             return res.send('Something doesn\'t feel right');
         }
@@ -312,14 +307,14 @@ router.get('/:id/comment/:timestamp/delete', async(req, res) => {
         comments = JSON.stringify(comments);
 
         // update post
-        // await Post.update(
-        //     { comments },
-        //     {
-        //         where: {
-        //             id: postId
-        //         }
-        //     }
-        // )
+        await Post.update(
+            { comments },
+            {
+                where: {
+                    id: postId
+                }
+            }
+        )
         // update user
         const user = await User.findOne({
             where: {
@@ -334,33 +329,46 @@ router.get('/:id/comment/:timestamp/delete', async(req, res) => {
         const commentedPostindex = commentedPosts.findIndex(comment => {
             return comment.createdAt == timestamp && comment.post == postId
         });
-        console.log(commentedPostindex);
-        console.log(commentedPosts[commentedPostindex]);
+
         if (commentedPostindex) {
             commentedPosts.splice(commentedPostindex, 1);
         }
         commentedPosts = JSON.stringify(commentedPosts);
 
-        // await User.update(
-        //     { commentedPosts: commentedPosts },
-        //     {
-        //         where: {
-        //             id: userId
-        //         }
-        //     }
-        // );
+        await User.update(
+            { commentedPosts: commentedPosts },
+            {
+                where: {
+                    id: userId
+                }
+            }
+        );
 
         return res.send({ msg: 'Deleted comment successfully!' });
     } catch(err) {
         console.log(err);
         return res.send('Something went wrong');
-        
     }
 })
 
 // delete a post
-router.delete('/:id', async (req, res) => {
-    res.send('deleted');
+router.get('/:id/delete', async (req, res) => {
+    try {
+        const postId = parseInt(req.params.id);
+        const userId = parseInt(req.session.user.id);
+
+        await Post.destroy({
+            where: {
+                user: userId,
+                id: postId
+            }
+        });
+
+        return res.send({ msg: 'Deleted post!' });
+    } catch(err) {
+        console.log(err);
+        return res.send('Something went wrong deleting post')
+    }
 })
 
 

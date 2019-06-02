@@ -124,6 +124,72 @@ router.get('/:id/edit', async (req, res) => {
     return res.send('user with id '+req.params.id+' edited!')
 })
 
+router.get('/:id/follow', async (req, res) => {
+    try {
+        const followerId = parseInt(req.session.user.id);
+        const followeeId = parseInt(req.params.id);
+
+        // Add followerId to the followee user's followers column
+        const followee = await User.findOne({
+            where: {
+                id: followeeId
+            }
+        })
+        const followers = followee.followers || [];
+        const followerIndex = followers.indexOf(followerId);
+
+        let toFollow;
+        if (followerIndex === -1) {
+            toFollow = true;
+            // follow if not already followed
+            followers.push(followerId);
+        } else {
+            toFollow = false;
+            followers.splice(followerIndex, 1);
+        }
+
+        await User.update(
+            { followers: followers },
+            {
+                where: {
+                    id: followeeId
+                }
+            }
+        );
+        // Add followeeid to the followers following column
+        const follower = await User.findOne({
+            where: {
+            id: followeeId
+            }
+        });
+        
+        const following = follower.following || [];
+        if (toFollow) {
+            following.push(followeeId);
+        } else {
+            following.splice(followeeId, 1);
+        }
+
+        await User.update(
+            { following: following },
+            {
+                where: {
+                    id: followerId
+                }
+            }
+        );
+        if (toFollow) {
+            return res.send({ msg: 'Following' });
+        } else {
+            return res.send({ msg: 'Unfollowed' });
+        }
+        
+    } catch(err) {
+        console.log(err);
+        return res.send('Something went wrong following this user');
+    }
+})
+
 const upload = multer({
     dest: 'avatars',
     limits: {
