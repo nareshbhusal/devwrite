@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
+const requireLogin = require('../middlewares/requireLogin');
 
 router.get('/', async (req, res) => {
     try {
@@ -18,7 +19,7 @@ router.get('/', async (req, res) => {
 
 // Create a post
 //post
-router.get('/', async (req, res) => {
+router.get('/', requireLogin, async (req, res) => {
     //const post = req.body || {};
     let post = { ...req.query };
     post.user = req.session.user.id;
@@ -61,26 +62,26 @@ router.get('/', async (req, res) => {
 })
 
 // Get a particular post by its id
-// router.get('/:id', async (req, res) => {
-//     try {
-//         const post = await Post.findOne({
-//             where: {
-//                 id: req.params.id
-//             }
-//         });
-//         if (!post) {
-//             return res.send('404! no such post found');
-//         }
-//         return res.status(300).send(post);
-//     } catch(err) {
-//         console.log(err);
-//         res.send('Something went wrong!');
-//     }
-// })
+router.get('/:id', async (req, res) => {
+    try {
+        const post = await Post.findOne({
+            where: {
+                id: req.params.id
+            }
+        });
+        if (!post) {
+            return res.send('404! no such post found');
+        }
+        return res.status(300).send(post);
+    } catch(err) {
+        console.log(err);
+        res.send('Something went wrong!');
+    }
+})
 
 // Edit the creds of a post by id 
 //put
-router.post('/:id/edit', async (req, res) => {
+router.post('/:id/edit', requireLogin, async (req, res) => {
     
     try {
         // const upDatedPost = req.body || {};
@@ -109,7 +110,7 @@ router.post('/:id/edit', async (req, res) => {
 
 //Post a comment on a post
 //post
-router.get('/:id/comment', async (req, res) => {
+router.get('/:id/comment', requireLogin, async (req, res) => {
 
     // Add the comment to both user model and the post model
 
@@ -192,7 +193,7 @@ router.get('/:id/comment', async (req, res) => {
 
 // route to like posts
 //post
-router.get('/:id/like', async(req, res) => {
+router.get('/:id/like', requireLogin, async(req, res) => {
     // check to see if the user has already liked the post
     
     try {
@@ -281,7 +282,7 @@ router.get('/:id/like', async(req, res) => {
 
 // Delete comment
 //post
-router.get('/:id/comment/:timestamp/delete', async(req, res) => {
+router.get('/:id/comment/:timestamp/delete', requireLogin, async(req, res) => {
     try {
         const timestamp = req.params.timestamp;
         const postId = req.params.id;
@@ -352,7 +353,7 @@ router.get('/:id/comment/:timestamp/delete', async(req, res) => {
 })
 
 // delete a post
-router.get('/:id/delete', async (req, res) => {
+router.get('/:id/delete', requireLogin, async (req, res) => {
     try {
         const postId = parseInt(req.params.id);
         const userId = parseInt(req.session.user.id);

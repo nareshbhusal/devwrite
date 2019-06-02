@@ -2,6 +2,7 @@ const express = require('express');
 const multer = require('multer');
 const router = express.Router();
 const User  = require('../models/User');
+const requireLogin = require('../middlewares/requireLogin');
 
 // Get all users
 router.get('/', async (req, res) => {
@@ -12,9 +13,9 @@ router.get('/', async (req, res) => {
         console.log(err);
         return res.send(404);
     }
-})
+});
 
-router.get('/me', async (req, res) => {
+router.get('/me', requireLogin, async (req, res) => {
     try {
         const user = await User.findOne({
             where: {
@@ -98,7 +99,7 @@ router.get('/:id', async (req, res) => {
 
 // Edit the creds of a user by id 
 //put
-router.get('/:id/edit', async (req, res) => {
+router.get('/:id/edit', requireLogin, async (req, res) => {
     //const updatedUserValues = req.body;
     if (req.session.user.id !=req.params.id) {
         const errors = [{ err: 'Can\'t perform this action as you are not logged in as this user!' }];
@@ -124,7 +125,7 @@ router.get('/:id/edit', async (req, res) => {
     return res.send('user with id '+req.params.id+' edited!')
 })
 
-router.get('/:id/follow', async (req, res) => {
+router.get('/:id/follow', requireLogin, async (req, res) => {
     try {
         const followerId = parseInt(req.session.user.id);
         const followeeId = parseInt(req.params.id);
@@ -211,7 +212,7 @@ router.post(':/id/avatar', upload.single('avatar'), async(req, res) => {
 
 // delete a user
 //delete
-router.get('/:id/delete', async (req, res) => {
+router.get('/:id/delete', requireLogin, async (req, res) => {
 
     if (req.session.user.id !=req.params.id) {
         const errors = [{ err: 'Can\'t perform this action as you are not logged in as this user!' }];
