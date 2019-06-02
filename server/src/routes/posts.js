@@ -118,13 +118,16 @@ router.get('/:id/comment', async (req, res) => {
     const errors= [];
     if (!comment.comment) {
         errors.push({ err: 'Provide a comment body' });
+        return res.send(errors);
     }
     try {
         //comment = req.body || {};
         let comment = { ...req.query } || {};
+        const userId = req.session.user.id;
+
         const user = await User.findOne({
             where: {
-                id: req.session.user.id
+                id: userId
             }
         });
         let comments = JSON.parse(user.commentedPosts) || [];
@@ -143,7 +146,7 @@ router.get('/:id/comment', async (req, res) => {
             },
             {
                 where: {
-                    id: req.session.user.id
+                    id: userId
                 }
             }
         )
@@ -155,7 +158,8 @@ router.get('/:id/comment', async (req, res) => {
             }
         });
         delete comment.post;
-        comment.user = req.session.user.id;
+        comment.user = userId;
+        comment.username = user.name;
         comments = await JSON.parse(post.comments) || [];
         comments.push(comment);
         comments = await JSON.stringify(comments);
@@ -218,7 +222,7 @@ router.get('/:id/like', async(req, res) => {
             );
             //update likedPosts on user
             likedPosts.splice(likedPosts.indexOf(postId));
-            
+
             await User.update(
                 { likedPosts: likedPosts },
                 {
@@ -255,6 +259,70 @@ router.get('/:id/like', async(req, res) => {
     } catch(err) {
         consoele.log(err);
         return res.send('Something went wrong!');
+    }
+})
+
+// Delete comment
+//post
+router.get('/:id/comment/:timestamp/delete', async(req, res) => {
+    try {
+        const timestamp = req.params.timestamp;
+        console.log(timestamp);
+        const postId = req.params.id;
+        const userId = req.session.user.id;
+
+        const post = await Post.findOne({
+            where: {
+                id: postId
+            }
+        });
+        const comments = post.comments;
+        const commentIndex = comments.findIndex(comment => {
+            return comment.createdAt === timestamp && userId === comment.user 
+        });
+        if (!commentIndex) {
+            return res.send('Something doesn\'t feel right')
+        }
+        comments.splice(commentIndex, 1);
+
+        // update post
+        await Post.update(
+            { comments },
+            {
+                where: {
+                    id: postId
+                }
+            }
+        )
+        // update user
+        const user = await User.findOne({
+            where: {
+                id: userId
+            }
+        });
+        let commentedPosts = user.commentedPosts;
+        const commentedPostindex = commentedPosts.findIndex(comment => {
+            return comment.createdAt === timestamp && comment.post == postId
+        });
+        if (commentedPostindex) {
+            commentedPosts.splice(commentedPostindex);
+        }
+        commentedPosts = commentedPosts;
+
+        await User.update(
+            { commentedPosts: commentedPosts },
+            {
+                where: {
+                    id: userId
+                }
+            }
+        )
+
+        return res.send({ msg: 'Deleted comment successfully!' });
+    } catch(err) {
+        console.log(err);
+        return res.send('Something went wrong');
+        
     }
 })
 

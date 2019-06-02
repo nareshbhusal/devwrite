@@ -19,8 +19,6 @@ const updateSessions = async (user, sessionID) => {
         session_ids = session_ids.toString();
     }
 
-    // const updatedUserValues = { ... user };
-    // updatedUserValues.session_ids = session_ids;
     try {
         await User.update(
             { session_ids },
