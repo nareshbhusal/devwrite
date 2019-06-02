@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
 
-const updateSessions = async (user) => {
+const updateSessions = async (user, sessionID) => {
 
     // takes the user fetched from the database freshly,
     // and update it's session_ids 
@@ -13,19 +13,20 @@ const updateSessions = async (user) => {
     if (session_ids) {
         session_ids = session_ids.split(',');
         if (session_ids.length > 4) {
-            session_ids.splice(4, 1, req.session.sessionID);
-            session_ids = session_ids.toString();
+            session_ids.pop();
         }
+        session_ids.unshift(sessionID);
+        session_ids = session_ids.toString();
     }
 
-    const updatedUserValues = user;
-    updatedUserValues.session_ids = session_ids;
+    // const updatedUserValues = { ... user };
+    // updatedUserValues.session_ids = session_ids;
     try {
         await User.update(
-            { ...updatedUserValues },
+            { session_ids },
             {
                 where: {
-                id: updatedUserValues.id
+                id: user.id
             }
         }
         );
@@ -53,10 +54,13 @@ router.get('/login', async (req, res) => {
             }
         });
         if (userInRecords) {           
-            await updateSessions(userInRecords);
+            await updateSessions(userInRecords, req.sessionID);
             // login successful
             console.log('loggedin', userInRecords.name);
-            return res.send(req.session);
+            // set user on cookie
+            req.session.user = {};
+            req.session.user.id = userInRecords.id;
+            return res.send(req.sessionID);
         } else {
             // creds don't match
             errors.push({ err: 'Wrong password or username!' })
