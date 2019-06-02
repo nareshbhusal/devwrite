@@ -53,10 +53,10 @@ router.get('/login', async (req, res) => {
             }
         });
         if (userInRecords) {           
-            await updateSessions();
+            await updateSessions(userInRecords);
             // login successful
             console.log('loggedin', userInRecords.name);
-            return res.send('logged in successfully!')
+            return res.send(req.session);
         } else {
             // creds don't match
             errors.push({ err: 'Wrong password or username!' })
@@ -65,8 +65,8 @@ router.get('/login', async (req, res) => {
         
     } catch(err) {
         console.log(err);
+        return res.send('Something went wrong logging in!')
     }
-    res.send('login');
 })
 
 router.get('/logout', async (req, res) => {

@@ -176,6 +176,88 @@ router.get('/:id/comment', async (req, res) => {
     }
 })
 
+// route to like posts
+//post
+router.get('/:id/like', async(req, res) => {
+    // check to see if the user has already liked the post
+    
+    try {
+        const postId = parseInt(req.params.id);
+        const userId = parseInt(req.session.user.id);
+
+        const post = await Post.findOne({
+            where: {
+                id: postId
+            }
+        });
+
+        const user = await User.findOne({
+            where: {
+                id: userId
+            }
+        });
+        let likedPosts = user.likedPosts; // user's liked posts
+        let likedBy = post.likedBy; // posts likers
+
+        const alreadyLiked = likedBy.some(liker => {
+            return liker === userId;
+        });
+        if (alreadyLiked) {
+            // if the post was already liked by the user
+
+            // update likedBy on post
+            likedBy.splice(likedBy.indexOf(userId), 1);
+
+            await Post.update(
+                { likedBy: likedBy },
+                {
+                    where: {
+                        id: postId
+                    }
+                }
+            );
+            //update likedPosts on user
+            likedPosts.splice(likedPosts.indexOf(postId));
+            
+            await User.update(
+                { likedPosts: likedPosts },
+                {
+                    where: {
+                        id: userId
+                    }
+                }
+            );
+
+        } else {
+            // if not liked already
+            // update likedBy on post
+            likedBy = likedBy.push(userid);
+            await Post.update(
+                { likedBy: likedBy },
+                {
+                    where: {
+                        id: postId
+                    }
+                }
+            );
+            //update likedPosts on user
+            likedPosts.push(postid);
+
+            await User.update(
+                { likedPosts: likedPosts },
+                {
+                    where: {
+                        id: userId
+                    }
+                }
+            )
+        }
+    } catch(err) {
+        consoele.log(err);
+        return res.send('Something went wrong!');
+    }
+})
+
 // delete a post
 router.delete('/:id', async (req, res) => {
     res.send('deleted');
