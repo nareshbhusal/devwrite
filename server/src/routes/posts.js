@@ -130,14 +130,13 @@ router.get('/:id/comment', async (req, res) => {
                 id: userId
             }
         });
-        let comments = JSON.parse(user.commentedPosts) || [];
+        let comments = user.commentedPosts || [];
         comment = {
             comment: comment.comment,
             createdAt: new Date().getTime(),
             post: req.params.id
         }
         comments.push(comment);
-        comments = await JSON.stringify(comments);
 
         // Push this to user table's commentedPosts column
         await User.update(
