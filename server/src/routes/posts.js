@@ -3,18 +3,18 @@ const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
 
-// router.get('/', async (req, res) => {
-//     try {
-//         const posts = await Post.findAll();
-//         if (!posts.length) {
-//             return res.send('404. No posts found!');
-//         }
-//         return res.send(posts);
-//     } catch(err) {
-//         console.log(err);
-//         return res.send('Something went wrong fetching posts');
-//     }
-// })
+router.get('/', async (req, res) => {
+    try {
+        const posts = await Post.findAll();
+        if (!posts.length) {
+            return res.send('404. No posts found!');
+        }
+        return res.send(posts);
+    } catch(err) {
+        console.log(err);
+        return res.send('Something went wrong fetching posts');
+    }
+})
 
 // Create a post
 //post
@@ -199,8 +199,8 @@ router.get('/:id/like', async(req, res) => {
                 id: userId
             }
         });
-        let likedPosts = user.likedPosts; // user's liked posts
-        let likedBy = post.likedBy; // posts likers
+        let likedPosts = user.likedPosts || []; // user's all liked posts
+        let likedBy = post.likedBy || []; // posts likers
 
         const alreadyLiked = likedBy.some(liker => {
             return liker === userId;
@@ -220,7 +220,7 @@ router.get('/:id/like', async(req, res) => {
                 }
             );
             //update likedPosts on user
-            likedPosts.splice(likedPosts.indexOf(postId));
+            likedPosts.splice(likedPosts.indexOf(postId), 1);
 
             await User.update(
                 { likedPosts: likedPosts },
@@ -231,10 +231,14 @@ router.get('/:id/like', async(req, res) => {
                 }
             );
 
+            return res.send({ msg: 'Unliked the post' });
+
         } else {
             // if not liked already
             // update likedBy on post
-            likedBy = likedBy.push(userid);
+            console.log('likedBy', likedBy);
+            likedBy.push(parseInt(userId));
+            console.log('likedBy', likedBy);
             await Post.update(
                 { likedBy: likedBy },
                 {
@@ -243,8 +247,9 @@ router.get('/:id/like', async(req, res) => {
                     }
                 }
             );
+            console.log('update likedPosts on user')
             //update likedPosts on user
-            likedPosts.push(postid);
+            likedPosts.push(parseInt(postId));
 
             await User.update(
                 { likedPosts: likedPosts },
@@ -254,9 +259,11 @@ router.get('/:id/like', async(req, res) => {
                     }
                 }
             )
+
+            return res.send({ msg: 'Liked the post' })
         }
     } catch(err) {
-        consoele.log(err);
+        console.log(err);
         return res.send('Something went wrong!');
     }
 })
@@ -275,7 +282,8 @@ router.get('/:id/comment/:timestamp/delete', async(req, res) => {
                 id: postId
             }
         });
-        const comments = post.comments;
+        let comments = JSON.parse(post.comments) || [];
+        console.log(comments);
         const commentIndex = comments.findIndex(comment => {
             return comment.createdAt === timestamp && userId === comment.user 
         });
@@ -283,6 +291,7 @@ router.get('/:id/comment/:timestamp/delete', async(req, res) => {
             return res.send('Something doesn\'t feel right')
         }
         comments.splice(commentIndex, 1);
+        comments = JSON.stringify(comments);
 
         // update post
         await Post.update(
@@ -299,14 +308,14 @@ router.get('/:id/comment/:timestamp/delete', async(req, res) => {
                 id: userId
             }
         });
-        let commentedPosts = user.commentedPosts;
+        let commentedPosts = JSON.parse(user.commentedPosts) || [];
         const commentedPostindex = commentedPosts.findIndex(comment => {
             return comment.createdAt === timestamp && comment.post == postId
         });
         if (commentedPostindex) {
-            commentedPosts.splice(commentedPostindex);
+            commentedPosts.splice(commentedPostindex, 1);
         }
-        commentedPosts = commentedPosts;
+        commentedPosts = JSON.stringify(commentedPosts);
 
         await User.update(
             { commentedPosts: commentedPosts },
