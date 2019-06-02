@@ -3,18 +3,18 @@ const router = express.Router();
 const Post = require('../models/Post');
 const User = require('../models/User');
 
-router.get('/', async (req, res) => {
-    try {
-        const posts = await Post.findAll();
-        if (!posts.length) {
-            return res.send('404. No posts found!');
-        }
-        return res.send(posts);
-    } catch(err) {
-        console.log(err);
-        return res.send('Something went wrong fetching posts');
-    }
-})
+// router.get('/', async (req, res) => {
+//     try {
+//         const posts = await Post.findAll();
+//         if (!posts.length) {
+//             return res.send('404. No posts found!');
+//         }
+//         return res.send(posts);
+//     } catch(err) {
+//         console.log(err);
+//         return res.send('Something went wrong fetching posts');
+//     }
+// })
 
 // Create a post
 //post
@@ -130,7 +130,11 @@ router.get('/:id/comment', async (req, res) => {
                 id: userId
             }
         });
-        let comments = user.commentedPosts || [];
+        let comments = user.commentedPosts;
+        if (typeof(comments)==='string') {
+            comments = JSON.parse(comments);
+        }
+        comments = comments || [];
         comment = {
             comment: comment.comment,
             createdAt: new Date().getTime(),
@@ -159,9 +163,16 @@ router.get('/:id/comment', async (req, res) => {
         delete comment.post;
         comment.user = userId;
         comment.username = user.name;
-        comments = await JSON.parse(post.comments) || [];
+        console.log(typeof post.comments);
+        comments = post.comments;
+        if (typeof(comments) === "string") {
+            comments = JSON.parse(comments);
+        }
+        comments = comments || [];
+        // comments = JSON.parse(JSON.stringify(comments).trim()) || [];
+        console.log(typeof comments);
         comments.push(comment);
-        comments = await JSON.stringify(comments);
+        comments = JSON.stringify(comments);
         await Post.update(
             { 
                 comments: comments 
@@ -273,7 +284,6 @@ router.get('/:id/like', async(req, res) => {
 router.get('/:id/comment/:timestamp/delete', async(req, res) => {
     try {
         const timestamp = req.params.timestamp;
-        console.log(timestamp);
         const postId = req.params.id;
         const userId = req.session.user.id;
 
@@ -282,49 +292,63 @@ router.get('/:id/comment/:timestamp/delete', async(req, res) => {
                 id: postId
             }
         });
-        let comments = JSON.parse(post.comments) || [];
-        console.log(comments);
+        let comments = post.comments;
+        if (typeof(comments) === 'string') {
+            comments = JSON.parse(comments);
+        }
+        comments = comments || [];
         const commentIndex = comments.findIndex(comment => {
-            return comment.createdAt === timestamp && userId === comment.user 
+            console.log('timestamp', timestamp);
+            console.log('userId', userId)
+            console.log('comment.user', comment.user);
+            return comment.createdAt == timestamp && userId == comment.user 
         });
-        if (!commentIndex) {
-            return res.send('Something doesn\'t feel right')
+        console.log(commentIndex);
+        console.log(comments[commentIndex])
+        if (!commentIndex<0) {
+            return res.send('Something doesn\'t feel right');
         }
         comments.splice(commentIndex, 1);
         comments = JSON.stringify(comments);
 
         // update post
-        await Post.update(
-            { comments },
-            {
-                where: {
-                    id: postId
-                }
-            }
-        )
+        // await Post.update(
+        //     { comments },
+        //     {
+        //         where: {
+        //             id: postId
+        //         }
+        //     }
+        // )
         // update user
         const user = await User.findOne({
             where: {
                 id: userId
             }
         });
-        let commentedPosts = JSON.parse(user.commentedPosts) || [];
+        let commentedPosts = user.commentedPosts;
+        if (typeof(commentedPosts) === 'string') {
+            commentedPosts = JSON.parse(commentedPosts)
+        }
+        commentedPosts = commentedPosts || [];
         const commentedPostindex = commentedPosts.findIndex(comment => {
-            return comment.createdAt === timestamp && comment.post == postId
+            return comment.createdAt == timestamp && comment.post == postId
         });
+        console.log(commentedPostindex);
+        console.log(commentedPosts[commentedPostindex]);
         if (commentedPostindex) {
             commentedPosts.splice(commentedPostindex, 1);
         }
         commentedPosts = JSON.stringify(commentedPosts);
 
-        await User.update(
-            { commentedPosts: commentedPosts },
-            {
-                where: {
-                    id: userId
-                }
-            }
-        )
+        // await User.update(
+        //     { commentedPosts: commentedPosts },
+        //     {
+        //         where: {
+        //             id: userId
+        //         }
+        //     }
+        // );
 
         return res.send({ msg: 'Deleted comment successfully!' });
     } catch(err) {

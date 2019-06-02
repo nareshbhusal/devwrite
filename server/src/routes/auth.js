@@ -58,7 +58,7 @@ router.get('/login', async (req, res) => {
             // set user on cookie
             req.session.user = {};
             req.session.user.id = userInRecords.id;
-            return res.send(req.sessionID);
+            return res.send({ msg: 'Logged in!' });
         } else {
             // creds don't match
             errors.push({ err: 'Wrong password or username!' })
