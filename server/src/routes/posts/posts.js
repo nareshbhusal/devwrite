@@ -3,6 +3,8 @@ const router = express.Router();
 const Post = require('../../models/Post');
 const User = require('../../models/User');
 const getUser = require('../../controllers/user/getUser');
+const getPost = require('../../controllers/post/getPost');
+const updatePost = require('../../controllers/post/updatePost');
 const updateUser = require('../../controllers/user/updateUser');
 const requireLogin = require('../../middlewares/requireLogin');
 
@@ -11,7 +13,7 @@ const requireLogin = require('../../middlewares/requireLogin');
 router.get('/', requireLogin, async (req, res) => {
     //const post = req.body || {};
     let post = { ...req.query };
-    post.user = req.session.user.id;
+
     const errors = []
     if (!post.title, !post.about, !post.body) {
         errors.push({ err: 'Please fill in all field!' });
@@ -25,7 +27,7 @@ router.get('/', requireLogin, async (req, res) => {
         post.createdAt = new Date().getTime();
         post = await Post.create(post);
         // get the user
-        const user = await getUser({ id:userId });
+        const user = await getUser({ id: userId });
 
         // update the posts id column in the database on user table
         let posts = user.posts || [];
@@ -42,13 +44,10 @@ router.get('/', requireLogin, async (req, res) => {
 // Get a particular post by its id
 router.get('/:id', async (req, res) => {
     try {
-        const post = await Post.findOne({
-            where: {
-                id: req.params.id
-            }
-        });
+        const id = req.params.id;
+        const post = await getPost({ id });
         if (!post) {
-            return res.send('404! no such post found');
+            return res.send([{err: '404! no such post found'}]);
         }
         return res.status(300).send(post);
     } catch(err) {
@@ -66,15 +65,11 @@ router.post('/:id/edit', requireLogin, async (req, res) => {
         const upDatedPost = { ...req.query };
         // add edit timestamp
         upDatedPost.editedAt = new Date().getTime();
-        const post = await Post.update(
-            { ...upDatedPost },
-            {
-                where: {
-                user: req.session.user.id,
-                id: req.params.id
-            }
-        }
-        );
+        const postData = {
+            user: req.session.user.id,
+            id: req.params.id
+        };
+        const post = await updatePost(postData, updatedPost);
         if (!post) {
             return res.send('This is awkward..hmmm...')
         }
