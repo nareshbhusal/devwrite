@@ -199,11 +199,7 @@ router.get('/:id/comment/:timestamp/delete', requireLogin, async(req, res) => {
         const postId = req.params.id;
         const userId = req.session.user.id;
 
-        const post = await Post.findOne({
-            where: {
-                id: postId
-            }
-        });
+        const post = await getPost({ id: postId });
         let comments = post.comments;
         if (typeof(comments) === 'string') {
             comments = JSON.parse(comments);
@@ -219,20 +215,9 @@ router.get('/:id/comment/:timestamp/delete', requireLogin, async(req, res) => {
         comments = JSON.stringify(comments);
 
         // update post
-        await Post.update(
-            { comments },
-            {
-                where: {
-                    id: postId
-                }
-            }
-        )
+        await updatePost({ id: postId }, { comments });
         // update user
-        const user = await User.findOne({
-            where: {
-                id: userId
-            }
-        });
+        const user = await getUser({ id: userId });
         let commentedPosts = user.commentedPosts;
         if (typeof(commentedPosts) === 'string') {
             commentedPosts = JSON.parse(commentedPosts)
@@ -247,14 +232,7 @@ router.get('/:id/comment/:timestamp/delete', requireLogin, async(req, res) => {
         }
         commentedPosts = JSON.stringify(commentedPosts);
 
-        await User.update(
-            { commentedPosts: commentedPosts },
-            {
-                where: {
-                    id: userId
-                }
-            }
-        );
+        await updateUser(userId, { commentedPosts });
 
         return res.send({ msg: 'Deleted comment successfully!' });
     } catch(err) {
