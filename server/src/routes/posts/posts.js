@@ -1,21 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const Post = require('../models/Post');
-const User = require('../models/User');
-const requireLogin = require('../middlewares/requireLogin');
-
-router.get('/', async (req, res) => {
-    try {
-        const posts = await Post.findAll();
-        if (!posts.length) {
-            return res.send('404. No posts found!');
-        }
-        return res.send(posts);
-    } catch(err) {
-        console.log(err);
-        return res.send('Something went wrong fetching posts');
-    }
-})
+const Post = require('../../models/Post');
+const User = require('../../models/User');
+const getUser = require('../../controllers/user/getUser');
+const updateUser = require('../../controllers/user/updateUser');
+const requireLogin = require('../../middlewares/requireLogin');
 
 // Create a post
 //post
@@ -30,30 +19,19 @@ router.get('/', requireLogin, async (req, res) => {
     }
     try {
         post = { ...req.query };
-        post.user = req.session.user.id;
+        const userId = req.session.user.id
+        post.user = userId;
         // add timestamp
         post.createdAt = new Date().getTime();
         post = await Post.create(post);
         // get the user
-        const user = await User.findOne({
-            where: {
-                id: req.session.user.id
-            }
-        })
+        const user = await getUser({ id:userId });
+
         // update the posts id column in the database on user table
         let posts = user.posts || [];
         posts.push(parseInt(post.id));
 
-        await User.update(
-            { 
-                posts
-            },
-            {
-                where: {
-                id: req.session.user.id
-            }
-        }
-        );
+        await updateUser(userId, { posts });
         return res.status(200).send({ msg: 'Done!' });
     } catch(err) {
         console.log(err);

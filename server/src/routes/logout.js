@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const getUser = require('../controllers/getUser');
+const getUser = require('../controllers/user/getUser');
 
 router.get('/logout', async (req, res) => {
     // Clear session_id from the database
