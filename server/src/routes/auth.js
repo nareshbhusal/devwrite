@@ -1,37 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/User');
-
-const updateSessions = async (user, sessionID) => {
-
-    // takes the user fetched from the database freshly,
-    // and update it's session_ids 
-    // logic -- keep number of session id below 5
-
-    let session_ids;
-    session_ids = user.session_ids;
-    if (session_ids) {
-        session_ids = session_ids.split(',');
-        if (session_ids.length > 4) {
-            session_ids.pop();
-        }
-        session_ids.unshift(sessionID);
-        session_ids = session_ids.toString();
-    }
-
-    try {
-        await User.update(
-            { session_ids },
-            {
-                where: {
-                id: user.id
-            }
-        }
-        );
-    } catch(err) {
-        console.log(err);
-    }
-}
+const updateSessions = require('../controllers/updateSessions');
+const getUser = require('../controllers/getUser');
 
 // post
 router.get('/login', async (req, res) => {
@@ -46,12 +17,9 @@ router.get('/login', async (req, res) => {
     }
 
     try {
-        const userInRecords = await User.findOne({
-            where: {
-                ...user
-            }
-        });
-        if (userInRecords) {           
+        const userInRecords = await getUser(user);
+
+        if (userInRecords) {
             await updateSessions(userInRecords, req.sessionID);
             // login successful
             console.log('loggedin', userInRecords.name);

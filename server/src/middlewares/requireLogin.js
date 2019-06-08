@@ -9,7 +9,9 @@ const requireLogin = async (req, res, next) => {
     // Check if session exists
     if (!req.session) {
         return res.send({ err: 'This action requires authorization! Please login or signup' });
+        
     }
+    console.log('session found', req.session.user.id);
     if (req.session.user) {
         // lookup the user in the DB by pulling their email from the session
         try{
@@ -18,15 +20,17 @@ const requireLogin = async (req, res, next) => {
                     id: req.session.user.id,
                 }
             });
+            console.log(user);
             // Check if the id and sessionID in session match the ones in DB
             if (user) {
+                console.log('user found');
                 const isAuthorized = user.session_ids.split(',').some(session_id => {
                     return session_id === req.session.sessionID
                 });
                 if (isAuthorized) {
                     console.log('user is authorized')
                     clearHeaderCache(res);
-                    next();
+                    return next();
                 } else {
                     // clear the browser session
                     req.session.destroy((err) => {

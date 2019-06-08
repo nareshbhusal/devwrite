@@ -46,7 +46,7 @@ router.get('/', requireLogin, async (req, res) => {
 
         await User.update(
             { 
-                posts 
+                posts
             },
             {
                 where: {
