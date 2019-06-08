@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Post = require('../../models/Post');
-const User = require('../../models/User');
 const getUser = require('../../controllers/user/getUser');
 const getPost = require('../../controllers/post/getPost');
+const createPost = require('../../controllers/post/createPost');
 const updatePost = require('../../controllers/post/updatePost');
+const deletePost = require('../../controllers/post/deletePost');
 const updateUser = require('../../controllers/user/updateUser');
 const requireLogin = require('../../middlewares/requireLogin');
 
@@ -21,19 +22,10 @@ router.get('/', requireLogin, async (req, res) => {
     }
     try {
         post = { ...req.query };
-        const userId = req.session.user.id
-        post.user = userId;
-        // add timestamp
-        post.createdAt = new Date().getTime();
-        post = await Post.create(post);
-        // get the user
-        const user = await getUser({ id: userId });
+        const userId = req.session.user.id;
 
-        // update the posts id column in the database on user table
-        let posts = user.posts || [];
-        posts.push(parseInt(post.id));
-
-        await updateUser(userId, { posts });
+        await createPost(userId, post);
+        
         return res.status(200).send({ msg: 'Done!' });
     } catch(err) {
         console.log(err);
@@ -247,12 +239,12 @@ router.get('/:id/delete', requireLogin, async (req, res) => {
         const postId = parseInt(req.params.id);
         const userId = parseInt(req.session.user.id);
 
-        await Post.destroy({
-            where: {
+        await deletePost(
+            { 
                 user: userId,
                 id: postId
             }
-        });
+        );
 
         return res.send({ msg: 'Deleted post!' });
     } catch(err) {
