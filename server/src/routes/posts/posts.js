@@ -58,22 +58,23 @@ router.get('/:id', async (req, res) => {
 
 // Edit the creds of a post by id 
 //put
-router.post('/:id/edit', requireLogin, async (req, res) => {
+router.get('/:id/edit', requireLogin, async (req, res) => {
     
     try {
+        const postId = req.params.id;
+        const userId = req.session.user.id;
         // const upDatedPost = req.body || {};
         const upDatedPost = { ...req.query };
         // add edit timestamp
         upDatedPost.editedAt = new Date().getTime();
         const postData = {
-            user: req.session.user.id,
-            id: req.params.id
+            user: userId,
+            id: postId
         };
         const post = await updatePost(postData, updatedPost);
         if (!post) {
             return res.send('This is awkward..hmmm...')
         }
-        console.log(post);
         return res.send({ msg: 'Updated the post' });
     } catch(err) {
         console.log(err);
