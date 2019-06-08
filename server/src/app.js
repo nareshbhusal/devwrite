@@ -9,7 +9,7 @@ const app = express();
 const uuid = require('uuid');
 
 //import routes
-const usersRoute = require('./routes/users/users');
+const usersRoute = require('./routes/users/index');;
 const postsRoute = require('./routes/posts/index');
 const loginRoute = require('./routes/login');
 const logoutRoute = require('./routes/logout');
