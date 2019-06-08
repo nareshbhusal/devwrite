@@ -99,12 +99,9 @@ router.get('/:id/comment', requireLogin, async (req, res) => {
         //comment = req.body || {};
         let comment = { ...req.query } || {};
         const userId = req.session.user.id;
+        const postId = req.params.id;
 
-        const user = await User.findOne({
-            where: {
-                id: userId
-            }
-        });
+        const user = await getUser({ id: userId });
         let comments = user.commentedPosts;
         if (typeof(comments)==='string') {
             comments = JSON.parse(comments);
@@ -113,28 +110,15 @@ router.get('/:id/comment', requireLogin, async (req, res) => {
         comment = {
             comment: comment.comment,
             createdAt: new Date().getTime(),
-            post: req.params.id
+            post: postId
         }
         comments.push(comment);
 
         // Push this to user table's commentedPosts column
-        await User.update(
-            { 
-                commentedPosts: comments
-            },
-            {
-                where: {
-                    id: userId
-                }
-            }
-        )
+        await updateUser({ id: userId }, { commentedPosts: comments });
 
         // Push also to the post table
-        const post = await Post.findOne({
-            where: {
-                id: req.params.id
-            }
-        });
+        const post = await getPost({ id: postId });
         delete comment.post;
         comment.user = userId;
         comment.username = user.name;
@@ -148,17 +132,8 @@ router.get('/:id/comment', requireLogin, async (req, res) => {
         console.log(typeof comments);
         comments.push(comment);
         comments = JSON.stringify(comments);
-        await Post.update(
-            { 
-                comments: comments 
-            },
-            {
-                where: {
-                    id: req.params.id
-            }
-        }
-        );
-        return res.send({ msg: 'Commented posted' });
+        await updatePost({ id: postId }, { comments });
+        return res.send({ msg: 'Comment posted' });
     } catch(err) {
         console.log(err);
         return res.send('Something went wrong while commenting');
