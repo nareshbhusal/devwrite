@@ -149,19 +149,11 @@ router.get('/:id/like', requireLogin, async(req, res) => {
         const postId = parseInt(req.params.id);
         const userId = parseInt(req.session.user.id);
 
-        const post = await Post.findOne({
-            where: {
-                id: postId
-            }
-        });
-
-        const user = await User.findOne({
-            where: {
-                id: userId
-            }
-        });
+        const user = await getUser({ id: userId });
         let likedPosts = user.likedPosts || []; // user's all liked posts
-        let likedBy = post.likedBy || []; // posts likers
+
+        const post = await getPost({ id: postId });
+        let likedBy = post.likedBy || []; // post's likers
 
         const alreadyLiked = likedBy.some(liker => {
             return liker === userId;
@@ -172,54 +164,24 @@ router.get('/:id/like', requireLogin, async(req, res) => {
             // update likedBy on post
             likedBy.splice(likedBy.indexOf(userId), 1);
 
-            await Post.update(
-                { likedBy: likedBy },
-                {
-                    where: {
-                        id: postId
-                    }
-                }
-            );
-            //update likedPosts on user
+            await updatePost({ likedBy }, { id: postId });
+            //update likedPosts on user table
             likedPosts.splice(likedPosts.indexOf(postId), 1);
 
-            await User.update(
-                { likedPosts: likedPosts },
-                {
-                    where: {
-                        id: userId
-                    }
-                }
-            );
+            await updateUser(userId, { likedPosts });
 
             return res.send({ msg: 'Unliked the post' });
 
         } else {
             // if not liked already
             // update likedBy on post
-            console.log('likedBy', likedBy);
             likedBy.push(parseInt(userId));
-            console.log('likedBy', likedBy);
-            await Post.update(
-                { likedBy: likedBy },
-                {
-                    where: {
-                        id: postId
-                    }
-                }
-            );
-            console.log('update likedPosts on user')
+            await updatePost({ id: postId }, { likedBy });
+
             //update likedPosts on user
             likedPosts.push(parseInt(postId));
 
-            await User.update(
-                { likedPosts: likedPosts },
-                {
-                    where: {
-                        id: userId
-                    }
-                }
-            )
+            await updateUser(id, { likedPosts });
 
             return res.send({ msg: 'Liked the post' })
         }
