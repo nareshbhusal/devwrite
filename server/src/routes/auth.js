@@ -49,8 +49,7 @@ router.get('/logout', async (req, res) => {
                 await clearSession(req, user);
                 
             } else {
-                console.log(err);
-                throw "user not found server error"
+                return res.send([{ err: 'User not logged in!' }]);
             }
         } catch(err) {
             res.status(500).send('something went wrong while trying to log out!')
