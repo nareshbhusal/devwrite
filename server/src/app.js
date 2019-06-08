@@ -11,7 +11,8 @@ const uuid = require('uuid');
 //import routes
 const usersRoute = require('./routes/users');
 const postsRoute = require('./routes/posts');
-const authRoute = require('./routes/auth');
+const loginRoute = require('./routes/login');
+const logoutRoute = require('./routes/logout');
 
 // create redis client
 let client = redis.createClient();
@@ -50,7 +51,8 @@ const port = process.env.PORT || 5000;
 app.get('/', (req, res)=>{
     res.send('hi there!')
 })
-app.use('/', authRoute);
+app.use('/login', loginRoute);
+app.use('/logout', logoutRoute);
 
 app.use('/users', usersRoute);
 app.use('/posts', postsRoute);
