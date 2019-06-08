@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const updateUser = require('./updateUser');
 
 // takes the user fetched from the database freshly,
     // and update it's session_ids on the database
@@ -18,14 +18,7 @@ const updateSessionIDs = async (user, sessionID) => {
     }
 
     try {
-        await User.update(
-            { session_ids },
-            {
-                where: {
-                id: user.id
-            }
-        }
-        );
+        await updateUser(user.id, { session_ids });
     } catch(err) {
         console.log(err);
     }

@@ -7,11 +7,9 @@ const updateUser = async (id, dataToUpdate) => {
     await User.update(
         { ...dataToUpdate },
         {
-            where: {
-                id
-            }
+            where: { id }
         }
-    )
+    );
 }
 
 module.exports = updateUser;
