@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const updateSessionIDs = require('../controllers/updateSessions');
+const updateSessionIDs = require('../controllers/updateSessionIDs');
 const addCookie = require('../controllers/addCookie');
 const getUser = require('../controllers/getUser');
 
@@ -45,20 +45,9 @@ router.get('/logout', async (req, res) => {
             const userId = req.session.user.id;
             const user = await getUser({ id: userId });
             if (user) {
-                let session_ids = user.session_ids;
-                session_ids = session_ids.split(',').filter(session_id => {
-                    return session_id !== req.sessionID
-                }).toString();
-
-                User.update({
-                    session_ids
-                })
-                req.session.destroy((err) => {
-                    if(err) {
-                        return console.log(err);
-                    }
-                    res.redirect('/');
-                });
+                // if user exists
+                await clearSession(req, user);
+                
             } else {
                 console.log(err);
                 throw "user not found server error"
