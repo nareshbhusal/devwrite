@@ -1,11 +1,8 @@
-const express = require('express');
-const router = express.Router();
 const updateSessionIDs = require('../controllers/user/updateSessionIDs');
 const addCookie = require('../controllers/user/addCookie');
 const getUser = require('../controllers/user/getUser');
 
-// post
-router.get('/', async (req, res) => {
+const login = async(req, res) => {
     // const user = {...req.body};
     const user = {...req.query};
 
@@ -36,6 +33,6 @@ router.get('/', async (req, res) => {
         console.log(err);
         return res.send('Something went wrong logging in!')
     }
-});
+}
 
-module.exports = router;
+module.exports = login;

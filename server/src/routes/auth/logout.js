@@ -1,8 +1,6 @@
-const express = require('express');
-const router = express.Router();
 const getUser = require('../controllers/user/getUser');
 
-router.get('/', async (req, res) => {
+const logout = async(req, res) => {
     // Clear session_id from the database
     if (req.session.user) {
         try{
@@ -21,6 +19,6 @@ router.get('/', async (req, res) => {
     } else {
         res.status(400).send('You\'re aready logged out');
     }
-})
+}
 
-module.exports = router;
+module.exports = logout;
