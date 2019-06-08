@@ -5,7 +5,7 @@ const addCookie = require('../controllers/user/addCookie');
 const getUser = require('../controllers/user/getUser');
 
 // post
-router.get('/login', async (req, res) => {
+router.get('/', async (req, res) => {
     // const user = {...req.body};
     const user = {...req.query};
 

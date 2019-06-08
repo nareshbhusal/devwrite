@@ -1,6 +1,6 @@
-const router = express.Router();
+const Post = require('../../models/Post');
 
-router.get('/', async (req, res) => {
+const getPost = async (req, res) => {
     try {
         const posts = await Post.findAll();
         if (!posts.length) {
@@ -11,6 +11,6 @@ router.get('/', async (req, res) => {
         console.log(err);
         return res.send('Something went wrong fetching posts');
     }
-})
+}
 
-module.exports = router;
+module.exports = getPost;

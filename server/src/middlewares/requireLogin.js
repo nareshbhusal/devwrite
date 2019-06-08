@@ -1,4 +1,4 @@
-const getUser = require('../controllers/getUser');
+const getUser = require('../controllers/user/getUser');
 
 const clearHeaderCache = (res) => {
     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
@@ -15,7 +15,7 @@ const requireLogin = async (req, res, next) => {
     if (req.session.user) {
         // lookup the user in the DB by pulling their email from the session
         try{
-            const user = await getUser({ id: userId })
+            const user = await getUser({ id: userId });
 
             // Check if the userid and sessionID in session match the ones in DB
             if (user) {

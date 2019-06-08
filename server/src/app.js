@@ -10,7 +10,7 @@ const uuid = require('uuid');
 
 //import routes
 const usersRoute = require('./routes/users');
-const postsRoute = require('./routes/posts');
+const postsRoute = require('./routes/posts/index');
 const loginRoute = require('./routes/login');
 const logoutRoute = require('./routes/logout');
 

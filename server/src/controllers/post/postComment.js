@@ -3,6 +3,8 @@ const getPost = require('../../controllers/post/getPost');
 const updateUser = require('../../controllers/user/updateUser');
 const updatePost = require('../../controllers/post/updatePost');
 
+// @param comment is the comment text body
+
 const postComment = async (comment, postId,  userId) => {
     const user = await getUser({ id: userId });
         let comments = user.commentedPosts;
