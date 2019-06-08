@@ -1,5 +1,7 @@
-const User = require('../../models/User');
 const Post = require('../../models/Post');
+
+// @param post is an object with title, about, body, tags properties
+// @param userId is the id of the poster
 
 const createPost = async (post, userId) => {
     post.user = userId;
