@@ -1,9 +1,11 @@
 const User = require('../models/User');
 
-const getUser = async () => {
+// @param userData is an object with the user data to match in db
+
+const getUser = async (userData) => {
     const userInRecords = await User.findOne({
         where: {
-            ...user
+            ...userData
         }
     });
     return userInRecords;
