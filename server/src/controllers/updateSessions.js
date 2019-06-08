@@ -1,11 +1,10 @@
 const User = require('../models/User');
 
-
 // takes the user fetched from the database freshly,
-    // and update it's session_ids 
+    // and update it's session_ids on the database
     // logic -- keep number of session id below 5
 
-const updateSessions = async (user, sessionID) => {
+const updateSessionIDs = async (user, sessionID) => {
 
     let session_ids;
     session_ids = user.session_ids;
@@ -32,4 +31,4 @@ const updateSessions = async (user, sessionID) => {
     }
 }
 
-module.exports = updateSessions;
+module.exports = updateSessionIDs;
