@@ -2,7 +2,7 @@
 // @param user is the user fetched from the database
 // function sets data to the cookie
 
-const addCookie = (req, user) => {
+const addCookie = (req, userInRecords) => {
     req.session.user = {};
     req.session.user.id = userInRecords.id;
 }
