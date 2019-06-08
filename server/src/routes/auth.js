@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const User = require('../models/User');
 const updateSessionIDs = require('../controllers/updateSessions');
+const addCookie = require('../controllers/addCookie');
 const getUser = require('../controllers/getUser');
 
 // post
@@ -23,8 +23,8 @@ router.get('/login', async (req, res) => {
             // login successful
             await updateSessionIDs(userInRecords, req.sessionID);
             // set user on cookie
-            req.session.user = {};
-            req.session.user.id = userInRecords.id;
+            addCookie(req, userInRecords);
+            
             return res.send({ msg: 'Logged in!' });
         } else {
             // creds don't match
