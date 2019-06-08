@@ -1,4 +1,4 @@
-const updateUser = require('./updateSessionIDs');
+const updateUser = require('./updateUser');
 
 const clearSession = async (req, user) => {
     let session_ids = user.session_ids;
