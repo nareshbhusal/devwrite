@@ -1,6 +1,6 @@
 const Post = require('../../models/Post');
 
-const getPost = (data) => {
+const getPost = async (data) => {
     const post = await Post.findOne({
         where: { ...data}
     });

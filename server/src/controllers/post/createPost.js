@@ -1,4 +1,6 @@
 const Post = require('../../models/Post');
+const getUser = require('../../controllers/user/getUser');
+const updateUser = require('../../controllers/user/updateUser');
 
 // @param post is an object with title, about, body, tags properties
 // @param userId is the id of the poster

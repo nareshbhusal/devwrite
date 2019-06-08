@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const Post = require('../../models/Post');
 const getUser = require('../../controllers/user/getUser');
 const getPost = require('../../controllers/post/getPost');
 const createPost = require('../../controllers/post/createPost');
 const updatePost = require('../../controllers/post/updatePost');
 const deletePost = require('../../controllers/post/deletePost');
+const postComment = require('../../controllers/post/postComment');
 const updateUser = require('../../controllers/user/updateUser');
 const requireLogin = require('../../middlewares/requireLogin');
 
@@ -25,7 +25,7 @@ router.get('/', requireLogin, async (req, res) => {
         const userId = req.session.user.id;
 
         await createPost(userId, post);
-        
+
         return res.status(200).send({ msg: 'Done!' });
     } catch(err) {
         console.log(err);
@@ -70,7 +70,7 @@ router.get('/:id/edit', requireLogin, async (req, res) => {
         return res.send({ msg: 'Updated the post' });
     } catch(err) {
         console.log(err);
-        return res.send('Something went wrong')
+        return res.send('Something went wrong');
     }
 })
 
@@ -93,38 +93,8 @@ router.get('/:id/comment', requireLogin, async (req, res) => {
         const userId = req.session.user.id;
         const postId = req.params.id;
 
-        const user = await getUser({ id: userId });
-        let comments = user.commentedPosts;
-        if (typeof(comments)==='string') {
-            comments = JSON.parse(comments);
-        }
-        comments = comments || [];
-        comment = {
-            comment: comment.comment,
-            createdAt: new Date().getTime(),
-            post: postId
-        }
-        comments.push(comment);
-
-        // Push this to user table's commentedPosts column
-        await updateUser({ id: userId }, { commentedPosts: comments });
-
-        // Push also to the post table
-        const post = await getPost({ id: postId });
-        delete comment.post;
-        comment.user = userId;
-        comment.username = user.name;
-        console.log(typeof post.comments);
-        comments = post.comments;
-        if (typeof(comments) === "string") {
-            comments = JSON.parse(comments);
-        }
-        comments = comments || [];
-        // comments = JSON.parse(JSON.stringify(comments).trim()) || [];
-        console.log(typeof comments);
-        comments.push(comment);
-        comments = JSON.stringify(comments);
-        await updatePost({ id: postId }, { comments });
+        await postComment(comment, postId,  userId);
+        
         return res.send({ msg: 'Comment posted' });
     } catch(err) {
         console.log(err);

@@ -1,6 +1,6 @@
 const Post = require('../../models/Post');
 
-const deletePost = (postData) => {
+const deletePost = async (postData) => {
     await Post.destroy({
         where: { ...postData }
     })
