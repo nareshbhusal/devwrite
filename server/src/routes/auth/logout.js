@@ -1,6 +1,10 @@
-const getUser = require('../controllers/user/getUser');
+const getUser = require('../../controllers/user/getUser');
+//import clearSession
 
 const logout = async(req, res) => {
+    if (!req.session) {
+        return res.send([{ err: 'Already logged out!' }]);
+    }
     // Clear session_id from the database
     if (req.session.user) {
         try{
@@ -11,13 +15,13 @@ const logout = async(req, res) => {
                 await clearSession(req, user);
                 
             } else {
-                return res.send([{ err: 'User not logged in!' }]);
+                return res.send([{ err: 'Already logged out!' }]);
             }
         } catch(err) {
             res.status(500).send('something went wrong while trying to log out!')
         }
     } else {
-        res.status(400).send('You\'re aready logged out');
+        res.status(400).send([{ err: 'Already logged out!' }]);
     }
 }
 

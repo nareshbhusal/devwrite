@@ -4,22 +4,20 @@ const getUser = require('../../controllers/user/getUser');
 
 // Register a user
 const registerUser = async(req, res) => {
-    // const user = { ...req.body } || {};
-    const user = { ...req.query };
-    console.log(user);
-
+    const user = { ...req.body } || {};
+    // const user = { ...req.query };
     // server side validation
     const errors = [];
     if (!user.name || !user.password || !user.email) {
         errors.push({ err: 'Please fill all fields' });
-        return res.send(errors);
+        return res.status(401).send(errors);
     }
 
     // see if email already exists
     const userInRecords = await getUser({ email: user.email });
     if (userInRecords) {
         errors.push({ err: 'Email is already in use!' })
-        return res.send(errors);
+        return res.status(409).send(errors);
     }
 
     // attach timestamp and session_id
@@ -36,7 +34,7 @@ const registerUser = async(req, res) => {
     // Successful registeration
     // set a cookie
     addCookie(req, newUser);
-    return res.send(req.session);
+    return res.status(201).send(req.session);
 }
 
 module.exports = registerUser;

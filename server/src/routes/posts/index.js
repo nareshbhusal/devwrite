@@ -13,11 +13,9 @@ const requireLogin = require('../../middlewares/requireLogin');
 router.get('/', getPosts);
 router.get('/:id', getPostById);
 router.post('/', requireLogin, createPost);
-router.post('/:id/comment', createComment);
-router.post('/:id/like', likePost);
-router.post('/:id/comment/:timestamp/delete', deleteComment);
-router.post('/:id/delete', deletePost);
-
-
+router.put('/:id/comment', requireLogin, createComment);
+router.put('/:id/like', requireLogin, likePost);
+router.post('/:id/comment/:timestamp/delete', requireLogin, deleteComment);
+router.post('/:id/delete', requireLogin, deletePost);
 
 module.exports = router;

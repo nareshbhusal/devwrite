@@ -9,7 +9,7 @@ const requireLogin = async (req, res, next) => {
     const authError = 'This action requires authorization! Please login or signup';
 
     if (!req.session) {
-        return res.send([{ err: authError }]);
+        return res.status(401).send([{ err: authError }]);
     }
 
     if (req.session.user) {
@@ -40,7 +40,7 @@ const requireLogin = async (req, res, next) => {
         }
     } else {
         // Not logged in. No session
-        return res.send([{ err: authError }]);
+        return res.status(401).send([{ err: authError }]);
     }
 }
 

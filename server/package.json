@@ -6,7 +6,10 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js -e js,env",
-    "test": "jest"
+    "test": "jest --watchAll"
+  },
+  "jest": {
+    "testEnvironment": "node"
   },
   "keywords": [],
   "author": "",
@@ -25,6 +28,7 @@
     "pg": "^7.12.0",
     "redis": "^2.8.0",
     "sequelize": "^5.10.3",
+    "supertest": "^4.0.2",
     "uuid": "^3.3.2"
   },
   "devDependencies": {
