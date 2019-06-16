@@ -15,12 +15,13 @@ const requireLogin = async (req, res, next) => {
     if (req.session.user) {
         // lookup the user in the DB by pulling their email from the session
         try{
+            const userId = req.session.user.id;
             const user = await getUser({ id: userId });
 
             // Check if the userid and sessionID in session match the ones in DB
             if (user) {
                 const isAuthorized = user.session_ids.split(',').some(session_id => {
-                    return session_id === req.session.sessionID
+                    return session_id === req.sessionID
                 });
                 if (isAuthorized) {
                     clearHeaderCache(res);
@@ -33,10 +34,10 @@ const requireLogin = async (req, res, next) => {
                     }
                 });
             }
-            return res.send([{ err: authError }]);
+            return res.status(401).send([{ err: authError }]);
         } catch(err) {
             console.log('error checking authorization status', err);
-            return res.send([{ err: 'Something went wrong checking authorization' }]);
+            return res.status(500).send([{ err: 'Something went wrong checking authorization' }]);
         }
     } else {
         // Not logged in. No session

@@ -1,8 +1,8 @@
 const updateUser = require('./updateUser');
 
 // takes the user fetched from the database freshly,
-    // and update it's session_ids on the database
-    // logic -- keep number of session id below 5
+// and updates it's session_ids on the database
+// logic -- keep number of session id below 5
 
 const updateSessionIDs = async (user, sessionID) => {
 

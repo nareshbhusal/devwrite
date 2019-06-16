@@ -1,11 +1,13 @@
 const User  = require('../../models/User');
 const addCookie = require('../../controllers/user/addCookie');
 const getUser = require('../../controllers/user/getUser');
+const updateSessionIDs = require('../../controllers/user/updateSessionIDs');
 
 // Register a user
 const registerUser = async(req, res) => {
-    const user = { ...req.body } || {};
-    // const user = { ...req.query };
+    // const user = { ...req.body } || {};
+    const user = { ...req.query } || {};
+
     // server side validation
     const errors = [];
     if (!user.name || !user.password || !user.email) {

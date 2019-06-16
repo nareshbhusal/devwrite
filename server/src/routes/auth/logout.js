@@ -13,9 +13,10 @@ const logout = async(req, res) => {
             if (user) {
                 // if user exists
                 await clearSession(req, user);
+                return res.status(200).send({ msg: 'User logged out!' });
                 
             } else {
-                return res.send([{ err: 'Already logged out!' }]);
+                return res.status(400).send([{ err: 'Already logged out!' }]);
             }
         } catch(err) {
             res.status(500).send('something went wrong while trying to log out!')

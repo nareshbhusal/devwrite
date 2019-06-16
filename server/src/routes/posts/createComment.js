@@ -5,8 +5,8 @@ const createComment = async (req, res) => {
 
     // Add the comment to both user model and the post model
 
-    // const comment = req.body || {};
-    let comment = { ...req.query } || {};
+    const comment = req.body;
+    // let comment = { ...req.query };
     const errors= [];
     if (!comment.comment) {
         errors.push({ err: 'Provide a comment body' });

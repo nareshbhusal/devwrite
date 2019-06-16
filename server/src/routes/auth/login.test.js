@@ -9,7 +9,10 @@ const user2 = {
 }
 
 beforeEach(async () => {
-    await User.create(user2);
+    await User.destroy({
+        where: {},
+        truncate: true
+    });
 })
 
 afterEach(async () => {
@@ -20,6 +23,7 @@ afterEach(async () => {
 })
 
 test('Should login the user', async () => {
+    await User.create(user2);
     await request(app).post('/login').send({
         email: user2.email,
         password: user2.password

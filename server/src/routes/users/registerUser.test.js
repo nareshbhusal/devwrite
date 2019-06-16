@@ -15,10 +15,6 @@ beforeEach(async () => {
       });
 })
 
-afterEach(async () => {
-    await User.create(user1);
-})
-
 test('Should register user and receive 201', async() => {
     await request(app).post('/users').send({
         name: 'test',
@@ -29,9 +25,13 @@ test('Should register user and receive 201', async() => {
 
 test('Should get 409 while registering user', async () => {
     await User.create(user1);
-    await request(app).post('/users').send({
-        name: user1.name,
-        email: user1.email,
-        password: user1.password
-    }).expect(409);
+    await request(app).post('/users')
+        .send(user1).expect(409);
+})
+
+afterEach(async() => {
+    await User.destroy({
+        where: {},
+        truncate: true
+    });
 })

@@ -5,6 +5,7 @@ const getCurrentUser = async(req, res) => {
         console.log(req.session)
         const id = req.session.user.id;
         const user = await getUser({ id })
+        console.log(user);
         return res.send(user);
     } catch(err) {
         console.log(err);

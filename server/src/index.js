@@ -46,7 +46,7 @@ db.authenticate()
 
 // Set routes
 app.get('/', (req, res)=>{
-    res.send('hi there!')
+    res.send(req.session)
 })
 app.use('/', authRoute);
 
