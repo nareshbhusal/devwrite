@@ -9,15 +9,14 @@ const app = express();
 const uuid = require('uuid');
 
 //import routes
-const usersRoute = require('./routes/users/index');;
-const postsRoute = require('./routes/posts/index');
-const authRoute = require('./routes/auth/index');
+const routes = require('./routes/index');
 
 // create redis client
 let client = redis.createClient();
-client.on('connet', () => {
-    console.log('redis connected');
+client.on('connect', () => {
+    console.log('Redis connected')
 })
+
 
 // configure middlewares
 app.use(express.json())
@@ -39,18 +38,17 @@ app.use(session({
     }
 }));
 
+
 // Initialize database
 db.authenticate()
     .then(() => console.log('database connected'))
     .catch(err => console.log('SOMETHING WRONG WITH DATABASE', err));
 
 // Set routes
-app.get('/', (req, res)=>{
-    res.send(req.session)
+app.get('', (req, res)=>{
+    return res.status(201).send(req.session);
 })
-app.use('/', authRoute);
 
-app.use('/users', usersRoute);
-app.use('/posts', postsRoute);
+app.use(routes);
 
 module.exports = app;

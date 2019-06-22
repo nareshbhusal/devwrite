@@ -7,22 +7,22 @@ const editPost = async (req, res) => {
     try {
         const postId = req.params.id;
         const userId = req.session.user.id;
-        // const upDatedPost = req.body || {};
-        const upDatedPost = { ...req.query };
+        // const updatedPost = req.body || {};
+        const updatedPost = { ...req.query };
         // add edit timestamp
-        upDatedPost.editedAt = new Date().getTime();
+        updatedPost.editedAt = new Date().getTime();
         const postData = {
             user: userId,
             id: postId
         };
         const post = await updatePost(postData, updatedPost);
         if (!post) {
-            return res.send('This is awkward..hmmm...')
+            return res.status(409).send({err: 'Is this your post? This is awkward..hmmm...'})
         }
-        return res.send({ msg: 'Updated the post' });
+        return res.status(201).send({ msg: 'Updated the post' });
     } catch(err) {
         console.log(err);
-        return res.send('Something went wrong');
+        return res.status(500).send({err: 'Sever error: Something went wrong editing post :('});
     }
 }
 

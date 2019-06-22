@@ -7,10 +7,9 @@ const login = async(req, res) => {
     // const user = {...req.query};
 
     // server side validation
-    const errors = [];
     if (!user.email || !user.password) {
-        errors.push({ err: 'Please fill in all fields' });
-        return res.status(401).send(errors);
+        const error = { err: 'Please fill in all fields' };
+        return res.status(401).send(error);
     }
 
     try {
@@ -25,13 +24,12 @@ const login = async(req, res) => {
 
         } else {
             // creds don't match
-            errors.push({ err: 'Wrong password or username!' })
-            return res.status(400).send(errors);
+            return res.status(401).send({ err: 'Wrong password or username!' });
         }
         
     } catch(err) {
         console.log(err);
-        return res.status(500).send('Something went wrong logging in!')
+        return res.status(500).send({err: 'Something went wrong logging in!'})
     }
 }
 

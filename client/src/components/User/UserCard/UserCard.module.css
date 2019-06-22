@@ -1,0 +1,40 @@
+.container{
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.1);
+    padding: 1rem;
+    width: 100%;
+    cursor: pointer;
+}
+
+.info{
+    margin-left: 1rem;
+}
+
+.usericon{
+    align-self: flex-start;
+}
+
+.name{
+    color: #111;
+    text-decoration: none;
+}
+
+.about{
+    color: #444;
+    font-size: 1.5rem;
+}
+
+.followButton{
+    color: blue;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    opacity: 0.8;
+    transition: 0.1s;
+}
+
+.followButton:hover{
+    opacity: 1;
+}

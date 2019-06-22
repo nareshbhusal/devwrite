@@ -27,7 +27,7 @@ const likePost = async (req, res) => {
             // update likedBy on post
             likedBy.splice(likedBy.indexOf(userId), 1);
 
-            await updatePost({ likedBy }, { id: postId });
+            await updatePost({ id: postId }, { likedBy });
             //update likedPosts on user table
             likedPosts.splice(likedPosts.indexOf(postId), 1);
 
@@ -44,13 +44,13 @@ const likePost = async (req, res) => {
             //update likedPosts on user
             likedPosts.push(parseInt(postId));
 
-            await updateUser(id, { likedPosts });
+            await updateUser(userId, { likedPosts });
 
             return res.send({ msg: 'Liked the post' })
         }
     } catch(err) {
         console.log(err);
-        return res.send('Something went wrong!');
+        return res.status(500).send('Something went wrong!');
     }
 }
 

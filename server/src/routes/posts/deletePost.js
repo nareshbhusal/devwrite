@@ -13,10 +13,10 @@ const deletePost = async(req, res) => {
             }
         );
 
-        return res.send({ msg: 'Deleted post!' });
+        return res.status(200).send({ msg: 'Deleted post!' });
     } catch(err) {
         console.log(err);
-        return res.send('Something went wrong deleting post')
+        return res.status(400).send({err: 'Something went wrong deleting post'})
     }
 }
 

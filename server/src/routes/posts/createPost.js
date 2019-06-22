@@ -2,24 +2,21 @@ const createPostCtrl = require('../../controllers/post/createPost');
 
 // Create a post
 const createPost = async (req, res) => {
-    //const post = req.body || {};
-    let post = { ...req.query };
+    let post = req.body || {};
 
-    const errors = []
-    if (!post.title, !post.about, !post.body) {
-        errors.push({ err: 'Please fill in all fields!' });
-        return res.send(errors);
+    if (!post.title || !post.body) {
+        return res.status(422).send({ err: 'Please fill in all fields!' });
     }
     try {
-        post = { ...req.query };
+        post = { ...req.body };
         const userId = req.session.user.id;
+        
+        await createPostCtrl(post, userId);
 
-        await createPostCtrl(userId, post);
-
-        return res.status(200).send({ msg: 'Done!' });
+        return res.status(201).send({ msg: 'Post created!' });
     } catch(err) {
         console.log(err);
-        return res.send('Something went wrong!')
+        return res.status(500).send({err: 'Something went wrong!'})
     }
 }
 

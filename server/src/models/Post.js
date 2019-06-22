@@ -1,8 +1,13 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database');
 
-const user = db.define('post', {
+const post = db.define('post', {
 
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     title: {
         type: Sequelize.STRING
     },
@@ -11,6 +16,9 @@ const user = db.define('post', {
     },
     user: {
         type: Sequelize.INTEGER
+    },
+    username: {
+        type: Sequelize.STRING
     },
     about: {
         type: Sequelize.STRING
@@ -33,4 +41,4 @@ const user = db.define('post', {
     }
 })
 
-module.exports = user;
+module.exports = post;

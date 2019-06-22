@@ -1,4 +1,7 @@
 const getPost = require('../../controllers/post/getPost');
+const parsePost = require('../../controllers/post/parsePost');
+
+const isLoggedIn = require('../../controllers/isLoggedIn');
 
 const getPostById = async (req, res) => {
 // Get a particular post by its id
@@ -6,12 +9,21 @@ const getPostById = async (req, res) => {
         const id = req.params.id;
         const post = await getPost({ id });
         if (!post) {
-            return res.send([{err: '404! no such post found'}]);
+            return res.status(404).send({err: '404: No such post found'});
         }
-        return res.status(300).send(post);
+
+        const loggedIn = await isLoggedIn(req);
+        let userId;
+        if (loggedIn){
+            userId = parseInt(req.session.user.id);
+        }
+
+        const parsedPost = await parsePost(post, userId);
+
+        return res.status(200).send(parsedPost);
     } catch(err) {
         console.log(err);
-        res.send('Something went wrong!');
+        res.status(500).send({err: 'Something went wrong!'});
     }
 }
 

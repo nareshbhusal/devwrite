@@ -7,37 +7,46 @@ const updatePost = require('../../controllers/post/updatePost');
 
 const postComment = async (comment, postId,  userId) => {
     const user = await getUser({ id: userId });
-        let comments = user.commentedPosts;
-        if (typeof(comments)==='string') {
-            comments = JSON.parse(comments);
-        }
-        comments = comments || [];
-        comment = {
-            comment: comment.comment,
-            createdAt: new Date().getTime(),
-            post: postId
-        }
-        comments.push(comment);
+    const post = await getPost({ id: postId });
 
-        // Push this to user table's commentedPosts column
-        await updateUser({ id: userId }, { commentedPosts: comments });
+    let comments = user.commentedPosts || [];
+    if (typeof(comments)==='string') {
+        comments = JSON.parse(comments);
+    }
+    comments = comments || [];
+    const commentId = Math.max(...comments.map(comment => {
+        return comment.id
+    })) +1;
 
-        // Push also to the post table
-        const post = await getPost({ id: postId });
-        delete comment.post;
-        comment.user = userId;
-        comment.username = user.name;
-        console.log(typeof post.comments);
-        comments = post.comments;
-        if (typeof(comments) === "string") {
-            comments = JSON.parse(comments);
-        }
-        comments = comments || [];
-        // comments = JSON.parse(JSON.stringify(comments).trim()) || [];
-        console.log(typeof comments);
-        comments.push(comment);
-        comments = JSON.stringify(comments);
-        await updatePost({ id: postId }, { comments });
+    const newComment = {
+        body: comment,
+        createdAt: new Date().getTime(),
+        id: commentId,
+        username: user.name,
+        postTitle: post.title,
+        postId,
+        userId
+    }
+    console.log(newComment);
+
+    // Push this to user table's commentedPosts column
+    comments.push(newComment);
+
+    comments = JSON.stringify(comments);
+    await updateUser(userId, { commentedPosts: comments });
+    console.log(comments)
+    // Push also to the post table
+
+    let postComments = post.comments || [];
+    if (typeof(postComments) === "string") {
+        postComments = JSON.parse(postComments);
+    }
+
+    postComments = postComments || [];
+
+    postComments.push(newComment);
+    postComments = JSON.stringify(postComments);
+    await updatePost({ id: postId }, { comments: postComments });
 }
 
 module.exports = postComment;

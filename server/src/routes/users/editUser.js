@@ -2,23 +2,23 @@ const updateUser = require('../../controllers/user/updateUser');
 
 // Edit the creds of a user by id 
 const editUser = async(req, res) => {
-    //const updatedUserValues = req.body;
+
     if (req.session.user.id !=req.params.id) {
-        const errors = [{ err: 'Can\'t perform this action as you are not logged in as this user!' }];
-        return res.send(errors);
+        const authError = { err: 'Can\'t perform this action as you are not logged in as this user!' };
+        return res.status(403).send(authError);
     }
-    const updatedUserValues = { ...req.query };
+    const updatedUserValues = { ...req.body };
     console.log(updatedUserValues);
+    
     try {
-        const id = req.user.session.id;
-        await updateUser({ id }, { ...updatedUserValues });
+        const id = req.session.user.id;
+        await updateUser(id, { ...updatedUserValues });
     } catch(err) {
         console.log(err);
-        const errors = [];
-        errors.push({ err: 'Something went wrong updating the user' });
-        return res.send(errors);
+        return res.status(500).send({ err: 'Something went wrong updating the user' });
     }
-    return res.send({msg: 'user with id '+req.params.id+' edited!'})
+
+    return res.status(200).send({msg: 'user with id '+req.params.id+' edited!'})
 }
 
 module.exports = editUser;

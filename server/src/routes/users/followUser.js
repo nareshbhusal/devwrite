@@ -21,7 +21,7 @@ const followUser = async(req, res) => {
             followers.splice(followerIndex, 1);
         }
 
-        await updateUser({ id: followeeId }, { followers });
+        await updateUser(followeeId, { followers });
         // Add followeeid to the followers following column
         const follower = await getUser({ id: followeeId });
         
@@ -32,16 +32,16 @@ const followUser = async(req, res) => {
             following.splice(followeeId, 1);
         }
 
-        await updateUser({ id: followerId }, { following });
+        await updateUser(followerId, { following });
         if (toFollow) {
-            return res.send({ msg: 'Following' });
+            return res.status(200).send({ msg: 'Following' });
         } else {
-            return res.send({ msg: 'Unfollowed' });
+            return res.status(200).send({ msg: 'Unfollowed' });
         }
         
     } catch(err) {
         console.log(err);
-        return res.send('Something went wrong following this user');
+        return res.status(500).send({err: 'Something went wrong following this user'});
     }
 }
 

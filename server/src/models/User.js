@@ -3,6 +3,11 @@ const db = require('../config/database');
 
 const user = db.define('user', {
 
+    id: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     name: {
         type: Sequelize.STRING
     },
@@ -40,6 +45,9 @@ const user = db.define('user', {
     commentedPosts: {
         // object with comment body, created time & edited time of the comment and id of the post
         type: Sequelize.JSON
+    },
+    savedPosts: {
+        type: Sequelize.ARRAY(Sequelize.INTEGER)
     },
     session_ids: {
         type: Sequelize.STRING

@@ -1,0 +1,111 @@
+.container{
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0,0,0,0.09);
+    background-color: #fff;
+    width: 100%;
+    padding: 2rem;
+    margin: 2rem 0;
+    position: relative;
+}
+
+.info{
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.publish{
+    margin-left: 1rem;
+}
+
+.time{
+    color: #777;
+    font-size: 1.3rem;
+}
+
+.date{
+    margin-right: 0.5rem;
+}
+
+.length{
+    margin-left: 0.3rem;
+}
+
+
+.body{
+    font-size: 1.7rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+}
+
+.author{
+    margin-right: 0.55rem;
+    color: #000;
+    text-decoration: none;
+}
+
+.author:hover{
+    text-decoration: underline;
+}
+
+.actions{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+}
+
+.likeButton{
+    background-color: #fff;
+    color: red;
+    border: none;
+    cursor: pointer;
+}
+
+[contentEditable=true]:empty:before{
+    content:attr(placeholder);
+    color: silver;
+}
+
+[contentEditable=true]:hover{
+    cursor: text;
+}
+
+[contentEditable=true]:focus{
+    outline: none;
+}
+
+.authbuttons{
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.authbuttons button{
+    border: 1px solid #000;
+    background-color: #fff;
+    padding: 0.15rem 0.3rem;
+    cursor: pointer;
+    outline: none;
+    opacity: 0.7;
+    transition: 0.2s;
+}
+
+.authbuttons button:hover{
+    opacity: 1;
+}
+
+.submitButton{
+
+}
+
+.editButton{
+    margin-right: 1rem;
+}
+
+.deleteButton{
+
+}
+
+.cancelButton{
+
+}

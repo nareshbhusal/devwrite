@@ -1,0 +1,43 @@
+.container{
+    display: flex;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    align-self: flex-start;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    width: 100%;
+    background-color: rgba(0,0,0,0.02);
+}
+
+.search{
+    padding: 0.3rem;
+    flex-grow: 1;
+    max-width: 350px;
+    margin: 0 1.5rem;
+    background-color: rgb(226, 223, 223);
+    border: 1px solid rgb(226, 223, 223);
+}
+
+.search:focus{
+    outline: none;
+    border: 1px solid #ccc;
+}
+
+.right {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 0 1rem;
+}
+
+.writeLink{
+    margin: 0 2rem;
+    color: rgb(54, 19, 19);
+    text-decoration: none;
+}
+
+.signinLink{
+    color: #000;
+    text-decoration: none; 
+}

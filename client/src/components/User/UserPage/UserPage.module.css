@@ -1,0 +1,50 @@
+.container{
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper{
+    display: flex;
+    flex-direction: column;
+    width: 750px;
+    max-width: 90%;
+    min-width: 300px;
+    align-items: center;
+    margin-top: 2rem;
+}
+
+.tabs{
+    border-bottom: 1px solid #ccc;
+    width: 100%;
+    display: flex;
+}
+
+.tabs button{
+    margin-right: 2rem;
+    font-size: 1.4rem;
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    transition: 0.15s;
+    outline: none;
+    border-bottom: 1px solid;
+}
+
+.tabs button:hover{
+    color: #000;
+}
+
+.tab button.active{
+    color: red;
+}
+
+.networkHeading{
+    border-bottom: 1px solid #ddd;
+    margin: 1rem 0;
+    padding: 1rem 0;
+    margin-bottom: 2rem;
+}
+
+.likedposts, .savedposts, .userPosts, .usercomments{
+    width: 100%;
+}

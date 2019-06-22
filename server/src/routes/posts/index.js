@@ -3,19 +3,24 @@ const router = express.Router();
 const getPosts = require('./getPosts');
 const getPostById = require('./getPostById');
 const createPost = require('./createPost');
-const createComment = require('./createComment');
+
 const likePost = require('./likePost');
-const deleteComment = require('./deleteComment');
+const savePost = require('./savePost');
+
 const deletePost = require('./deletePost');
+
+const commentRoutes = require('./comments/index');
 
 const requireLogin = require('../../middlewares/requireLogin');
 
-router.get('/', getPosts);
+router.get('/:sortorder/', getPosts);
 router.get('/:id', getPostById);
 router.post('/', requireLogin, createPost);
-router.put('/:id/comment', requireLogin, createComment);
-router.put('/:id/like', requireLogin, likePost);
-router.post('/:id/comment/:timestamp/delete', requireLogin, deleteComment);
-router.post('/:id/delete', requireLogin, deletePost);
+
+router.post('/:id/like', requireLogin, likePost);
+router.post("/:id/save", requireLogin, savePost);
+router.delete('/:id', requireLogin, deletePost);
+
+router.use('/:postid/comment', commentRoutes);
 
 module.exports = router;

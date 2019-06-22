@@ -1,6 +1,6 @@
 const Sequelize = require('sequelize');
 
-module.exports = new Sequelize('mediumdb', 'postgres', 'nnnsss333', {
+module.exports = new Sequelize('mediumdb', 'postgres', 'nnnsss', {
     host: 'localhost',
     dialect: 'postgres',
     pool: {
@@ -11,5 +11,6 @@ module.exports = new Sequelize('mediumdb', 'postgres', 'nnnsss333', {
     },
     define : {
         timestamps: false
-    }
+    },
+    logging: false
 })

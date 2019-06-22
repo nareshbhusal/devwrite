@@ -8,7 +8,7 @@ const clearSession = async (req, user) => {
         return session_id !== req.sessionID
     }).toString();
 
-    await updateUser(id, { session_ids });
+    await updateUser(user.id, { session_ids });
 
     req.session.destroy((err) => {
         if(err) {

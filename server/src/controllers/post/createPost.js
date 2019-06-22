@@ -1,23 +1,44 @@
 const Post = require('../../models/Post');
 const getUser = require('../../controllers/user/getUser');
 const updateUser = require('../../controllers/user/updateUser');
+const textVersion = require('textversionjs');
 
 // @param post is an object with title, about, body, tags properties
 // @param userId is the id of the poster
 
+const parseTags = (post) => {
+    let tags = post.tags || '';
+    if (!tags) {
+        return [];
+    }
+    return tags.split(' ');
+}
+
 const createPost = async (post, userId) => {
     post.user = userId;
-    // add timestamp
+
+    // add timestamp and tags
     post.createdAt = new Date().getTime();
-    post = await Post.create(post);
-    // get the user
-    const user = await getUser({ id: userId });
+    post.tags = parseTags(post);
+    
+    try {
 
-    // update the posts id column in the database on user table
-    let posts = user.posts || [];
-    posts.push(parseInt(post.id));
+        // get the user
+        const user = await getUser({ id: userId });
 
-    await updateUser(userId, { posts });
+        const username = user.name;
+        post.username = username;
+        const createdPost = await Post.create(post);
+        
+        // update the posts id column in the database on user table
+        let userPosts = user.posts || [];
+        userPosts.push(parseInt(createdPost.id));
+
+        await updateUser(userId, { posts: userPosts });
+
+    } catch(err) {
+        throw err;
+    }
 }
 
 module.exports = createPost;

@@ -1,0 +1,13 @@
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+}
+
+.noPosts{
+    align-self: flex-start;
+    justify-self: center;
+    margin: 5rem;
+}

@@ -1,0 +1,135 @@
+.container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    padding: 2rem 0.1rem;
+}
+
+.info{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.name{
+    font-size: 3rem;
+    color: #333;
+}
+
+.about{
+    font-size: 1.75rem;
+    margin: 0.5rem 0;
+}
+
+.memberSince{
+    color: #555;
+    font-size: 1.4rem;
+}
+
+.website{
+    margin: 0.9rem 0;
+}
+
+.name, .about, .website, .submitButton, .editButton{
+    transition: 0.3s;
+}
+
+.website a{
+    margin-left: 0.6rem;
+    text-decoration: none;
+    color: rgb(22, 19, 19);
+    transition: 0.1s;
+    cursor: pointer;
+    text-shadow: #555;
+}
+
+.website a:hover{
+    color: rgb(56, 55, 55);
+}
+
+.networkLinks{
+    font-size: 1.5rem;
+}
+
+.networkLinks a {
+    color: #555;
+    opacity: 0.9;
+    transition: 0.3s;
+    text-decoration: none;
+    margin-right: 0.8rem;
+}
+
+.networkLinks a:hover{
+    opacity: 1;
+    text-decoration: underline;
+}
+
+.authButtons{
+    display: flex;
+
+}
+
+.editButton, .followButton, .logoutButton, .submitButton{
+    cursor: pointer;
+    opacity: 0.8;
+    transition: 0.3s;
+    display: block;
+    align-self: flex-start;
+    margin: 1rem 0;
+    padding: 0.4rem 1rem;
+    border: 1px solid;
+    color: #222;
+    border-radius: 4px;
+}
+
+.submitButton{
+    margin-left: 1rem;
+    background-color: #fff;
+    color: blue;
+}
+
+.editButton:hover,
+.followButton:hover,
+.logoutButton:hover,
+.submitButton:hover {
+    opacity: 1;
+}
+
+.editButton{
+    background: blue;
+    color: #fff;
+}
+
+.logoutButton{
+    background-color: #fff;
+}
+
+.followButton{
+    color: rgb(83, 83, 255);
+    border-color: rgb(83, 83, 255);
+    background: #fff;
+}
+
+.avatarWrapper{
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: -4rem;
+}
+
+.avatar{
+    padding: 1rem;
+    background-color: blue;
+    color: #fff;
+    border-radius: 50%;
+    height: 12rem;
+    width: 12rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.6rem;
+    text-decoration: none;
+    cursor: default;
+}
