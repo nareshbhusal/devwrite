@@ -82,7 +82,6 @@ export const getComment = async(postId, commentId) => {
 export const fetchUser = async(id) => {
     try {
         const res = await devwrite.get(`users/${id}`);
-        console.log(res.data);
         const user = res.data;
         user.error = '';
         return user;

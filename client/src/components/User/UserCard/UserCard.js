@@ -9,6 +9,7 @@ import UserIcon from '../../UserIcon/UserIcon';
 
 class userCard extends React.Component {
 
+    state = {}
     fetchData = async() => {
         const user = fetchUser(this.props.id);
         await this.setState({ ...user });
@@ -20,7 +21,7 @@ class userCard extends React.Component {
     render() {
         const name= this.state.name || "Nota Stalker";
         const about=this.state.about || "I like kids. I also like to watch people in the park, especially the kid... on the park."
-
+        const id = 'id';
         return (
             <article onClick={()=>history.push(`/user/${id}`)} className={styles.container}>
                 <UserIcon className={styles.usericon} name={name} id={id}/>

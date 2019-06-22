@@ -16,7 +16,7 @@ let client = redis.createClient();
 client.on('connect', () => {
     console.log('Redis connected')
 })
-
+const getTagCloud = require('./controllers/tag/getTagCloud');
 
 // configure middlewares
 app.use(express.json())
@@ -47,6 +47,10 @@ db.authenticate()
 // Set routes
 app.get('', (req, res)=>{
     return res.status(201).send(req.session);
+})
+app.get('/cloud', async (req, res) => {
+    const cloud = await getTagCloud();
+    return res.send(cloud);
 })
 
 app.use(routes);

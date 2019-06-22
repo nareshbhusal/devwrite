@@ -11,7 +11,7 @@ import UserComment from '../UserComment/UserComment';
 
 import authContext from '../../../contexts/authContext';
 
-import { fetchUser, getComment, logout } from '../../../helpers/index';
+import { fetchUser, getComment, logout, followUser } from '../../../helpers/index';
 
 const RenderTabData = ({ currentTab, user, comments }) => {
 
@@ -91,6 +91,12 @@ class UserPage extends React.Component{
         await this.setState({ user });
     }
 
+    followUser = async() => {
+        const userId = this.state.user.id;
+        await followUser(userId);
+        await this.fetchUser(userId);
+    }
+
     fetchUserComments = async() => {
         const userComments = this.state.user.commentedPosts || [];
         const comments = await Promise.all(userComments.map(async userComment => {
@@ -150,7 +156,6 @@ class UserPage extends React.Component{
     renderNetwork = () => {
         const networkType = this.props.match.params.network;
         const { user } = this.state;
-        console.log(user);
         if (!user[networkType]) {
             return <p>Loading...</p>
         }
@@ -187,20 +192,17 @@ class UserPage extends React.Component{
 
     render(){
         const { currentTab, user, error, editing } = this.state;
-
         const context = this.context || {};
-
+        
         const ownProfile = context.id == user.id;
-
         const toShowNetwork = this.toRenderNetworkProfiles();
         if (error) {
-            return <p>{error}</p>
+            return <div>{error}</div>
         }
-        // console.log(this.state);
         return (
             <div className={styles.container}>
                 <div className={styles.wrapper}>
-                    <UserInfo { ...user } ownProfile={ownProfile} logout={this.logoutHandler} toggleEdit={this.toggleEdit} editing={editing} />
+                    <UserInfo { ...user } ownProfile={ownProfile} logout={this.logoutHandler} toggleEdit={this.toggleEdit} editing={editing} followUser={this.followUser} />
                     {
                     toShowNetwork ? 
                     this.renderNetwork()

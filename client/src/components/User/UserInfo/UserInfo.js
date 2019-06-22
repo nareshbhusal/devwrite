@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './UserInfo.module.css';
-import { editUser, followUser } from '../../../helpers/index';
+import { editUser } from '../../../helpers/index';
 
 import { Link } from 'react-router-dom';
 
@@ -15,18 +15,16 @@ const renderAvatar = (name) => {
     );
 }
 
-const userInfo = ({ id, ownProfile, editing, name, about, website, following, followers, createdAt, followed, logout, toggleEdit })=>{
-    
-    const onSubmitHandler = async(id) => {
+const userInfo = (props) => {
+    let { id, ownProfile, editing, name, about, website, following, followers, createdAt, followed, logout, toggleEdit, followUser } = props;
 
+    const onSubmitHandler = async(id) => {
         const name = nameRef.current.innerText;
         const website = websiteRef.current.innerText;
         const about = aboutRef.current.innerText;
 
         await editUser({ id, name, about, website });
     }
-
-
     const followButtonTxt = followed ? 'Unfollow' : 'Follow';
     followers= followers || [];
     following=following || [];
