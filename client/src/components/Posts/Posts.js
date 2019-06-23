@@ -14,8 +14,7 @@ class Posts extends React.Component{
 
     determineSorting = async () => {
 
-        let { tag } = this.props;
-        let { sortOrder, t } = this.props.pathParams || {};
+        let { sortOrder, t, tag } = this.props.pathParams || {};
         sortOrder = sortOrder || 'new';
         t= t || 1;
         tag=tag || '';
@@ -26,7 +25,8 @@ class Posts extends React.Component{
             sortingChanged = true;
             await this.setState({ sortOrder, t, tag });
         }
-        
+        console.log(this.state);
+
         if (sortOrder!==this.state.sortOrder) {
             console.log('sorting changed');
         }
@@ -40,8 +40,8 @@ class Posts extends React.Component{
     fetchPosts = async () => {
         try {
             const { sortOrder, t, page, tag } = this.state;
-            
-            const res = await devWrite.get(`posts/${sortOrder}/?tag=${tag}?t=${t}?page=${page}`);
+            const URL = `posts/${sortOrder}/?tag=${tag}&t=${t}&page=${page}`;
+            const res = await devWrite.get(URL);
             const newPosts = res.data;
             if (newPosts.length) {
                 
@@ -69,7 +69,6 @@ class Posts extends React.Component{
     }
     
     render() {
-        // console.log(this.state)
         if (!this.state.posts.length) {
             return (
                 <div className={styles.container}>

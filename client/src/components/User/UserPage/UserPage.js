@@ -91,10 +91,9 @@ class UserPage extends React.Component{
         await this.setState({ user });
     }
 
-    followUser = async() => {
-        const userId = this.state.user.id;
-        await followUser(userId);
-        await this.fetchUser(userId);
+    followUser = async(id) => {
+        await followUser(id);
+        await this.fetchUser(this.state.user.id);
     }
 
     fetchUserComments = async() => {

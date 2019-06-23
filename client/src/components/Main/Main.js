@@ -8,6 +8,7 @@ import PopularTags from '../PopularTags/PopularTags';
 import Footer from '../Footer/Footer';
 
 import { Link } from 'react-router-dom';
+import queryString from 'query-string';
 import qs from 'qs';
 
 import devWrite from '../../devwrite';
@@ -20,10 +21,11 @@ class Main extends React.Component{
 
     state = {}
 
-    async determineDest(){
-        const { userId, postId, tag } = this.props.match.params;
+    async determineDestination(){
+        const { userId, postId } = this.props.match.params;
         const pathname = this.props.location.pathname.toString();
-        await this.setState({ userId, postId, tag, pathname });
+
+        await this.setState({ userId, postId, pathname });
     }
 
     pathChanged(){
@@ -50,13 +52,13 @@ class Main extends React.Component{
     componentDidUpdate(){
 
         if(this.pathChanged()) {
-            this.determineDest();
+            this.determineDestination();
             console.log('changed route')
         }
     }
 
     async componentDidMount(){
-        this.determineDest();
+        this.determineDestination();
         await this.fetchData();
     }
     
@@ -80,7 +82,6 @@ class Main extends React.Component{
             return <UserPage match={this.props.match} location={this.props.location} />
 
         } else {
-            const { tag } = this.props.match.params;
             const query = qs.parse(this.props.location.search, {
                 ignoreQueryPrefix: true
             })
@@ -88,7 +89,7 @@ class Main extends React.Component{
             return (
                 <main className={styles.main}>
                     <div className={styles.posts}>
-                        <Posts tag={tag} pathParams={pathParams}/>
+                        <Posts pathParams={pathParams}/>
                     </div>
 
                     <div className={styles.sidebar}>

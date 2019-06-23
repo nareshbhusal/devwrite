@@ -38,6 +38,9 @@ const post = db.define('post', {
     },
     likedBy: {
         type: Sequelize.ARRAY(Sequelize.INTEGER)
+    },
+    numOfLikes: {
+        type: Sequelize.INTEGER
     }
 })
 

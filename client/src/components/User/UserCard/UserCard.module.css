@@ -4,7 +4,7 @@
     border: 1px solid #ddd;
     box-shadow: 1px 1px 1px 1px rgba(0,0,0,0.1);
     padding: 1rem;
-    width: 100%;
+    min-width: 100%;
     cursor: pointer;
 }
 
@@ -24,6 +24,7 @@
 .about{
     color: #444;
     font-size: 1.5rem;
+    width: 100%;
 }
 
 .followButton{

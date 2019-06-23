@@ -70,7 +70,7 @@ class Editor extends React.Component{
             history.goBack();
             
         } catch(err) {
-            console.log(err);
+            console.log(err.response.data.err);
         }
     }
 
@@ -90,7 +90,7 @@ class Editor extends React.Component{
     retrieveLocalStorage = async () => {
         let data = await window.localStorage.getItem('data');
         data = JSON.parse(data);
-        let { title, body, theme, tags } = data;
+        let { title, body, theme, tags } = data || {};
 
         title = title || '';
         body = body || '';

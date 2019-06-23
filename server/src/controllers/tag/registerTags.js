@@ -6,9 +6,7 @@ const registerTags = async(tags, postId) => {
         return { tagName, postId }
     });
 
-    await Tag.bulkCreate({
-        tagColumns
-    });
+    await Tag.bulkCreate(tagColumns);
 }
 
 module.exports = registerTags;

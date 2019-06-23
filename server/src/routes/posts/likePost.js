@@ -21,33 +21,25 @@ const likePost = async (req, res) => {
         const alreadyLiked = likedBy.some(liker => {
             return liker === userId;
         });
+
+        let toLike;
         if (alreadyLiked) {
             // if the post was already liked by the user
-
-            // update likedBy on post
+            toLike=false;
             likedBy.splice(likedBy.indexOf(userId), 1);
-
-            await updatePost({ id: postId }, { likedBy });
-            //update likedPosts on user table
             likedPosts.splice(likedPosts.indexOf(postId), 1);
-
-            await updateUser(userId, { likedPosts });
-
-            return res.send({ msg: 'Unliked the post' });
 
         } else {
             // if not liked already
-            // update likedBy on post
+            toLike=true;
             likedBy.push(parseInt(userId));
-            await updatePost({ id: postId }, { likedBy });
-
-            //update likedPosts on user
             likedPosts.push(parseInt(postId));
-
-            await updateUser(userId, { likedPosts });
-
-            return res.send({ msg: 'Liked the post' })
         }
+        const numOfLikes = likedBy.length;
+        await updatePost({ id: postId }, { likedBy, numOfLikes });
+        await updateUser(userId, { likedPosts });
+        return res.status(201).send({ msg: `${toLike ? 'Liked' : 'Unliked'} post` })
+
     } catch(err) {
         console.log(err);
         return res.status(500).send('Something went wrong!');

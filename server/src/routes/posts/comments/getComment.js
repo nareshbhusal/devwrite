@@ -15,7 +15,7 @@ const getComment = async(req, res) => {
             postComments = JSON.parse(postComments);
         }
 
-        console.log(postComments)
+        // console.log(postComments)
         const comment = postComments.find(postComment => {
             return postComment.id === commentId;
         })

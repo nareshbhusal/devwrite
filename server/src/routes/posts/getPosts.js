@@ -1,4 +1,5 @@
 const Post = require('../../models/Post');
+const Tag = require('../../models/Tag');
 const sequelize = require('sequelize');
 const isLoggedIn = require('../../controllers/isLoggedIn');
 
@@ -6,11 +7,12 @@ const parsePost = require('../../controllers/post/parsePost');
 
 const postsPerBatch = 10;
 
-const getNewPosts = async(tag, batchNum=1, numberOfPosts=postsPerBatch) => {
+const getNewPosts = async(tag='', batchNum=1, numberOfPosts=postsPerBatch) => {
 
     const offset = numberOfPosts * (batchNum-1);
 
     // TODO: add logic to only include posts with tags containing keyword `${tag}`
+    Post.belongsTo(Tag, {targetKey:'postId',foreignKey: 'id'});
 
     const posts = await Post.findAll({
         where: {},
@@ -18,14 +20,24 @@ const getNewPosts = async(tag, batchNum=1, numberOfPosts=postsPerBatch) => {
         order: [
             ['createdAt', 'DESC']
         ],
-        offset
+        offset,
+        // include: [{
+        //     model: Tag,
+        //     having: ["postId = id"],
+        //     // where: {
+        //     //     tagName: {
+        //     //         [sequelize.Op.iLike]: `%${tag}%`
+        //     //     }
+        //     // },
+        //     required: true
+        // }]
     });
-    // console.log(posts);
+    console.log(posts.length);
 
     return posts;
 }
 
-const getTopPosts = async(tag, batchNum=1, days=1, numberOfPosts=postsPerBatch) => {
+const getTopPosts = async(tag='', batchNum=1, days=1, numberOfPosts=postsPerBatch) => {
 
     const offset = numberOfPosts * (batchNum-1);
 
@@ -38,40 +50,50 @@ const getTopPosts = async(tag, batchNum=1, days=1, numberOfPosts=postsPerBatch) 
     startTime=startTime.getTime().toString();
     endTime=endTime.getTime().toString();
 
+    Post.belongsTo(Tag, {targetKey:'postId',foreignKey: 'id'});
     const posts = await Post.findAll({
         where: {
             createdAt: {
-                "$between": [startTime, endTime]
+                [sequelize.Op.between]: [startTime, endTime]
             }
         },
         limit:numberOfPosts,
         order: [
-            [sequelize.fn('length', sequelize.col('likedBy')), 'DESC']
-            // ['likedBy'.length, 'DESC']
+            ['numOfLikes', 'DESC']
         ],
-        offset
+        offset,
+        include: [{
+            model: Tag,
+            having: ["postId = id"],
+            where: {
+                tagName: {
+                    // [sequelize.Op.iLike]: `%${tag}%`
+                }
+            },
+            required: true
+        }]
     });
-    // console.log(posts);
     return posts;
 }
 
 /*
 
-/posts/new?page=x
-/posts/top?t=DAYS?page=x
+**********ROUTES**********
+>    /posts/new?page=x
+>    /posts/top?t=DAYS?page=x
 
 */
 
 const getPosts = async (req, res, next) => {
     try {
         const { sortorder } = req.params;
-
-        if (sortorder !=='top', sortorder !=='new') {
-            return next();
-        }
-
         const { t, page, tag } = req.query;
         const numDays = t;
+        
+        if (sortorder !=='top' && sortorder !=='new') {
+            return next();
+        }
+        console.log(sortorder, numDays, page, tag);
 
         let posts = [];
         if (sortorder==='new') {

@@ -45,6 +45,6 @@
     margin-bottom: 2rem;
 }
 
-.likedposts, .savedposts, .userPosts, .usercomments{
+.likedposts, .savedposts, .userPosts, .usercomments, .network{
     width: 100%;
 }

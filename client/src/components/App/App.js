@@ -10,7 +10,7 @@ import './App.css';
 
 const App = ()=> {
 
-    const pathsThatRenderMain = ["/", "/:sortOrder", "/tag/:tag", "/user/:userId", "/user/:userId/network/:network", "/post/:postId" ];
+    const pathsThatRenderMain = ["/", "/posts/:sortOrder", "/user/:userId", "/user/:userId/network/:network", "/post/:postId" ];
     const pathsThatRenderEditor = ["/editor", "/editor/:postId"];
 
     return (
