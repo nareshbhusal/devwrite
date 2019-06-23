@@ -6,8 +6,7 @@ const parsePost = require('../../controllers/post/parsePost');
 
 const postsPerBatch = 10;
 
-const getQueryConfig = ({ tag='', page, days, sortorder }) => {
-
+const getQueryConfig = ({ tag='', page, days, sortorder, search='' }) => {
     const offset = postsPerBatch * (page-1);
     const queryConfig = {
         where: {},
@@ -39,7 +38,6 @@ const getQueryConfig = ({ tag='', page, days, sortorder }) => {
             ['createdAt', 'DESC']
         ]
     }
-
     if (tag) {
         queryConfig.include = [{
             model: Tag,
@@ -47,6 +45,24 @@ const getQueryConfig = ({ tag='', page, days, sortorder }) => {
             where: {
                 tagName: {
                     [sequelize.Op.iLike]: `%${tag}%`
+                }
+            },
+            required: true
+        }];
+
+        if (search) {
+            queryConfig.include[0].where.title = {
+                [sequelize.Op.iLike]: `%${searh}%`
+            }
+        }
+    }
+    if (search && !tag) {
+        queryConfig.include = [{
+            model: Tag,
+            having: ["postId = id"],
+            where: {
+                title: {
+                    [sequelize.Op.iLike]: `%${searh}%`
                 }
             },
             required: true
@@ -66,13 +82,13 @@ const getQueryConfig = ({ tag='', page, days, sortorder }) => {
 const getPosts = async (req, res, next) => {
     try {
         const { sortorder } = req.params;
-        const { t, page, tag } = req.query;
+        const { t, page, tag, search } = req.query;
         const days = t;
 
         if (sortorder !=='top' && sortorder !=='new') {
             return next();
         }
-        const queryConfig = getQueryConfig({ tag, page, days, sortorder });
+        const queryConfig = getQueryConfig({ tag, page, days, sortorder, search });
         Post.belongsTo(Tag, {targetKey:'postId',foreignKey: 'id'});
         const posts = await Post.findAll(queryConfig);
         

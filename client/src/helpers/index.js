@@ -130,6 +130,7 @@ export const loginUser = async (data) => {
         });
         history.goBack();
         // return res.data;
+        console.log(res.data);
 
     } catch(err) {
         console.log(err);
@@ -182,7 +183,7 @@ export const deleteUser = async(id) => {
         console.log(res);
         return res.data;
     } catch(err) {
-        console.log(err);
+        console.log(err.response.data);
         return {};
     }
 }
@@ -192,7 +193,7 @@ export const followUser = async(id) => {
         const res = await devwrite.post(`users/${id}/follow`)
         console.log(res.data);
     } catch(err) {
-        console.log(err);
+        console.log(err.response.data);
     }
 }
 
@@ -201,7 +202,7 @@ export const getTagsCloud = async() => {
         const res = await devwrite.get('/tags');
         return res.data;
     } catch(err) {
-        console.log(err);
+        console.log(err.respose.data);
         return []
     }
 }

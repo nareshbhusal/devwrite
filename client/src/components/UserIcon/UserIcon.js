@@ -27,7 +27,6 @@ const userIcon = ({ name = 'anon', id, size=4, avatarURL, onChangeHandler, editi
         </Link>
         {editing ? 
         <input 
-        defaultValue={avatarURL}
         value={avatarURL}
         type="text"
         className={styles.input} 
