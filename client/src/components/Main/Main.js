@@ -101,7 +101,7 @@ class Main extends React.Component{
                 <authContext.Provider value={contextData}>
                     <Nav />
                     {this.renderMain()}
-                    {/* <Footer className={styles.footer} /> */}
+                    <Footer className={styles.footer} />
                 </authContext.Provider>
                 
             </div>

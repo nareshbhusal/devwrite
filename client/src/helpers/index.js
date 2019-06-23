@@ -169,8 +169,10 @@ export const editUser = async({ id, name, about, website, photo }) => {
     try {
         const res = await devwrite.put(`users/${id}`, { name, about, website, photo });
         console.log(res.data);
+        return res.data;
     } catch(err) {
         console.log(err.response);
+        return err.response.data;
     }
 }
 

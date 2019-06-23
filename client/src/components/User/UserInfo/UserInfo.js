@@ -15,7 +15,10 @@ const userInfo = (props) => {
         const name = nameRef.current.innerText;
         const website = websiteRef.current.innerText;
         const about = aboutRef.current.innerText;
-        await editUser({ id, name, about, website, photo: avatarURL });
+        const res = await editUser({ id, name, about, website, photo: avatarURL });
+        if (res.msg) {
+            toggleEdit();
+        }
     }
 
     const followButtonTxt = followed ? 'Unfollow' : 'Follow';

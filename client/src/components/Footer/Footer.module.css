@@ -1,7 +1,44 @@
 .container{
     position: absolute;
     bottom: 0%;
-    background-color: red;
+    background-color: #444;
     width: 100%;
     text-align: center;
+    padding: 1rem;
+    color: rgb(221, 218, 218);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.7;
+    letter-spacing: 0.3px;
+    z-index: 20;
+    margin: -15rem 0;
+}
+
+.container > *{
+    margin: 0.5rem 0;
+}
+
+.copyStatement{
+    display: flex;
+    align-items: center;
+}
+.copyStatement span, .personalWebsite{
+    color: #eeefff;
+    margin-left: 0.5rem;
+    text-decoration: none;
+}
+
+.repoLink{
+    height: 2.5rem;
+    width:2.5rem;
+    display: block;
+    margin-left: 1rem;
+}
+
+.logo{
+    height: 100%;
+    width: auto;
+    display: block;
 }
