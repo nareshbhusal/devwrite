@@ -34,10 +34,6 @@
     color: #000;
 }
 
-.tab button.active{
-    color: red;
-}
-
 .networkHeading{
     border-bottom: 1px solid #ddd;
     margin: 1rem 0;

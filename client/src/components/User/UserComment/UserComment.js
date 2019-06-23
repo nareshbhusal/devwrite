@@ -4,10 +4,10 @@ import styles from './UserComment.module.css';
 import { Link } from 'react-router-dom';
 
 const userComment = (props) => {
-    console.log(props)
     const { postTitle, username, userId, postId, id, createdAt, body, err } = props.comment;
     if (err) {
-        return <p style={{color: 'pink'}}>{err}</p>;
+        // return <p style={{color: 'pink'}}>{err}</p>;
+        return null;
     }
     return (
         <div className={styles.container}>
@@ -16,7 +16,7 @@ const userComment = (props) => {
                     {username}
                 </Link>
                 commented on
-                <Link>
+                <Link to={`/post/${postId}`}>
                     <p className={styles.title} 
                         dangerouslySetInnerHTML={{__html: postTitle}}>
                     </p>

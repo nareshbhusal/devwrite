@@ -4,13 +4,11 @@ import styles from './UserPage.module.css';
 import UserInfo from '../UserInfo/UserInfo';
 import Post from '../../Posts/Post/Post';
 import UserCard from '../UserCard/UserCard';
-
-import { Link } from 'react-router-dom';
 import UserComment from '../UserComment/UserComment';
 
 import authContext from '../../../contexts/authContext';
-
 import { fetchUser, getComment, logout, followUser } from '../../../helpers/index';
+
 
 const RenderTabData = ({ currentTab, user, comments }) => {
 
@@ -32,7 +30,6 @@ const RenderTabData = ({ currentTab, user, comments }) => {
         );
 
     } else if(currentTab==='comments') {
-        // console.log(comments);
         return (
             <div className={styles.usercomments}>
                 {comments.map(comment => {
@@ -86,7 +83,6 @@ class UserPage extends React.Component{
         }
     }
     fetchUser = async (userId) => {
-        
         const user = await fetchUser(userId);
         await this.setState({ user });
     }
@@ -135,20 +131,16 @@ class UserPage extends React.Component{
     }
 
     updateTabsStyle = () => {
-
         if (this.toRenderNetworkProfiles() || !this.likesRef.current) {
             return;
         }
-
         [this.postsRef, this.commentsRef, this.likesRef, this.savedRef].forEach(xRef => {
             xRef.current.style.borderColor='transparent';
             xRef.current.style.color = '#444';
         });
-
         const refName = this.state.currentTab + 'Ref';
         this[refName].current.style.borderColor = '#000';
         this[refName].current.style.color = '#000';
-        
     }
 
     renderNetwork = () => {
@@ -207,14 +199,22 @@ class UserPage extends React.Component{
         return (
             <div className={styles.container}>
                 <div className={styles.wrapper}>
-                    <UserInfo { ...user } ownProfile={ownProfile} logout={this.logoutHandler} toggleEdit={this.toggleEdit} editing={editing} followUser={this.followUser} />
+                    <UserInfo { ...user } 
+                    ownProfile={ownProfile} 
+                    logout={this.logoutHandler} 
+                    toggleEdit={this.toggleEdit} 
+                    editing={editing} 
+                    followUser={this.followUser} />
+
                     {
                     toShowNetwork ? 
                     this.renderNetwork()
                     :
                     <React.Fragment>
                         {this.renderTabs()}
-                        <RenderTabData user={user} currentTab={currentTab} comments={this.state.comments} />
+                        <RenderTabData user={user} 
+                        currentTab={currentTab} 
+                        comments={this.state.comments} />
                     </React.Fragment>
                     }
                 </div>
