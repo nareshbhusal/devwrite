@@ -4,15 +4,11 @@ import Nav from '../Nav/Nav';
 import UserPage from '../User/UserPage/UserPage';
 import PostPage from '../PostPage/PostPage';
 import Posts from '../Posts/Posts';
-import PopularTags from '../PopularTags/PopularTags';
+import TagsCloud from '../TagsCloud/TagsCloud';
 import Footer from '../Footer/Footer';
 
-import { Link } from 'react-router-dom';
-import queryString from 'query-string';
 import qs from 'qs';
-
-import devWrite from '../../devwrite';
-import { getCurrentUser } from '../../helpers/index';
+import { getCurrentUser, getTagsCloud } from '../../helpers/index';
 import authContext from '../../contexts/authContext';
 
 import styles from './Main.module.css';
@@ -32,12 +28,9 @@ class Main extends React.Component{
         return this.props.location.pathname.toString() !== this.state.pathname;
     }
 
-    fetchPopularTags = async () => {
-        try {
-            await devWrite.get('tags/');
-        } catch(err) {
-            console.log(err);
-        }
+    getPopularTags = async () => {
+        const popularTags = await getTagsCloud();
+        await this.setState({ popularTags })
     }
 
     getLoggedUser = async() => {
@@ -47,6 +40,7 @@ class Main extends React.Component{
 
     async fetchData(){
         await this.getLoggedUser();
+        await this.getPopularTags();
     }
 
     componentDidUpdate(){
@@ -64,7 +58,7 @@ class Main extends React.Component{
     
     renderMain(){
         
-        const { postId, userId, pathname } = this.state;
+        const { postId, userId, pathname, popularTags } = this.state;
 
         if (!pathname) {
             return <h2>Loading...</h2>
@@ -93,7 +87,7 @@ class Main extends React.Component{
                     </div>
 
                     <div className={styles.sidebar}>
-                        <PopularTags />
+                        <TagsCloud tags={popularTags} />
                     </div>
                 </main>
             );
@@ -107,7 +101,7 @@ class Main extends React.Component{
                 <authContext.Provider value={contextData}>
                     <Nav />
                     {this.renderMain()}
-                    <Footer className={styles.footer} />
+                    {/* <Footer className={styles.footer} /> */}
                 </authContext.Provider>
                 
             </div>

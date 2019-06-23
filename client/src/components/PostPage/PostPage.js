@@ -3,6 +3,7 @@ import styles from './PostPage.module.css';
 
 import { fetchPost, likePost, savePost, deletePost, followUser, fetchUser } from '../../helpers';
 import { Link } from 'react-router-dom';
+import textVersion from 'textversionjs';
 
 import PostActions from './PostActions/PostActions';
 import UserIcon from '../UserIcon/UserIcon';
@@ -10,17 +11,18 @@ import Comment from '../Comment/Comment';
 
 import authContext from '../../contexts/authContext';
 
-
 const RenderDiscussion = ({ context, post, fetchPostData }) => {
         
-    const { id, title, author, comments } = post;
+    const { id, title, username, comments } = post;
     const editorCommentData = {
-        postId: id
+        postId: id,
+        username: context.name,
+        userId: context.id
     }
     return (
-        <section id="#discussion" className={styles.discussion}>
+        <section id="discussion" className={styles.discussion}>
             <h2 className={styles.discussionHeading}>
-                Responses to "{title}" by {author}
+                Responses to "{textVersion(title)}" by {username}
             </h2>
             <Comment comment={editorCommentData} />
             <div className={styles.comments}>
@@ -29,9 +31,8 @@ const RenderDiscussion = ({ context, post, fetchPostData }) => {
                 <h2>No responses</h2> : null}
 
                 {comments.reverse().map(comment => {
-                    // console.log(comment)
                     return (
-                        <Comment key={comment.body} 
+                        <Comment key={comment.id} 
                             comment={comment} 
                             postActionHandler={fetchPostData}/>
                     );
@@ -45,7 +46,7 @@ const RenderDiscussion = ({ context, post, fetchPostData }) => {
 class PostPage extends React.Component {
 
     state = {}
-
+    _isMounted=false;
     static contextType = authContext;
 
     followAuthor = async() => {
@@ -66,18 +67,25 @@ class PostPage extends React.Component {
     }
 
     fetchPostData = async () => {
+        if (!this._isMounted) {
+            return;
+        }
         await this.setState({ error: '' });
         const { id } = this.props;
         const post = await fetchPost(id);
         await this.setState({ ...post });
-        const isAuthor = this.isAuthor();
         await this.isAuthorFollowed();
+        const isAuthor = this.isAuthor();
         await this.setState({ isAuthor });
     }
 
     componentDidMount = async() => {
+        this._isMounted=true;
         await this.setState({ error: '' });
         await this.fetchPostData();
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     isAuthor = () => {
@@ -105,8 +113,7 @@ class PostPage extends React.Component {
     }
 
     render(){
-        // console.log(this.state);
-        const { username, user, date, readingTime, title, body, tags, error, isAuthorFollowed } = this.state;
+        const { username, user, date, readingTime, title, body, tags, error, isAuthorFollowed, photo } = this.state;
         if (error) {
             return <p style={{margin: '4rem 0'}}>{this.state.error}</p>
         }
@@ -124,7 +131,9 @@ class PostPage extends React.Component {
 
                 <div className={styles.info}>
                     <UserIcon name={username}
-                        className={styles.usericon} id={user}/>
+                        className={styles.usericon} 
+                        id={user}
+                        avatarURL={photo}/>
                         
                     <div className={styles.publish}>
 

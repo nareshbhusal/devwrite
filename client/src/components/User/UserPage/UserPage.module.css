@@ -48,3 +48,15 @@
 .likedposts, .savedposts, .userPosts, .usercomments, .network{
     width: 100%;
 }
+
+.avatarWrapper{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid red;
+}
+
+.avatarWrapper input {
+    position: absolute;
+    top:0;
+    z-index: 100;
+}

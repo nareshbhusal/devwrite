@@ -8,11 +8,13 @@ import ContentEditable from 'react-contenteditable';
 import UserIcon from '../UserIcon/UserIcon';
 
 import authContext from '../../contexts/authContext';
+import { fetchAvatar } from '../../helpers';
 
 class Comment extends React.Component{
 
     static contextType = authContext;
 
+    _isMounted=true;
     state = {
         editing: false,
         body: ''
@@ -23,7 +25,6 @@ class Comment extends React.Component{
     submitComment = async() => {
         try {
             const { body, postId } = this.state;
-            console.log(postId)
             const res = await devwrite.post(`posts/${postId}/comment`, {
                 body
             });
@@ -71,7 +72,7 @@ class Comment extends React.Component{
             });
             console.log(res.data);
             await this.props.postActionHandler();
-
+            await this.setState({ editing: false });
         } catch(err) {
             console.log(err.response);
             alert(err); // alert error
@@ -155,18 +156,36 @@ class Comment extends React.Component{
         const value = e.target.value;
         await this.setState({ body: value });
     };
-
-    componentDidMount = async() => {
-        let { body, id, postId, userId, isLiked } = this.props.comment;
+    async componentDidUpdate() {
+        if (!this._isMounted) {
+            return;
+        }
+        let { body, createdAt, id, postId, userId, isLiked, likedBy } = this.props.comment;
+        likedBy=likedBy || [];
+        const likes = likedBy.length;
         body = body || '';
         const isEditor = !body;
-        await this.setState({ body, postId, isLiked, userId, id, isEditor });
-        console.log(this.props.comment);
+        if (likes !==this.state.likes || isLiked !==this.state.isLiked) {
+            await this.setState({ body, postId, isLiked, userId, id, isEditor, likes, createdAt });
+        }
     }
 
+    componentDidMount = async() => {
+        let { body, createdAt, id, postId, userId, isLiked, likedBy, username } = this.props.comment;
+        likedBy=likedBy || [];
+        const likes = likedBy.length;
+        body = body || '';
+        const isEditor = !body;
+        const photo = await fetchAvatar(userId);
+        await this.setState({ body, postId, isLiked, userId, id, isEditor, likes, createdAt, username, photo });
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
+
     renderTimeInfo() {
-        const { body, createdAt, editedAt } = this.state;
-        if(!body) {
+        const { createdAt, editedAt, isEditor } = this.state;
+        if(isEditor) {
             return null;
         }
         return (
@@ -190,13 +209,16 @@ class Comment extends React.Component{
 
     render() {
         
-        const { username, userId, body, isLiked } = this.props.comment;
-        // console.log(isLiked)
+        let { username, userId, body, isLiked, likes, isEditor, photo } = this.state;
+
         return(
             <article className={styles.container+` post`}>
 
                 <div className={styles.info}>
-                    <UserIcon className={styles.usericon} name={username} id={userId}/>
+                    <UserIcon className={styles.usericon} 
+                        name={username} id={userId} 
+                        avatarURL={photo}/>
+                        
                     <div className={styles.publish}>
                         <Link to={`/user/`+userId} className={styles.author}>
                             {username}
@@ -208,10 +230,15 @@ class Comment extends React.Component{
                 {this.renderBody(body)}
 
                 <div className={styles.actions}>
-                    {body ? 
-                    <button className={styles.likeButton} onClick={this.likeComment}>
-                        <i className={`fa fa-heart${isLiked ? '' : '-o'}`}></i>
-                    </button> :
+                    {!isEditor ? 
+                    <div className={styles.likes}>
+                        <button className={styles.likeButton} onClick={this.likeComment}>
+                            <i className={`fa fa-heart${isLiked ? '' : '-o'}`}></i>
+                        </button>
+                        <span className={styles.likesCount}>
+                            {likes +` likes`}
+                        </span>
+                    </div> :
                     null
                     }
                     

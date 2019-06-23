@@ -40,7 +40,8 @@ const post = db.define('post', {
         type: Sequelize.ARRAY(Sequelize.INTEGER)
     },
     numOfLikes: {
-        type: Sequelize.INTEGER
+        type: Sequelize.INTEGER,
+        defaultValue: 0
     }
 })
 

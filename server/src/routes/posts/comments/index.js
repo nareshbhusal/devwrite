@@ -8,7 +8,7 @@ const editComment = require('./editComment');
 const deleteComment = require('./deleteComment');
 const likeComment = require('./likeComment');
 
-router.get('/:commentid', requireLogin, getComment);
+router.get('/:commentid', getComment);
 router.post('/', requireLogin, createComment);
 router.put('/:commentid', requireLogin, editComment);
 router.delete('/:commentid', requireLogin, deleteComment);

@@ -48,10 +48,6 @@ db.authenticate()
 app.get('', (req, res)=>{
     return res.status(201).send(req.session);
 })
-app.get('/cloud', async (req, res) => {
-    const cloud = await getTagCloud();
-    return res.send(cloud);
-})
 
 app.use(routes);
 

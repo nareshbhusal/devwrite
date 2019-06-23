@@ -44,6 +44,7 @@ const likeComment = async(req, res) => {
         }
         
         const updatedPostComment = { ...postComment, likedBy: commentLikes };
+        console.log(updatedPostComment)
         postComments[postCommentIndex] = updatedPostComment;
         
         postComments = JSON.stringify(postComments);

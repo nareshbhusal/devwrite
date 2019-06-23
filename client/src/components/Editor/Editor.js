@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './Editor.module.css';
 import devwrite from '../../devwrite';
 
-import { fetchPost } from '../../helpers';
+import { fetchPost, createPost, editPost } from '../../helpers';
 import history from '../../history';
 
 import Logo from '../Logo/Logo';
@@ -15,7 +15,8 @@ class Editor extends React.Component{
         body: '',
         theme: 'light',
         tags: '',
-        saved: true
+        saved: true,
+        toEdit: false // 
     }
     titleRef = React.createRef();
     bodyRef = React.createRef();
@@ -57,21 +58,28 @@ class Editor extends React.Component{
     }
 
     onSubmitHandler = async() => {
-        try {
-            const { title, body, tags } = this.state;
-            const res = await devwrite.post('posts/', {
+        const { postId } = this.props.match.params;
+        const { title, body, tags } = this.state;
+
+        let res;
+        if(postId) {
+            res = await editPost(postId, {
                 title,
                 body,
                 tags
             });
-            console.log(res.data);
-
+        } else {
+            res = await createPost({
+                title,
+                body,
+                tags
+            });
+        }
+        if (res.msg) {
+            // if successful
             this.resetLocalStorage();
             history.goBack();
-            
-        } catch(err) {
-            console.log(err.response.data.err);
-        }
+        }    
     }
 
     changeTheme = async () => {

@@ -1,5 +1,5 @@
 .container{
-    min-height: 100vh;
+    min-height: 110vh;
     position: relative;
 }
 
@@ -17,6 +17,6 @@
 }
 
 .posts{
-    width: 85%;
+    width: 55%;
     max-width: 700px;
 }

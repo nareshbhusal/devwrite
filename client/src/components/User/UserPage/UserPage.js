@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './UserPage.module.css';
 
 import UserInfo from '../UserInfo/UserInfo';
-import Posts from '../../Posts/Posts';
 import Post from '../../Posts/Post/Post';
 import UserCard from '../UserCard/UserCard';
 
@@ -37,7 +36,8 @@ const RenderTabData = ({ currentTab, user, comments }) => {
         return (
             <div className={styles.usercomments}>
                 {comments.map(comment => {
-                    return <UserComment comment={comment}/>
+                    const key = String(comment.id) + String(comment.postId);
+                    return <UserComment key={key} comment={comment}/>
                 })}
             </div>
         );
@@ -45,7 +45,7 @@ const RenderTabData = ({ currentTab, user, comments }) => {
         return (
             <div className={styles.likedposts}>
                 {likedPosts.map(postId => {
-                    return <Posts id={postId} />
+                    return <Post key={postId} id={postId} />
                 })}
             </div>
         )
@@ -53,7 +53,7 @@ const RenderTabData = ({ currentTab, user, comments }) => {
         return (
             <div className={styles.savedposts}>
                 {savedPosts.map(postId => {
-                    return <Posts id={postId} />
+                    return <Post key={postId} id={postId} />
                 })}
             </div>
         );
@@ -68,7 +68,7 @@ class UserPage extends React.Component{
     savedRef = React.createRef();
 
     static contextType = authContext;
-
+    _isMounted=false;
     state = {
         currentTab: 'posts',
         user: {},
@@ -101,7 +101,6 @@ class UserPage extends React.Component{
         const comments = await Promise.all(userComments.map(async userComment => {
             return await getComment(userComment.postId, userComment.id);
         }));
-        console.log(comments);
         await this.setState({ comments });
     }
 
@@ -171,6 +170,9 @@ class UserPage extends React.Component{
     }
 
     async componentDidUpdate(){
+        if (!this._isMounted){
+            return false;
+        }
         this.updateTabsStyle();
         const newUserId = parseInt(this.props.match.params.userId);
         if (newUserId !==this.state.user.id) {
@@ -179,8 +181,12 @@ class UserPage extends React.Component{
     }
 
     async componentDidMount(){
+        this._isMounted=true;
         this.updateTabsStyle();
         await this.fetchData();
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     fetchData = async () => {

@@ -13,23 +13,24 @@ import UserIcon from '../../UserIcon/UserIcon';
 class Post extends React.Component {
 
     state = {}
-
+    _isMounted=false;
     static contextType = authContext;
 
     updatePostData = async() => {
+        if (!this._isMounted) {
+            return;
+        }
         const postData = await fetchPost(this.state.id);
         await this.setState({ ...postData });
     }
 
     likePost = async() => {
-        // like
         const { id } = this.state;
         await likePost(id);
         await this.updatePostData(id);
     }
 
     savePost = async() => {
-        // save
         const { id } = this.state;
         await savePost(id);
         await this.updatePostData(id);
@@ -57,24 +58,31 @@ class Post extends React.Component {
     }
 
     async componentDidMount(){
+        this._isMounted=true;
         const { id } = this.props;
         await this.setState({ id });
         await this.updatePostData();
     }
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
 
     render(){
-        const { username, user, likedBy, id, date, readingTime, title, body, tags, liked, saved } = this.state;
+        const { username, user, id, date, readingTime, title, body, tags, photo } = this.state;
 
         if (!title) {
             return null;
         }
         const postId = id;
-        const likes = likedBy.length;
 
         return (
             <article onClick={this.postClickHandler} className={styles.container+` post`}>
                 <div className={styles.info}>
-                    <UserIcon className={styles.usericon} name={username} id={user}/>
+                    <UserIcon 
+                    className={styles.usericon} 
+                    name={username} id={user} 
+                    avatarURL={photo}/>
+
                     <div className={styles.publish}>
                         <Link to={`/user/`+user} className={styles.author}>
                             {username}
@@ -98,7 +106,7 @@ class Post extends React.Component {
                 </Link>
                 <p className={styles.tags}>
                     {tags.map(tag => {
-                        return <Link key={tag} to={tag} className={styles.tag}>{`#`+tag}</Link>
+                        return <Link key={tag} to={`?tag=${tag}`} className={styles.tag}>{`#`+tag}</Link>
                     })}
                 </p>
                 

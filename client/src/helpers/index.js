@@ -2,6 +2,17 @@ import devwrite from '../devwrite';
 import history from '../history';
 import textVersion from 'textversionjs';
 
+export const fetchAvatar = async(id) => {
+    try {
+        const res = await devwrite.get(`users/${id}`);
+        const user = res.data;
+        return user.photo;
+    } catch(err) {
+        // console.log(err.response.data.err);
+        return '';
+    }
+}
+
 // POST ROUTES
 
 export const fetchPost = async(id) => {
@@ -10,6 +21,8 @@ export const fetchPost = async(id) => {
         const post = res.data;
         post.title = textVersion(post.title);
         post.body = textVersion(post.body);
+        const photo = await fetchAvatar(post.user);
+        post.photo = photo;
         return post;
         
     } catch(err) {
@@ -20,19 +33,27 @@ export const fetchPost = async(id) => {
 
 export const createPost = async() => {
     try {
-        const res = await devwrite.post(`posts`);
+        const res = await devwrite.post(`posts`, {
+            ...postData
+        });
         console.log(res.data);
+        return res.data;
     } catch(err) {
-        console.log(err);
+        console.log(err.response.data.err);
+        return { err: err.response.data.err }
     }
 }
 
-export const editPost = async(id) => {
+export const editPost = async(id, postData) => {
     try {
-        const res = await devwrite.put(`posts/${id}`);
+        const res = await devwrite.put(`posts/${id}`, {
+            ...postData
+        });
         console.log(res.data);
+        return res.data;
     } catch(err) {
-        console.log(err);
+        console.log(err.response.data.err);
+        return { err: err.response.data.err }
     }
 }
 
@@ -144,9 +165,9 @@ export const createUser = async(data) => {
     }
 }
 
-export const editUser = async({ id, name, about, website }) => {
+export const editUser = async({ id, name, about, website, photo }) => {
     try {
-        const res = await devwrite.put(`users/${id}`, { name, about, website });
+        const res = await devwrite.put(`users/${id}`, { name, about, website, photo });
         console.log(res.data);
     } catch(err) {
         console.log(err.response);
@@ -170,5 +191,15 @@ export const followUser = async(id) => {
         console.log(res.data);
     } catch(err) {
         console.log(err);
+    }
+}
+
+export const getTagsCloud = async() => {
+    try {
+        const res = await devwrite.get('/tags');
+        return res.data;
+    } catch(err) {
+        console.log(err);
+        return []
     }
 }

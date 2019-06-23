@@ -1,0 +1,81 @@
+
+.container{
+    padding: 1rem;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
+
+.toggleButton{
+    padding: 1rem;
+    border: 1px solid #444;
+    color: #fff;
+    background-color: #444;
+    width: 100%;
+    cursor: pointer;
+    transition: 0.25s;
+    outline: none;
+}
+
+.toggleButton:focus{
+    box-shadow: 0 0 0 0.2rem rgba(0,0,0,.5);
+}
+
+.button2{
+    border: 1px solid green;
+    background-color: green;
+}
+
+.button2:focus{
+    box-shadow: 0 0 0 0.2rem rgba(40,167,69,.5);
+}
+
+.toggleButton i{
+    margin-left: 0.5rem;
+}
+
+.menuWrapper{
+    position: relative;
+    width: 10rem;
+    margin-right: 2rem;
+}
+.menuWrapper:nth-of-type(2){
+    width: 13.5rem;
+}
+
+.menu{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top: 100%;
+    padding: 1rem 0;
+    left:0;
+    min-width: 100%;
+    background-color: #fff;
+    z-index: 7;
+    border: 1px solid #ccc;
+    margin-top: 0.1rem;
+    border-radius: 3px;
+}
+
+.menuItem{
+    cursor: pointer;
+    display: block;
+    padding: 0.5rem 1.6rem;
+    color: #000;
+    text-decoration: none;
+}
+
+.menuItem:hover{
+    background-color: #ddd;
+}
+
+.tagInput{
+    border: 1px solid #ccc;
+    padding: 1rem;
+    width: 12rem;
+}
+
+.tagInput:focus{
+    outline: red;
+}

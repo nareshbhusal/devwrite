@@ -7,8 +7,7 @@ const editPost = async (req, res) => {
     try {
         const postId = req.params.id;
         const userId = req.session.user.id;
-        // const updatedPost = req.body || {};
-        const updatedPost = { ...req.query };
+        const updatedPost = { ...req.body };
         // add edit timestamp
         updatedPost.editedAt = new Date().getTime();
         const postData = {

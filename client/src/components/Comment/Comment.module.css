@@ -54,11 +54,21 @@
     margin-top: 2rem;
 }
 
+.likes {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
 .likeButton{
     background-color: #fff;
     color: red;
     border: none;
     cursor: pointer;
+}
+.likesCount{
+    margin-left: 0.5rem;
+    font-size: 1.5rem;
 }
 
 [contentEditable=true]:empty:before{

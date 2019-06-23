@@ -28,6 +28,7 @@ class Nav extends React.Component{
 
                         <UserIcon className={styles.UserIcon} 
                         name={user.name} 
+                        avatarURL={user.photo}
                         id={user.id}/>
                         :
                         <Link className={styles.signinLink} to="/signin">

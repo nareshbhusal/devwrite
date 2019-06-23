@@ -1,0 +1,43 @@
+.container{
+    margin: 1rem 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0,0,0,0.09);
+}
+
+.container a{
+    text-decoration: none;
+}
+
+.info{
+    display: flex;
+    align-items: center;
+    padding: 0.75rem;
+    border-bottom: 1px solid #dddc;
+    color: #444;
+}
+
+.date{
+    margin-left: 0.7rem;
+    font-size: 1.3rem;
+}
+
+.title, .body{
+    text-decoration: none;
+    color: #000;
+}
+
+.username {
+    color: blue;
+    margin-right: 0.5rem;
+    text-decoration: none;
+}
+.username:hover{
+    text-decoration: underline;
+}
+.title{
+    margin-left: 0.6rem;
+}
+
+.body{
+    padding: 1rem;
+}

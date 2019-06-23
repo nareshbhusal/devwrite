@@ -8,8 +8,7 @@ const postsPerBatch = 10;
 
 const getQueryConfig = ({ tag='', page, days, sortorder }) => {
 
-    const offset = numberOfPosts * (page-1);
-
+    const offset = postsPerBatch * (page-1);
     const queryConfig = {
         where: {},
         limit:postsPerBatch,
@@ -17,22 +16,28 @@ const getQueryConfig = ({ tag='', page, days, sortorder }) => {
     }
 
     if (sortorder==='top') {
-        queryConfig.order = ['numOfLikes', 'DESC']
-
-    } else {
-        // sortorder - `new`
         let startTime = new Date();
         startTime.setHours(startTime.getHours() - parseInt(days)*24);
         let endTime = new Date();
         startTime=startTime.getTime().toString();
         endTime=endTime.getTime().toString();
 
-        queryConfig.order = ['createdAt', 'DESC']
-        queryConfig.where = {
-            createdAt: {
-                [sequelize.Op.between]: [startTime, endTime]
+        queryConfig.order = [
+            ['numOfLikes', 'DESC']
+        ];
+        if (days !=='all') {
+            queryConfig.where = {
+                createdAt: {
+                    [sequelize.Op.between]: [startTime, endTime]
+                }
             }
         }
+
+    } else {
+        // sortorder - `new`
+        queryConfig.order = [
+            ['createdAt', 'DESC']
+        ]
     }
 
     if (tag) {
@@ -47,6 +52,7 @@ const getQueryConfig = ({ tag='', page, days, sortorder }) => {
             required: true
         }];
     }
+    return queryConfig;
 }
 
 /*
@@ -62,14 +68,13 @@ const getPosts = async (req, res, next) => {
         const { sortorder } = req.params;
         const { t, page, tag } = req.query;
         const days = t;
+
         if (sortorder !=='top' && sortorder !=='new') {
             return next();
         }
-
         const queryConfig = getQueryConfig({ tag, page, days, sortorder });
-
         Post.belongsTo(Tag, {targetKey:'postId',foreignKey: 'id'});
-        let posts = await Post.findAll(queryConfig) || [];
+        const posts = await Post.findAll(queryConfig);
         
         // parse post
         let userId;

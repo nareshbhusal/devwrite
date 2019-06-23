@@ -1,30 +1,23 @@
 import React from 'react';
 import styles from './UserInfo.module.css';
 import { editUser } from '../../../helpers/index';
-
 import { Link } from 'react-router-dom';
+import UserIcon from '../../UserIcon/UserIcon';
 
-const renderAvatar = (name) => {
-    name = name || 'Anonymous';
-    let initials = name[0].toString().toUpperCase();
-    initials = name.split(' ').length > 1 ? initials + name.split(' ')[name.split(' ').length - 1][0].toUpperCase() : initials;
-    return (
-        <div className={styles.avatar}>
-            {initials}
-        </div>
-    );
-}
+const avatarSize=17;
 
 const userInfo = (props) => {
     let { id, ownProfile, editing, name, about, website, following, followers, createdAt, followed, logout, toggleEdit, followUser } = props;
+    const photo = props.photo;
+    let [avatarURL, setAvatarURL] = React.useState(photo);
 
     const onSubmitHandler = async(id) => {
         const name = nameRef.current.innerText;
         const website = websiteRef.current.innerText;
         const about = aboutRef.current.innerText;
-
-        await editUser({ id, name, about, website });
+        await editUser({ id, name, about, website, photo: avatarURL });
     }
+
     const followButtonTxt = followed ? 'Unfollow' : 'Follow';
     followers= followers || [];
     following=following || [];
@@ -116,7 +109,6 @@ const userInfo = (props) => {
                         Logout
                     </button>
                 </React.Fragment>
-                
                 :
                 <button 
                     className={styles.followButton} 
@@ -124,13 +116,11 @@ const userInfo = (props) => {
                     {followButtonTxt}
                 </button>
                 }
-                
             </div>
-
-            <div className={styles.avatarWrapper}>
-                {renderAvatar(name)}
-            </div>
-            
+            <UserIcon editing={editing}
+            onChangeHandler={setAvatarURL} 
+            avatarURL={avatarURL} name={name} 
+            id={id} size={avatarSize}/>
         </section>
     );
 }
