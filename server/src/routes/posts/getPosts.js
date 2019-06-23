@@ -9,32 +9,57 @@ const postsPerBatch = 10;
 
 const getNewPosts = async(tag='', batchNum=1, numberOfPosts=postsPerBatch) => {
 
-    const offset = numberOfPosts * (batchNum-1);
+    
 
     // TODO: add logic to only include posts with tags containing keyword `${tag}`
     Post.belongsTo(Tag, {targetKey:'postId',foreignKey: 'id'});
 
-    const posts = await Post.findAll({
-        where: {},
-        limit:numberOfPosts,
-        order: [
-            ['createdAt', 'DESC']
-        ],
-        offset,
-        // include: [{
-        //     model: Tag,
-        //     having: ["postId = id"],
-        //     // where: {
-        //     //     tagName: {
-        //     //         [sequelize.Op.iLike]: `%${tag}%`
-        //     //     }
-        //     // },
-        //     required: true
-        // }]
-    });
     console.log(posts.length);
 
     return posts;
+}
+
+const getQueryConfig = ({ tag='', page, days, sortorder }) => {
+
+    const offset = numberOfPosts * (page-1);
+
+    const queryConfig = {
+        where: {},
+        limit:numberOfPosts,
+        offset
+    }
+
+    if (sortorder==='top') {
+        queryConfig.order = ['numOfLikes', 'DESC']
+
+    } else {
+        // sortorder - `new`
+        let startTime = new Date();
+        startTime.setHours(startTime.getHours() - parseInt(days)*24);
+        let endTime = new Date();
+        startTime=startTime.getTime().toString();
+        endTime=endTime.getTime().toString();
+
+        queryConfig.order = ['createdAt', 'DESC']
+        queryConfig.where = {
+            createdAt: {
+                [sequelize.Op.between]: [startTime, endTime]
+            }
+        }
+    }
+
+    if (tag) {
+        queryConfig.include = [{
+            model: Tag,
+            having: ["postId = id"],
+            where: {
+                tagName: {
+                    [sequelize.Op.iLike]: `%${tag}%`
+                }
+            },
+            required: true
+        }];
+    }
 }
 
 const getTopPosts = async(tag='', batchNum=1, days=1, numberOfPosts=postsPerBatch) => {
@@ -42,37 +67,10 @@ const getTopPosts = async(tag='', batchNum=1, days=1, numberOfPosts=postsPerBatc
     const offset = numberOfPosts * (batchNum-1);
 
     
-    let startTime = new Date();
-    startTime.setHours(startTime.getHours() - parseInt(days)*24);
+    
 
-    let endTime = new Date();
+    
 
-    startTime=startTime.getTime().toString();
-    endTime=endTime.getTime().toString();
-
-    Post.belongsTo(Tag, {targetKey:'postId',foreignKey: 'id'});
-    const posts = await Post.findAll({
-        where: {
-            createdAt: {
-                [sequelize.Op.between]: [startTime, endTime]
-            }
-        },
-        limit:numberOfPosts,
-        order: [
-            ['numOfLikes', 'DESC']
-        ],
-        offset,
-        include: [{
-            model: Tag,
-            having: ["postId = id"],
-            where: {
-                tagName: {
-                    // [sequelize.Op.iLike]: `%${tag}%`
-                }
-            },
-            required: true
-        }]
-    });
     return posts;
 }
 
@@ -88,20 +86,15 @@ const getPosts = async (req, res, next) => {
     try {
         const { sortorder } = req.params;
         const { t, page, tag } = req.query;
-        const numDays = t;
-        
+        const days = t;
         if (sortorder !=='top' && sortorder !=='new') {
             return next();
         }
-        console.log(sortorder, numDays, page, tag);
 
-        let posts = [];
-        if (sortorder==='new') {
-            posts = await getNewPosts(tag, page);
+        const queryConfig = getQueryConfig({ tag, page, days, sortorder });
 
-        } else if (sortorder==='top') {
-            posts = await getTopPosts(tag, page, numDays);
-        }
+        Post.belongsTo(Tag, {targetKey:'postId',foreignKey: 'id'});
+        let posts = await Post.findAll(queryConfig) || [];
         
         // parse post
         let userId;
