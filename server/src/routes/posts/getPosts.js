@@ -2,22 +2,9 @@ const Post = require('../../models/Post');
 const Tag = require('../../models/Tag');
 const sequelize = require('sequelize');
 const isLoggedIn = require('../../controllers/isLoggedIn');
-
 const parsePost = require('../../controllers/post/parsePost');
 
 const postsPerBatch = 10;
-
-const getNewPosts = async(tag='', batchNum=1, numberOfPosts=postsPerBatch) => {
-
-    
-
-    // TODO: add logic to only include posts with tags containing keyword `${tag}`
-    Post.belongsTo(Tag, {targetKey:'postId',foreignKey: 'id'});
-
-    console.log(posts.length);
-
-    return posts;
-}
 
 const getQueryConfig = ({ tag='', page, days, sortorder }) => {
 
@@ -25,7 +12,7 @@ const getQueryConfig = ({ tag='', page, days, sortorder }) => {
 
     const queryConfig = {
         where: {},
-        limit:numberOfPosts,
+        limit:postsPerBatch,
         offset
     }
 
@@ -60,18 +47,6 @@ const getQueryConfig = ({ tag='', page, days, sortorder }) => {
             required: true
         }];
     }
-}
-
-const getTopPosts = async(tag='', batchNum=1, days=1, numberOfPosts=postsPerBatch) => {
-
-    const offset = numberOfPosts * (batchNum-1);
-
-    
-    
-
-    
-
-    return posts;
 }
 
 /*
