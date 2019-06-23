@@ -22,7 +22,7 @@ const determineToggleDaysDisplay = (t) => {
     return activeDayDisplay;
 }
 
-const sort = ({ sortOrder, t, tag }) => {
+const sort = ({ sortOrder, t, tag, search }) => {
     const [menuOpen, toggleMenu] = React.useState(false);
     const [menuOpen2, toggleMenu2] = React.useState(false);
     const sortOrderAlt = sortOrder === 'new' ? 'top' : 'new';
@@ -31,6 +31,9 @@ const sort = ({ sortOrder, t, tag }) => {
     const changeTag = (e) => {
         const tag = e.target.value;
         let url = `/posts/${sortOrder}/?tag=${tag}`;
+        if (search) {
+            url+=`&search=${search}`;
+        }
         if (t && sortOrder==='top') {
             url=url+`&t=${t}`;
         }
@@ -66,6 +69,9 @@ const sort = ({ sortOrder, t, tag }) => {
                         let link = `?t=${item.value}`;
                         if (tag) {
                             link+=`&tag=${tag}`;
+                        }
+                        if (search){
+                            link+=`&search=${search}`;
                         }
                         return (
                             <Link to={link} key={item.value} className={styles.menuItem}>
