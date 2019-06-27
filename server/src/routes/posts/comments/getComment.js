@@ -6,7 +6,6 @@ const getComment = async(req, res) => {
         const commentId = parseInt(req.params.commentid);
 
         const post = await getPost({ id: postId });
-
         if (!post) {
             return res.status(404).send({ err: 'Post not found' });
         }
@@ -15,7 +14,6 @@ const getComment = async(req, res) => {
             postComments = JSON.parse(postComments);
         }
 
-        // console.log(postComments)
         const comment = postComments.find(postComment => {
             return postComment.id === commentId;
         })

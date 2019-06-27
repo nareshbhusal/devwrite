@@ -3,10 +3,15 @@ import styles from './Nav.module.css';
 import Logo from '../Logo/Logo';
 import UserIcon from '../UserIcon/UserIcon';
 import { Link } from 'react-router-dom';
-
+import history from '../../history';
 import authContext from '../../contexts/authContext';
 
-const Nav = ({ searchHandler }) => {
+const Nav = (props) => {
+
+    const searchHandler = (e) => {
+        const searchTerm = e.target.value;
+        history.push(`?search=${searchTerm}`);
+    }
 
     const context = useContext(authContext);
     const user = context || {};
@@ -14,7 +19,7 @@ const Nav = ({ searchHandler }) => {
     return (
         <div className={styles.container}>
             <Logo className={styles.logo} />
-            <input onSubmit={searchHandler} placeholder="search" className={styles.search} name="query" />
+            <input onInput={searchHandler} placeholder="search" className={styles.search} name="query" />
             <div className={styles.right}>
                 <Link className={styles.writeLink} to="/editor">
                     write a post

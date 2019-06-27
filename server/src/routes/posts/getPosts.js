@@ -9,11 +9,15 @@ const postsPerBatch = 10;
 const getQueryConfig = ({ tag='', page, days, sortorder, search='' }) => {
     const offset = postsPerBatch * (page-1);
     const queryConfig = {
-        where: {},
+        where: {
+            title: {
+                [sequelize.Op.iLike]: `%${search}%`
+            }
+        },
         limit:postsPerBatch,
         offset
     }
-
+    
     if (sortorder==='top') {
         let startTime = new Date();
         startTime.setHours(startTime.getHours() - parseInt(days)*24);
@@ -25,10 +29,8 @@ const getQueryConfig = ({ tag='', page, days, sortorder, search='' }) => {
             ['numOfLikes', 'DESC']
         ];
         if (days !=='all') {
-            queryConfig.where = {
-                createdAt: {
-                    [sequelize.Op.between]: [startTime, endTime]
-                }
+            queryConfig.where.createdAt = {
+                [sequelize.Op.between]: [startTime, endTime]
             }
         }
 
@@ -45,24 +47,6 @@ const getQueryConfig = ({ tag='', page, days, sortorder, search='' }) => {
             where: {
                 tagName: {
                     [sequelize.Op.iLike]: `%${tag}%`
-                }
-            },
-            required: true
-        }];
-
-        if (search) {
-            queryConfig.include[0].where.title = {
-                [sequelize.Op.iLike]: `%${searh}%`
-            }
-        }
-    }
-    if (search && !tag) {
-        queryConfig.include = [{
-            model: Tag,
-            having: ["postId = id"],
-            where: {
-                title: {
-                    [sequelize.Op.iLike]: `%${searh}%`
                 }
             },
             required: true
@@ -99,8 +83,8 @@ const getPosts = async (req, res, next) => {
             userId = parseInt(req.session.user.id);
         }
         const parsedPosts = await parsePost(posts, userId);
-
         return res.status(200).send(parsedPosts);
+        
     } catch(err) {
         console.log(err);
         return res.status(500).send({err: 'Something went wrong fetching posts'});

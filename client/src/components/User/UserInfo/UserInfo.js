@@ -3,6 +3,7 @@ import styles from './UserInfo.module.css';
 import { editUser } from '../../../helpers/index';
 import { Link } from 'react-router-dom';
 import UserIcon from '../../UserIcon/UserIcon';
+import authContext from '../../../contexts/authContext';
 
 const avatarSize=17;
 
@@ -10,6 +11,8 @@ const userInfo = (props) => {
     let { id, ownProfile, editing, name, about, website, following, followers, createdAt, followed, logout, toggleEdit, followUser } = props;
     const photo = props.photo;
     let [avatarURL, setAvatarURL] = React.useState(photo);
+
+    const userContext =  React.useContext(authContext);
 
     const onSubmitHandler = async(id) => {
         const name = nameRef.current.innerText;
@@ -19,6 +22,8 @@ const userInfo = (props) => {
         if (res.msg) {
             toggleEdit();
         }
+        // refresh auth
+        userContext.reEvaluateAuth();
     }
 
     const followButtonTxt = followed ? 'Unfollow' : 'Follow';
@@ -35,7 +40,6 @@ const userInfo = (props) => {
         background: 'rgba(0,0,0,0.7)',
         color: '#fff'
     };
-
     return (
         <section className={styles.container}>
             <div className={styles.info}>

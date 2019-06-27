@@ -5,14 +5,12 @@ const deletePost = async(req, res) => {
     try {
         const postId = parseInt(req.params.id);
         const userId = parseInt(req.session.user.id);
-
         await deletePostCtrl(
             { 
                 user: userId,
                 id: postId
             }
         );
-
         return res.status(200).send({ msg: 'Deleted post!' });
     } catch(err) {
         console.log(err);

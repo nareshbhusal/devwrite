@@ -11,16 +11,14 @@ const getPostById = async (req, res) => {
         if (!post) {
             return res.status(404).send({err: '404: No such post found'});
         }
-
         const loggedIn = await isLoggedIn(req);
         let userId;
         if (loggedIn){
             userId = parseInt(req.session.user.id);
         }
-
         const parsedPost = await parsePost(post, userId);
-
         return res.status(200).send(parsedPost);
+
     } catch(err) {
         console.log(err);
         res.status(500).send({err: 'Something went wrong!'});

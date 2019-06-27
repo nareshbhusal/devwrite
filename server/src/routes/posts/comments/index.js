@@ -12,7 +12,6 @@ router.get('/:commentid', getComment);
 router.post('/', requireLogin, createComment);
 router.put('/:commentid', requireLogin, editComment);
 router.delete('/:commentid', requireLogin, deleteComment);
-
 router.post('/:commentid/like', requireLogin, likeComment);
 
 module.exports = router;

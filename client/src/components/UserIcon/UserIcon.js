@@ -13,13 +13,14 @@ const userIcon = ({ name = 'anon', id, size=4, avatarURL, onChangeHandler, editi
         fontSize: `${size/2.2}rem`,
     }
     avatarURL = avatarURL || '';
+    const imageStyle = {backgroundImage: `url(${avatarURL})`};
 
     return (
         <div className={styles.container}>
 
         <Link to={`/user/${id}`} style={dynamicStyle} className={styles.userIcon}>
             <div className={styles.image} 
-            style={{backgroundImage: `url(${avatarURL})`}}>
+            style={imageStyle}>
             </div>
             <span className={styles.initials}>
                 {initials}
@@ -31,7 +32,7 @@ const userIcon = ({ name = 'anon', id, size=4, avatarURL, onChangeHandler, editi
         type="text"
         className={styles.input} 
         placeholder={avatarURL || "type avatar url"} 
-        onChange={(e)=>onChangeHandler(e.target.value)} /> 
+        onChange={(e)=>onChangeHandler(e.target.value)} />
         :null
         }
     </div>

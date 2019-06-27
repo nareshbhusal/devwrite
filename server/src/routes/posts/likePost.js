@@ -1,4 +1,3 @@
-
 const getUser = require('../../controllers/user/getUser');
 const getPost = require('../../controllers/post/getPost');
 const updatePost = require('../../controllers/post/updatePost');

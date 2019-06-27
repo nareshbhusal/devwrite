@@ -129,28 +129,6 @@ class Comment extends React.Component{
         await this.setState({ editing: !this.state.editing });
     }
 
-    renderBody(){
-        const { body, editing, isEditor } = this.state;
-
-        let isEnabled = editing || isEditor;
-
-        if (this.isCommentAuthor()) {
-        return (
-            <ContentEditable
-                ref={this.bodyRef}
-                className={styles.body}
-                contentEditable
-                html={body} 
-                placeholder="Add to the discussion"
-                disabled={!isEnabled}
-                onChange={this.handleChange}
-                tagName='p'
-                />
-            );
-        }
-        return <p className={styles.body}>{body}</p>
-    }
-
     handleChange = async e => {
 
         const value = e.target.value;
@@ -205,6 +183,27 @@ class Comment extends React.Component{
                 }
             </div> 
         );
+    }
+    renderBody(){
+        const { body, editing, isEditor } = this.state;
+
+        let isEnabled = editing || isEditor;
+
+        if (this.isCommentAuthor()) {
+        return (
+            <ContentEditable
+                ref={this.bodyRef}
+                className={styles.body}
+                contentEditable
+                html={body} 
+                placeholder="Add to the discussion"
+                disabled={!isEnabled}
+                onChange={this.handleChange}
+                tagName='p'
+                />
+            );
+        }
+        return <p className={styles.body}>{body}</p>
     }
 
     render() {

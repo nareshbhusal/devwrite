@@ -1,11 +1,8 @@
 const getPost = require('../../../controllers/post/getPost');
 const editPost = require('../../../controllers/post/updatePost');
 
-
 const likeComment = async(req, res) => {
-    
     try {
-
         let { commentid, postid } = req.params;
         let userId = req.session.user.id;
 
@@ -31,7 +28,6 @@ const likeComment = async(req, res) => {
         const commentLikes = postComment.likedBy || [];
 
         // determine if already liked
-
         let liked = false;
         if (commentLikes.indexOf(userId) === -1) {
             // not liked
@@ -44,12 +40,10 @@ const likeComment = async(req, res) => {
         }
         
         const updatedPostComment = { ...postComment, likedBy: commentLikes };
-        console.log(updatedPostComment)
         postComments[postCommentIndex] = updatedPostComment;
         
         postComments = JSON.stringify(postComments);
         await editPost({ id: postid }, { comments: postComments });
-
         return res.status(200).send({ msg: `${liked ? 'Liked' : 'Unliked'} comment!` });
 
     } catch(err) {

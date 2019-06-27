@@ -4,6 +4,7 @@ import styles from './Posts.module.css';
 
 import devWrite from '../../devwrite';
 import Sort from '../Sort/Sort';
+import Loader from '../Loader/Loader';
 
 class Posts extends React.Component{
     state = {
@@ -12,18 +13,19 @@ class Posts extends React.Component{
         page: 1, //current page number
         posts: [],
     }
+    _isMounted=false;
 
     determineSorting = async () => {
 
-        let { sortOrder, t, tag } = this.props.pathParams || {};
+        let { sortOrder, t, tag, search } = this.props.pathParams || {};
         sortOrder = sortOrder || 'new';
         t= t || 1;
         tag=tag || '';
-
+        search=search || '';
         let sortingChanged = false;
-        if (sortOrder!==this.state.sortOrder || t !==this.state.t || tag !==this.state.tag) {
+        if (sortOrder!==this.state.sortOrder || t !==this.state.t || tag !==this.state.tag || search !==this.state.search) {
             sortingChanged = true;
-            await this.setState({ sortOrder, t, tag });
+            await this.setState({ sortOrder, t, tag, search });
         }
         return sortingChanged;
     }
@@ -32,8 +34,8 @@ class Posts extends React.Component{
         await this.toggleLoading();
         this.enableInfiniteScroll();
         try {
-            const { sortOrder, t, page, tag } = this.state;
-            const URL = `posts/${sortOrder}/?tag=${tag}&t=${t}&page=${page}`;
+            const { sortOrder, t, page, tag, search } = this.state;
+            const URL = `posts/${sortOrder}/?tag=${tag}&t=${t}&page=${page}&search=${search}`;
             const res = await devWrite.get(URL);
             const newPosts = res.data;
             if (newPosts.length) {
@@ -41,7 +43,7 @@ class Posts extends React.Component{
                 await this.setState({ posts, page: this.state.page+1 });
             } else {
                 // 
-                window.removeEventListener('scroll', this.scrollEventListener);
+                this.disableInfiniteScroll();
                 console.log('removed listener');
             }
             
@@ -52,11 +54,18 @@ class Posts extends React.Component{
     }
 
     async componentDidUpdate(){
+        if (!this._isMounted){
+            return;
+        }
         const sortingChanged = await this.determineSorting();
         if (sortingChanged) {
             await this.setState({ posts: [], page:1 });
             await this.fetchPosts();
         }
+    }
+    componentWillUnmount(){
+        this.disableInfiniteScroll();
+        this._isMounted=false;
     }
 
     reachedNearBottom() {
@@ -72,7 +81,7 @@ class Posts extends React.Component{
     }
     scrollEventListener = async() => {
         if (this.reachedNearBottom() && !this.state.loading) {
-            console.log('here we are!')
+            console.log('load more posts now!')
             await this.fetchPosts();
         }
     }
@@ -80,8 +89,12 @@ class Posts extends React.Component{
     enableInfiniteScroll() {
         window.addEventListener('scroll', this.scrollEventListener);
     }
+    disableInfiniteScroll(){
+        window.removeEventListener('scroll', this.scrollEventListener);
+    }
 
     async componentDidMount() {
+        this._isMounted=true;
         await this.determineSorting();
         await this.fetchPosts();
     }
@@ -91,7 +104,7 @@ class Posts extends React.Component{
     }
     
     render() {
-        const { sortOrder, t, tag, loading, posts } = this.state;
+        const { sortOrder, t, tag, loading, posts, search } = this.state;
 
         return (
             <div className={styles.container}>
@@ -103,8 +116,8 @@ class Posts extends React.Component{
                 :
                 <h2 className={styles.noPosts}>No posts found!</h2>
                 }
-                {loading ? 
-                <p className={styles.loading}>Loading...</p> 
+                {!loading ? 
+                <Loader /> 
                 :null}
             </div>
         );

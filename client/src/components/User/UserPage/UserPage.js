@@ -5,7 +5,7 @@ import UserInfo from '../UserInfo/UserInfo';
 import Post from '../../Posts/Post/Post';
 import UserCard from '../UserCard/UserCard';
 import UserComment from '../UserComment/UserComment';
-
+import Loader from '../../Loader/Loader';
 import authContext from '../../../contexts/authContext';
 import { fetchUser, getComment, logout, followUser } from '../../../helpers/index';
 
@@ -18,7 +18,7 @@ const RenderTabData = ({ currentTab, user, comments }) => {
     const likedPosts = user.likedPosts || [];
 
     if (!posts) {
-        return <p>Loading...</p>
+        return <Loader />
     }
     if (currentTab==='posts') {
         return (
@@ -199,12 +199,15 @@ class UserPage extends React.Component{
         return (
             <div className={styles.container}>
                 <div className={styles.wrapper}>
-                    <UserInfo { ...user } 
-                    ownProfile={ownProfile} 
-                    logout={this.logoutHandler} 
-                    toggleEdit={this.toggleEdit} 
-                    editing={editing} 
-                    followUser={this.followUser} />
+                    {user.name ? 
+                        <UserInfo { ...user } 
+                        ownProfile={ownProfile} 
+                        logout={this.logoutHandler} 
+                        toggleEdit={this.toggleEdit} 
+                        editing={editing} 
+                        followUser={this.followUser} />
+                    :
+                    <Loader />}
 
                     {
                     toShowNetwork ? 

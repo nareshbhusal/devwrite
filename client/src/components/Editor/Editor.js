@@ -60,7 +60,6 @@ class Editor extends React.Component{
     onSubmitHandler = async() => {
         const { postId } = this.props.match.params;
         const { title, body, tags } = this.state;
-
         let res;
         if(postId) {
             res = await editPost(postId, {
@@ -91,7 +90,6 @@ class Editor extends React.Component{
     savetoLocalStorage = async () => {
         const { title, body, theme, tags } = this.state;
         const data = { title, body, theme, tags };
-        
         await window.localStorage.setItem('data', JSON.stringify(data));
     }
 
@@ -117,15 +115,12 @@ class Editor extends React.Component{
         e.persist();
 
         await this.setState({ saved: false });
-
         const name = e.target.getAttribute('name');
         let value = this[`${name}Ref`].current.innerHTML;
         
         await this.setState({ [name]: value });
         await this.savetoLocalStorage();
-
         await this.setState({ saved: true });
-        
     };
 
     tagsChangeHandler = async (e) => {
@@ -158,7 +153,6 @@ class Editor extends React.Component{
 
     render() {
         const { theme } = this.state;
-
         return (
             <div className={styles.container + ` ${theme==='light' ? styles.light : styles.dark}`}>
                 {this.renderTopBar()}

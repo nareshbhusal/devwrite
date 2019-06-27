@@ -44,7 +44,6 @@ class Main extends React.Component{
     }
 
     componentDidUpdate(){
-
         if(this.pathChanged()) {
             this.determineDestination();
             console.log('changed route')
@@ -57,7 +56,6 @@ class Main extends React.Component{
     }
     
     renderMain(){
-        
         const { postId, userId, pathname, popularTags } = this.state;
 
         if (!pathname) {
@@ -66,13 +64,11 @@ class Main extends React.Component{
         if (postId) {
             return (
                 <main className={styles.main}>
-                    
                     <PostPage className={styles.postpage} id={postId}/>
                 </main>
             );
 
         } else if (userId) {
-            
             return <UserPage match={this.props.match} location={this.props.location} />
 
         } else {
@@ -103,7 +99,6 @@ class Main extends React.Component{
                     {this.renderMain()}
                     <Footer className={styles.footer} />
                 </authContext.Provider>
-                
             </div>
         );
     }

@@ -5,6 +5,7 @@ import history from '../../history';
 import SignIn from '../SignIn/SignIn';
 import Main from '../Main/Main';
 import Editor from '../Editor/Editor';
+import NotFound from '../NotFound/NotFound';
 
 import './App.css';
 
@@ -18,10 +19,9 @@ const App = ()=> {
             <Router history={history}>
                 <Switch>
                     <Route exact path="/signin" component={SignIn}/>
-
                     <Route exact path={pathsThatRenderEditor} component={Editor}/>
-
                     <Route exact path={pathsThatRenderMain} component={Main}/>
+                    <Route path='/' component={NotFound} />
                 </Switch>
             </Router>
         </div>

@@ -14,7 +14,6 @@ const login = async(req, res) => {
 
     try {
         const userInRecords = await getUser(user);
-
         if (userInRecords) {
             // login successful
             await updateSessionIDs(userInRecords, req.sessionID);

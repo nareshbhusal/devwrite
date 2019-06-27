@@ -8,7 +8,6 @@ const editUser = async(req, res) => {
         return res.status(403).send(authError);
     }
     const updatedUserValues = { ...req.body };
-    console.log(updatedUserValues);
     
     try {
         const id = req.session.user.id;
@@ -17,7 +16,6 @@ const editUser = async(req, res) => {
         console.log(err);
         return res.status(500).send({ err: 'Something went wrong updating the user' });
     }
-
     return res.status(200).send({msg: 'user with id '+req.params.id+' edited!'})
 }
 

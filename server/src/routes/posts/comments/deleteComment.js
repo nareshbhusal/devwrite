@@ -44,10 +44,9 @@ const deleteComment = async (req, res) => {
             commentedPosts.splice(commentedPostindex, 1);
         }
         commentedPosts = JSON.stringify(commentedPosts);
-
         await updateUser(userId, { commentedPosts });
-
         return res.status(200).send({ msg: 'Deleted comment successfully!' });
+        
     } catch(err) {
         console.log(err);
         return res.status(500).send({err: 'Something went wrong'});

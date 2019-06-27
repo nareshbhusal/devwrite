@@ -2,7 +2,6 @@ const getUser = require('../../controllers/user/getUser');
 
 const getCurrentUser = async(req, res) => {
     try {
-
         const id = req.session.user.id;
         const user = await getUser({ id })
         return res.status(200).send(user);

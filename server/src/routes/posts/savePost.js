@@ -22,9 +22,7 @@ const savePost = async(req, res) => {
             // saved already
             savedPosts.splice(savedPosts.indexOf(postId), 1);
         }
-        // console.log(savedPosts);
         await updateUser(userId, { savedPosts });
-
         return res.status(200).send({ msg: `${toSave ? 'Saved' : 'Unsaved'} post!` });
     }
     catch(err) {

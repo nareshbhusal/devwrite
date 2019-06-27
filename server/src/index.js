@@ -16,7 +16,6 @@ let client = redis.createClient();
 client.on('connect', () => {
     console.log('Redis connected')
 })
-const getTagCloud = require('./controllers/tag/getTagCloud');
 
 // configure middlewares
 app.use(express.json())

@@ -26,7 +26,7 @@ export const fetchPost = async(id) => {
         return post;
         
     } catch(err) {
-        console.log(err.response.data);
+        console.log(err.response.data.err);
         return {error: err.response.data.err};
     }
 }
@@ -63,7 +63,7 @@ export const deletePost = async(id) => {
             const res = await devwrite.delete(`posts/${id}`);
             console.log(res.data);
         } catch(err) {
-            console.log(err);
+            console.log(err.response.data.err);
         }
     }
 }
@@ -74,7 +74,7 @@ export const likePost = async(id) => {
         console.log(res.data);
 
     } catch(err) {
-        console.log(err);
+        console.log(err.response.data.err);
     }
 }
 
@@ -83,7 +83,8 @@ export const savePost = async(id) => {
         const res = await devwrite.post(`posts/${id}/save`);
         console.log(res.data);
     } catch(err) {
-        console.log(err);
+        console.log(err.response.data.err);
+        
     }
 }
 
@@ -115,10 +116,9 @@ export const fetchUser = async(id) => {
 export const getCurrentUser = async() => {
     try {
         const res = await devwrite.get(`users/me`);
-        // console.log(res);
         return res.data;
     } catch(err) {
-        console.log(err.response);
+        console.log(err.response.data.err);
         return {};
     }
 }
@@ -183,7 +183,7 @@ export const deleteUser = async(id) => {
         console.log(res);
         return res.data;
     } catch(err) {
-        console.log(err.response.data);
+        console.log(err.response.data.err);
         return {};
     }
 }
@@ -193,7 +193,7 @@ export const followUser = async(id) => {
         const res = await devwrite.post(`users/${id}/follow`)
         console.log(res.data);
     } catch(err) {
-        console.log(err.response.data);
+        console.log(err.response.data.err);
     }
 }
 
@@ -202,7 +202,7 @@ export const getTagsCloud = async() => {
         const res = await devwrite.get('/tags');
         return res.data;
     } catch(err) {
-        console.log(err.respose.data);
+        console.log(err.respose.data.err);
         return []
     }
 }

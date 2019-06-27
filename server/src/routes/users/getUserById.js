@@ -1,10 +1,8 @@
 const getUser = require('../../controllers/user/getUser');
 const isLoggedIn = require('../../controllers/isLoggedIn');
 
-
 const parseUser = (user) => {
     // sanitize data for client side rendering
-
     user.createdAt = new Date(parseInt(user.createdAt)).toDateString().split(' ').splice(1).join(' ');
     user.followers = user.followers || [];
     user.following = user.following || [];
@@ -25,7 +23,6 @@ const getUserById = async (req, res) => {
             return res.status(404).send({ err: '404. This user is either deleted or never existed!' })
         }
         user = parseUser(user);
-
         const loggedIn = await isLoggedIn(req);
 
         if (loggedIn) {
