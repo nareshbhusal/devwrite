@@ -27,7 +27,7 @@ app.use(session({
     genid: function(req) {
         return uuid(); //use UUIDs for session IDs
     },
-    secret: 'ssssshhhh',
+    secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
     resave: true,
     store: new RedisStore({ client }),

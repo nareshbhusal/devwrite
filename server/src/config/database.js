@@ -1,7 +1,8 @@
 const Sequelize = require('sequelize');
+const { DB_NAME, HOST, DB_USER, DB_PASS } = process.env;
 
-module.exports = new Sequelize('mediumdb', 'postgres', 'nnnsss', {
-    host: 'localhost',
+module.exports = new Sequelize(DB_NAME, DB_USER, DB_PASS, {
+    host: HOST,
     dialect: 'postgres',
     pool: {
         max:5,
