@@ -29,11 +29,12 @@ class Comment extends React.Component{
                 body
             });
             console.log(res.data);
-            await this.setState({ editing: false, body: '' });
+            this.setState({ editing: false, body: '' });
+            await this.props.reFetchPost(postId);
 
         } catch(err) {
             console.log(err.response);
-            alert(err); // alert error
+            alert(err.response.data.err || err.response.data); // alert error
         }
     }
 
@@ -44,9 +45,9 @@ class Comment extends React.Component{
     
                 const res = await devwrite.delete(`posts/${postId}/comment/${id}`);
                 console.log(res.data);
-                await this.props.postActionHandler();
+                await this.props.reFetchPost(postId);
             } catch(err) {
-                console.log(err.response.data.err);
+                console.log(err.response.data.err || err.response.data);
             }
         }
     }
@@ -57,9 +58,10 @@ class Comment extends React.Component{
 
             const res = await devwrite.post(`posts/${postId}/comment/${id}/like`);
             console.log(res.data);
-            await this.props.postActionHandler();
+            await this.props.reFetchPost(postId);
         } catch(err) {
             console.log(err.response);
+            alert(err.response.data.err);
         }
     }
 
@@ -71,11 +73,11 @@ class Comment extends React.Component{
                 body
             });
             console.log(res.data);
-            await this.props.postActionHandler();
             await this.setState({ editing: false });
+
         } catch(err) {
-            console.log(err.response);
-            alert(err); // alert error
+            console.log(err.response.data.err);
+            alert(err.response.data.err); // alert error
         }
     }
 

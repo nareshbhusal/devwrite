@@ -7,16 +7,45 @@
     display: flex;
     flex-direction: row;
     justify-content: center;
+    padding: 2rem;
 }
 
 .sidebar{
-    position: absolute;
-    right: 0%;
-    margin: 2rem;
-    margin-right: 4rem;
+    margin: 2rem 3rem;
+    flex: 1;
 }
 
 .posts{
     width: 55%;
-    max-width: 700px;
+    max-width: 650px;
+    flex: 3;
+    margin: 0 3rem;
+}
+
+@media(max-width: 730px) {
+    .posts{
+        margin: 0 2rem;
+        width: 75%;
+    }
+    .sidebar{
+        margin: 2rem;
+    }
+}
+
+@media(max-width: 680px){
+    .main{
+        padding: 1rem;
+    }
+    .sidebar{
+        margin-left: 1rem;
+    }
+    .posts{
+        width: 100%;
+    }
+}
+
+@media(max-width: 550px){
+    .sidebar{
+        display: none;
+    }
 }

@@ -9,8 +9,8 @@
 
 .wrapper{
     display: flex;
-    width: 850px;
-    max-width: 85%;
+    max-width: 850px;
+    width: 90%;
     min-width: 300px;
     flex-direction: row;
     background-color: #fff;
@@ -54,5 +54,34 @@
     border-right: none;
     border-bottom: none;
     cursor: pointer;
-    
+}
+
+@media(max-width: 750px){
+    .wrapper{
+        width: 90%;
+    }
+}
+
+@media(max-width: 650px){
+    .wrapper{
+        width: 100%;
+    }
+    .container{
+        padding: 0 1.5rem;
+    }
+}
+
+@media(max-width: 550px){
+    .sideImage{
+        display: none;
+    }
+    .container{
+        padding: 0 2.5rem;
+    }
+}
+@media(max-width: 450px){
+
+    .container{
+        padding: 0 1.5rem;
+    }
 }

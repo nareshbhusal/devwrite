@@ -31,7 +31,7 @@ export const fetchPost = async(id) => {
     }
 }
 
-export const createPost = async() => {
+export const createPost = async(postData) => {
     try {
         const res = await devwrite.post(`posts`, {
             ...postData
@@ -40,6 +40,7 @@ export const createPost = async() => {
         return res.data;
     } catch(err) {
         console.log(err.response.data.err);
+        alert(err.response.data.err);
         return { err: err.response.data.err }
     }
 }
@@ -53,6 +54,7 @@ export const editPost = async(id, postData) => {
         return res.data;
     } catch(err) {
         console.log(err.response.data.err);
+        alert(err.response.data.err);
         return { err: err.response.data.err }
     }
 }
@@ -63,6 +65,7 @@ export const deletePost = async(id) => {
             const res = await devwrite.delete(`posts/${id}`);
             console.log(res.data);
         } catch(err) {
+            alert(err.response.data.err);
             console.log(err.response.data.err);
         }
     }
@@ -74,6 +77,7 @@ export const likePost = async(id) => {
         console.log(res.data);
 
     } catch(err) {
+        alert(err.response.data.err);
         console.log(err.response.data.err);
     }
 }
@@ -84,7 +88,7 @@ export const savePost = async(id) => {
         console.log(res.data);
     } catch(err) {
         console.log(err.response.data.err);
-        
+        alert(err.response.data.err);
     }
 }
 
@@ -134,6 +138,7 @@ export const loginUser = async (data) => {
 
     } catch(err) {
         console.log(err);
+        alert(err.response.data.err);
         return {};
     }
 }
@@ -162,6 +167,7 @@ export const createUser = async(data) => {
         // return res.data;
     } catch(err) {
         console.log(err.response);
+        alert(err.response.data.err);
         return {};
     }
 }
@@ -173,6 +179,7 @@ export const editUser = async({ id, name, about, website, photo }) => {
         return res.data;
     } catch(err) {
         console.log(err.response);
+        alert(err.response.data.err);
         return err.response.data;
     }
 }
@@ -184,6 +191,7 @@ export const deleteUser = async(id) => {
         return res.data;
     } catch(err) {
         console.log(err.response.data.err);
+        alert(err.response.data.err);
         return {};
     }
 }
@@ -194,6 +202,7 @@ export const followUser = async(id) => {
         console.log(res.data);
     } catch(err) {
         console.log(err.response.data.err);
+        alert(err.response.data.err);
     }
 }
 

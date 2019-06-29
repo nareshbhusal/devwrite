@@ -9,13 +9,17 @@ import Loader from '../../Loader/Loader';
 import authContext from '../../../contexts/authContext';
 import { fetchUser, getComment, logout, followUser } from '../../../helpers/index';
 
-
 const RenderTabData = ({ currentTab, user, comments }) => {
 
-    const { posts } = user;
+    let { posts } = user;
     comments = comments || [];
-    const savedPosts = user.savedPosts || [];
-    const likedPosts = user.likedPosts || [];
+    let savedPosts = user.savedPosts || [];
+    let likedPosts = user.likedPosts || [];
+
+    // provision for filtering duplicates
+    posts = [...new Set(posts)];
+    posts = [...new Set(savedPosts)];
+    posts = [...new Set(likedPosts)];
 
     if (!posts) {
         return <Loader />
@@ -33,7 +37,8 @@ const RenderTabData = ({ currentTab, user, comments }) => {
         return (
             <div className={styles.usercomments}>
                 {comments.map(comment => {
-                    const key = String(comment.id) + String(comment.postId);
+                    const key = `${comment.id}${comment.postId}`;
+                    console.log(key);
                     return <UserComment key={key} comment={comment}/>
                 })}
             </div>
@@ -155,15 +160,16 @@ class UserPage extends React.Component{
                     {networkType}
                 </h2>
                 {user[networkType].map(id => {
-                    return <UserCard id={id} />
+                    return <UserCard key={id} followUser={this.followUser} id={id} />
                 })}
             </div>
         );
     }
 
     async componentDidUpdate(){
-        if (!this._isMounted){
-            return false;
+        // if userId params isn't their, the route has changed
+        if (!this._isMounted || !this.props.match.params.userId){
+            return;
         }
         this.updateTabsStyle();
         const newUserId = parseInt(this.props.match.params.userId);
@@ -208,7 +214,6 @@ class UserPage extends React.Component{
                         followUser={this.followUser} />
                     :
                     <Loader />}
-
                     {
                     toShowNetwork ? 
                     this.renderNetwork()

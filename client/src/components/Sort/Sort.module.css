@@ -79,3 +79,12 @@
 .tagInput:focus{
     outline: red;
 }
+
+@media(max-width: 750x){
+    .container, .toggleButton, .menu{
+        padding: 0.5rem;
+    }
+    .menuWrapper{
+        margin-right: 1rem;
+    }
+}

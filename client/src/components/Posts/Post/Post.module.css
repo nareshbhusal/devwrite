@@ -36,6 +36,7 @@
     font-size: 2.5rem;
     margin-bottom: 0.25rem;
     line-height: 1.7;
+    text-overflow: clip;
 }
 
 .body{
@@ -43,6 +44,7 @@
     font-size: 1.9rem;
     margin-bottom: 0.75rem;
     line-height: 1.6;
+    text-overflow: clip;
 }
 
 .readmore{
@@ -67,4 +69,14 @@
 
 .tag:hover, .author:hover{
     text-decoration: underline;
+}
+
+@media(max-width: 650px){
+    .container{
+        padding: 1.5rem;
+        margin-top: 1rem;
+    }
+    .info{
+        margin-bottom: 1rem;
+    }
 }

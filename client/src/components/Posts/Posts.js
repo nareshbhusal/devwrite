@@ -32,15 +32,15 @@ class Posts extends React.Component{
 
     fetchPosts = async () => {
         await this.toggleLoading();
-        this.enableInfiniteScroll();
         try {
             const { sortOrder, t, page, tag, search } = this.state;
             const URL = `posts/${sortOrder}/?tag=${tag}&t=${t}&page=${page}&search=${search}`;
             const res = await devWrite.get(URL);
-            const newPosts = res.data;
+            let newPosts = res.data || [];
+            newPosts = newPosts.map(newPost => newPost.id);
             if (newPosts.length) {
                 const posts = [ ...this.state.posts, ...newPosts ];
-                await this.setState({ posts, page: this.state.page+1 });
+                await this.setState({ posts, page: page+1 });
             } else {
                 // 
                 this.disableInfiniteScroll();
@@ -61,6 +61,7 @@ class Posts extends React.Component{
         if (sortingChanged) {
             await this.setState({ posts: [], page:1 });
             await this.fetchPosts();
+            this.enableInfiniteScroll();
         }
     }
     componentWillUnmount(){
@@ -87,15 +88,19 @@ class Posts extends React.Component{
     }
 
     enableInfiniteScroll() {
-        window.addEventListener('scroll', this.scrollEventListener);
+        window.onscroll = this.scrollEventListener;
+        // window.addEventListener('scroll', this.scrollEventListener);
     }
     disableInfiniteScroll(){
-        window.removeEventListener('scroll', this.scrollEventListener);
+        window.onscroll = ()=>{};
+        // window.removeEventListener('scroll', this.scrollEventListener);
     }
 
     async componentDidMount() {
         this._isMounted=true;
+        console.log('mount')
         await this.determineSorting();
+        this.enableInfiniteScroll();
         await this.fetchPosts();
     }
 
@@ -105,18 +110,17 @@ class Posts extends React.Component{
     
     render() {
         const { sortOrder, t, tag, loading, posts, search } = this.state;
-
         return (
             <div className={styles.container}>
                 <Sort sortOrder={sortOrder} t={t} tag={tag} />
                 {posts.length ?
-                this.state.posts.map(post => {
-                    return <Post key={post.id} id={post.id}/>
+                [...new Set(this.state.posts)].map(id => {
+                    return <Post key={id} id={id}/>
                 })
                 :
                 <h2 className={styles.noPosts}>No posts found!</h2>
                 }
-                {!loading ? 
+                {loading ? 
                 <Loader /> 
                 :null}
             </div>

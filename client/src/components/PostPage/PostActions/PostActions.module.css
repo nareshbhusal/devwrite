@@ -5,7 +5,6 @@
     margin: 2rem 0;
 }
 
-
 .likeButton, .saveButton{
     background-color: #fff;
     border: none;
@@ -74,4 +73,16 @@
 
 .likeButton i, .saveButton i{
     font-size: 2rem;
+}
+
+@media(max-width: 650px){
+    .container{
+        margin: 1.2rem 0;
+    }
+    .authButtons{
+        margin: 0 1.5rem;
+    }
+    .editButton, .deleteButton{
+        margin-right: 1rem;
+    }
 }

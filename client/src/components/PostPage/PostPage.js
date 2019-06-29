@@ -34,7 +34,7 @@ const RenderDiscussion = ({ context, post, fetchPostData }) => {
                     return (
                         <Comment key={comment.id} 
                             comment={comment} 
-                            postActionHandler={fetchPostData}/>
+                            reFetchPost={fetchPostData}/>
                     );
                 })}
             </div>
@@ -66,12 +66,11 @@ class PostPage extends React.Component {
         await this.fetchPostData(id);
     }
 
-    fetchPostData = async () => {
+    fetchPostData = async (id=this.props.id) => {
         if (!this._isMounted) {
             return;
         }
         await this.setState({ error: '' });
-        const { id } = this.props;
         const post = await fetchPost(id);
         await this.setState({ ...post });
         await this.isAuthorFollowed();
@@ -81,8 +80,9 @@ class PostPage extends React.Component {
 
     componentDidMount = async() => {
         this._isMounted=true;
-        await this.setState({ error: '' });
-        await this.fetchPostData();
+        const { id } = this.props;
+        await this.setState({ id: id });
+        await this.fetchPostData(id);
     }
     componentWillUnmount() {
         this._isMounted = false;

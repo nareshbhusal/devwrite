@@ -1,7 +1,5 @@
 import React from 'react';
 import styles from './Editor.module.css';
-import devwrite from '../../devwrite';
-
 import { fetchPost, createPost, editPost } from '../../helpers';
 import history from '../../history';
 
@@ -43,10 +41,8 @@ class Editor extends React.Component{
                             {theme ==='light' ? 
                             <img src={themeIcon}/> :
                             <img src={themeIconLight}/>
-                            }
-                        
+                            } 
                     </button>
-
                     <button 
                         onClick={this.onSubmitHandler} 
                         className={styles.publishBtn}>
@@ -78,7 +74,7 @@ class Editor extends React.Component{
             // if successful
             this.resetLocalStorage();
             history.goBack();
-        }    
+        }
     }
 
     changeTheme = async () => {

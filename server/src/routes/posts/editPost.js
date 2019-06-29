@@ -1,7 +1,14 @@
 const updatePost = require('../../controllers/post/updatePost');
 
-// Edit the creds of a post by id 
-//put
+
+const parseTags = (post) => {
+    let tags = post.tags || '';
+    if (!tags) {
+        return [];
+    }
+    return tags.split(' ');
+}
+
 const editPost = async (req, res) => {
     
     try {
@@ -10,6 +17,7 @@ const editPost = async (req, res) => {
         const updatedPost = { ...req.body };
         // add edit timestamp
         updatedPost.editedAt = new Date().getTime();
+        updatedPost.tags = parseTags(updatedPost);
         const postData = {
             user: userId,
             id: postId

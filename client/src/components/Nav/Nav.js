@@ -21,8 +21,9 @@ const Nav = (props) => {
             <Logo className={styles.logo} />
             <input onInput={searchHandler} placeholder="search" className={styles.search} name="query" />
             <div className={styles.right}>
-                <Link className={styles.writeLink} to="/editor">
-                    write a post
+                <Link title="write a post" className={styles.writeLink} to="/editor">
+                    <i className={`fa fa-edit ${styles.writeIcon}`}></i>
+                    <span>write a post</span>
                 </Link>
                 {user.name ? 
 
@@ -31,8 +32,9 @@ const Nav = (props) => {
                     avatarURL={user.photo}
                     id={user.id}/>
                     :
-                    <Link className={styles.signinLink} to="/signin">
-                        Sign in
+                    <Link title="signin" className={styles.signinLink} to="/signin">
+                        <i className={`fa fa-sign-in ${styles.signInIcon}`}></i>
+                        <span>Sign in</span>
                     </Link>
                 }
                 

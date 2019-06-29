@@ -10,17 +10,15 @@ import NotFound from '../NotFound/NotFound';
 import './App.css';
 
 const App = ()=> {
-
     const pathsThatRenderMain = ["/", "/posts/:sortOrder", "/user/:userId", "/user/:userId/network/:network", "/post/:postId" ];
     const pathsThatRenderEditor = ["/editor", "/editor/:postId"];
-
     return (
         <div>
             <Router history={history}>
                 <Switch>
                     <Route exact path="/signin" component={SignIn}/>
                     <Route exact path={pathsThatRenderEditor} component={Editor}/>
-                    <Route exact path={pathsThatRenderMain} component={Main}/>
+                    <Route key={window.location.href} exact path={pathsThatRenderMain} component={Main}/>
                     <Route path='/' component={NotFound} />
                 </Switch>
             </Router>

@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin =  require('html-webpack-plugin');
 
-module.exports = {
+const config = {
 
     entry : ["@babel/polyfill", "./src/index.js"],
     output : {
@@ -25,10 +25,9 @@ module.exports = {
                 exclude: /node_modules/,
                 use: ['file-loader?name=[name].[ext]'] // ?name=[name].[ext] is only necessary to preserve the original file name
               },
-              
         ]
     },
-    mode:'development',
+    mode: process.env.NODE_ENV || 'development',
     plugins : [
         new HtmlWebpackPlugin ({
             template : './src/index.html',
@@ -38,6 +37,9 @@ module.exports = {
     devtool: 'source-map',
     devServer: {
         historyApiFallback: true
-
     }
 }
+
+config.devtool = config.mode ==='development' ? 'source-map' : false;
+
+module.exports = config;

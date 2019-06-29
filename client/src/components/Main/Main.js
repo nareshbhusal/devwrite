@@ -16,7 +16,7 @@ import styles from './Main.module.css';
 class Main extends React.Component{
 
     state = {}
-
+    _isMounted=false;
     async determineDestination(){
         const { userId, postId } = this.props.match.params;
         const pathname = this.props.location.pathname.toString();
@@ -44,15 +44,18 @@ class Main extends React.Component{
     }
 
     componentDidUpdate(){
-        if(this.pathChanged()) {
+        if(this.pathChanged() && this._isMounted) {
             this.determineDestination();
-            console.log('changed route')
         }
     }
 
     async componentDidMount(){
+        this._isMounted=true;
         this.determineDestination();
         await this.fetchData();
+    }
+    componentWillUnmount(){
+        this._isMounted=false;
     }
     
     renderMain(){

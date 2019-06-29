@@ -69,7 +69,6 @@ class Post extends React.Component {
 
     render(){
         const { username, user, id, date, readingTime, title, body, tags, photo } = this.state;
-
         if (!title) {
             return null;
         }
@@ -114,7 +113,7 @@ class Post extends React.Component {
 
             </article>
         );
-    }   
+    }
 }
 
 export default Post;
