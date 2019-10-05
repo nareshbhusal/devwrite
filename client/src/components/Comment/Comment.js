@@ -11,6 +11,7 @@ import authContext from '../../contexts/authContext';
 import helpers from '../../helpers';
 const fetchAvatar = helpers.fetchAvatar;
 const postComment = helpers.postComment;
+const likeComment = helpers.likeComment;
 const deleteComment = helpers.deleteComment;
 
 const RenderTimeInfo = ({ createdAt, editedAt, isEditor })=> {
@@ -62,23 +63,15 @@ class Comment extends React.Component{
     deleteComment = async() => {
         if (confirm('Are you sure you want to delete this comment?')){
             const { id, postId } = this.state;
-
             await deleteComment({ id, postId });
             await this.props.reFetchPost(postId);
         }
     }
 
     likeComment = async() => {
-        try {
-            const { id, postId } = this.state;
-
-            const res = await devwrite.post(`posts/${postId}/comment/${id}/like`);
-            console.log(res.data);
-            await this.props.reFetchPost(postId);
-        } catch(err) {
-            console.log(err.response);
-            alert(err.response.data.err);
-        }
+        const { id, postId } = this.state;
+        await likeComment({ id, postId });
+        await this.props.reFetchPost(postId);
     }
 
     submitUpdatedComment = async() => {

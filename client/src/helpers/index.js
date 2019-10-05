@@ -115,6 +115,14 @@ const helpers= {
             handleError(err);
         }
     },
+    likeComment: async({ id, postId })=> {
+        try {
+            const res = await devwrite.post(`posts/${postId}/comment/${id}/like`);
+            console.log(res.data);
+        } catch(err) {
+            handleError(err);
+        }
+    },
     deleteComment: async({ id, postId })=>{
         try {
             const res = await devwrite.delete(`posts/${postId}/comment/${id}`);
