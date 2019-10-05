@@ -37,7 +37,7 @@ const helpers= {
             return post;
             
         } catch(err) {
-            return handleError(err, alert=window.alert);
+            return handleError(err, alert=()=>{console.log});
         }
     },
     
@@ -101,7 +101,18 @@ const helpers= {
             console.log(res.data);
             return res.data;
         } catch(err) {
-            return handleError(err, alert.error);
+            return handleError(err, alert=()=>{console.log});
+        }
+    },
+
+    postComment: async({ body, postId }) => {
+        try {
+            const res = await devwrite.post(`posts/${postId}/comment`, {
+                body
+            });
+            console.log(res.data);
+        } catch(err) {
+            handleError(err);
         }
     },
     
@@ -114,7 +125,7 @@ const helpers= {
             user.error = '';
             return user;
         } catch(err) {
-            return handleError(err, alert.error);
+            return handleError(err, alert=()=>{console.log});
         }
     },
     

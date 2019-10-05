@@ -27,14 +27,12 @@ const postComment = async (comment, postId,  userId) => {
         postId,
         userId
     }
-    console.log(newComment);
 
     // Push this to user table's commentedPosts column
     comments.push(newComment);
 
     comments = JSON.stringify(comments);
     await updateUser(userId, { commentedPosts: comments });
-    console.log(comments)
     // Push also to the post table
 
     let postComments = post.comments || [];

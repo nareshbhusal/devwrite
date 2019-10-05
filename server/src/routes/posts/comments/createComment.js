@@ -11,7 +11,7 @@ const createComment = async (req, res) => {
         const { body } = req.body;
         const userId = req.session.user.id;
         const { postid } = req.params;
-        await postComment(body, postid,  userId);
+        await postComment(body, postid, userId);
         return res.status(201).send({ msg: 'Comment posted' });
         
     } catch(err) {

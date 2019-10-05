@@ -10,6 +10,33 @@ import UserIcon from '../UserIcon/UserIcon';
 import authContext from '../../contexts/authContext';
 import helpers from '../../helpers';
 const fetchAvatar = helpers.fetchAvatar;
+const postComment = helpers.postComment;
+const deleteComment = helpers.deleteComment;
+
+const RenderTimeInfo = ({ createdAt, editedAt, isEditor })=> {
+
+    if(isEditor) {
+        return null;
+    }
+    return (
+        <div className={styles.time}>
+            <span className={styles.date}>
+                {new Date(parseInt(createdAt)).toDateString().split(' ').splice(1).join(' ')}
+            </span>
+            
+            {editedAt ? 
+            <React.Fragment>
+                &middot;
+                <span style={{marginLeft: '0.3rem'}} className={styles.date}>
+                    edited {new Date(parseInt(editedAt)).toDateString().split(' ').splice(1).join(' ')}
+                </span>
+            </React.Fragment>
+            : null
+            }
+        </div> 
+    );
+}
+
 
 class Comment extends React.Component{
 
@@ -24,32 +51,20 @@ class Comment extends React.Component{
     bodyRef = React.createRef();
 
     submitComment = async() => {
-        try {
-            const { body, postId } = this.state;
-            const res = await devwrite.post(`posts/${postId}/comment`, {
-                body
-            });
-            console.log(res.data);
+        const { body, postId } = this.state;
+        const res = await postComment({ body, postId });
+        if (!res.err){
             this.setState({ editing: false, body: '' });
-            await this.props.reFetchPost(postId);
-
-        } catch(err) {
-            console.log(err.response);
-            alert(err.response.data.err || err.response.data); // alert error
         }
+        await this.props.reFetchPost(postId);
     }
 
     deleteComment = async() => {
         if (confirm('Are you sure you want to delete this comment?')){
-            try {
-                const { id, postId } = this.state;
-    
-                const res = await devwrite.delete(`posts/${postId}/comment/${id}`);
-                console.log(res.data);
-                await this.props.reFetchPost(postId);
-            } catch(err) {
-                console.log(err.response.data.err || err.response.data);
-            }
+            const { id, postId } = this.state;
+
+            await deleteComment({ id, postId });
+            await this.props.reFetchPost(postId);
         }
     }
 
@@ -138,55 +153,28 @@ class Comment extends React.Component{
         await this.setState({ body: value });
     };
     async componentDidUpdate() {
-        if (!this._isMounted) {
-            return;
-        }
-        let { body, createdAt, id, postId, userId, isLiked, likedBy } = this.props.comment;
-        likedBy=likedBy || [];
-        const likes = likedBy.length;
-        body = body || '';
-        const isEditor = !body;
-        if (likes !==this.state.likes || isLiked !==this.state.isLiked) {
-            await this.setState({ body, postId, isLiked, userId, id, isEditor, likes, createdAt });
-        }
+        await this.setStateData()
     }
 
-    componentDidMount = async() => {
+    setStateData = async () => {
         let { body, createdAt, id, postId, userId, isLiked, likedBy, username } = this.props.comment;
         likedBy=likedBy || [];
         const likes = likedBy.length;
         body = body || '';
         const isEditor = !body;
         const photo = await fetchAvatar(userId);
-        await this.setState({ body, postId, isLiked, userId, id, isEditor, likes, createdAt, username, photo });
+        if (likes !==this.state.likes || isLiked !==this.state.isLiked) {
+            await this.setState({ body, postId, isLiked, userId, id, isEditor, likes, createdAt, username, photo });
+        }
+    }
+
+    componentDidMount = async() => {
+        await this.setStateData();
     }
     componentWillUnmount() {
         this._isMounted = false;
       }
 
-    renderTimeInfo() {
-        const { createdAt, editedAt, isEditor } = this.state;
-        if(isEditor) {
-            return null;
-        }
-        return (
-            <div className={styles.time}>
-                <span className={styles.date}>
-                    {new Date(parseInt(createdAt)).toDateString().split(' ').splice(1).join(' ')}
-                </span>
-                
-                {editedAt ? 
-                <React.Fragment>
-                    &middot;
-                    <span style={{marginLeft: '0.3rem'}} className={styles.date}>
-                        edited {new Date(parseInt(editedAt)).toDateString().split(' ').splice(1).join(' ')}
-                    </span>
-                </React.Fragment>
-                : null
-                }
-            </div> 
-        );
-    }
     renderBody(){
         const { body, editing, isEditor } = this.state;
 
@@ -225,7 +213,7 @@ class Comment extends React.Component{
                         <Link to={`/user/`+userId} className={styles.author}>
                             {username}
                         </Link>
-                        {this.renderTimeInfo()}
+                        <RenderTimeInfo {...this.state} />
                     </div>
                 </div>
 

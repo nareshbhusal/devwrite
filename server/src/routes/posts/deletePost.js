@@ -9,14 +9,15 @@ const deletePost = async(req, res) => {
         const userId = parseInt(req.session.user.id);
         const postData = { user: userId, id: postId };
         const post = await getPost(postData);
-        if (post){
-            await deletePostCtrl(postData);
-            return res.status(200).send({ msg: 'Deleted post!' });
+        if (!post){
+            return res.status(403).send(authError);
         }
-        return res.status(403).send(authError);
+        await deletePostCtrl(postData);
+        return res.status(200).send({ msg: 'Deleted post!' });
+        
     } catch(err) {
         console.log(err);
-        return res.status(400).send({err: 'Something went wrong deleting post'})
+        return res.status(500).send({err: 'Something went wrong deleting post'})
     }
 }
 
