@@ -115,6 +115,14 @@ const helpers= {
             handleError(err);
         }
     },
+    deleteComment: async({ id, postId })=>{
+        try {
+            const res = await devwrite.delete(`posts/${postId}/comment/${id}`);
+            console.log(res.data);
+        } catch(err) {
+            handleError(err);
+        }
+    },
     
     // USER ROUTES
     
