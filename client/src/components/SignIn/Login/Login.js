@@ -1,39 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Login.module.css';
 
 import helpers from '../../../helpers/index';
 const loginUser = helpers.loginUser;
 
-class Login extends React.Component{
+const login = () => {
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
 
-    state = {
-        email: '',
-        password:''
+    const handleEmailInput = e => {
+        setEmail(e.target.value);
     }
-
+    const handlePasswordInput = e => {
+        setPassword(e.target.value);
+    }
     onSubmitHandler = async(e) => {
         e.preventDefault();
         loginUser(this.state);
     }
 
-    onChangeHandler = async (e) => {
-        const { name, value } = e.target;
-        await this.setState({ [name]: value });
-    }
-
-    render() {
-
-        return (
-            <form onSubmit={this.onSubmitHandler} className={styles.form}>
-                <h1 className={styles.heading}>
-                    Welcome back!
-                </h1>
-                <input value={this.state.email} onChange={this.onChangeHandler} className={styles.input} name="email" type="email" placeholder="Email address"/>
-                <input value={this.state.password} onChange={this.onChangeHandler} className={styles.input} name="password" type="password" placeholder="Password" />
-                <input className={styles.input} type="submit" value="Login"/>
-            </form>
-        );
-    }
+    return (
+        <form onSubmit={onSubmitHandler} className={styles.form}>
+            <h1 className={styles.heading}>
+                Welcome back!
+            </h1>
+            <input value={email} onChange={handleEmailInput} className={styles.input} name="email" type="email" placeholder="Email address"/>
+            <input value={password} onChange={handlePasswordInput} className={styles.input} name="password" type="password" placeholder="Password" />
+            <input className={styles.input} type="submit" value="Login"/>
+        </form>
+    );
 }
 
-export default Login;
+export default login;
