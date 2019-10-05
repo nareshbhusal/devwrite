@@ -1,11 +1,12 @@
 import React from 'react';
 import styles from './UserCard.module.css';
 
-import { fetchUser } from '../../../helpers/index';
 import { Link } from 'react-router-dom';
 import history from '../../../history';
 
 import UserIcon from '../../UserIcon/UserIcon';
+import helpers from '../../../helpers/index';
+const fetchUser = helpers.fetchUser;
 
 class userCard extends React.Component {
 

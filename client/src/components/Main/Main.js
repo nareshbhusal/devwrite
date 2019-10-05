@@ -8,10 +8,14 @@ import TagsCloud from '../TagsCloud/TagsCloud';
 import Footer from '../Footer/Footer';
 
 import qs from 'qs';
-import { getCurrentUser, getTagsCloud } from '../../helpers/index';
+import helpers from '../../helpers/index';
 import authContext from '../../contexts/authContext';
 
 import styles from './Main.module.css';
+
+const getCurrentUser = helpers.getCurrentUser;
+const getTagsCloud = helpers.getTagsCloud;
+
 
 class Main extends React.Component{
 

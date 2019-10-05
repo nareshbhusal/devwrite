@@ -7,7 +7,7 @@ const clearHeaderCache = (res) => {
 
 const requireLogin = async (req, res, next) => {
 
-    const authError = {err: 'This action requires authorization! Please login or signup'};
+    const authError = {err: 'Please login or signup first!'};
     const serverError = { err: 'Server error: Something went wrong checking authorization' };
 
     let loggedIn;

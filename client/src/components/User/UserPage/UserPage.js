@@ -7,7 +7,12 @@ import UserCard from '../UserCard/UserCard';
 import UserComment from '../UserComment/UserComment';
 import Loader from '../../Loader/Loader';
 import authContext from '../../../contexts/authContext';
-import { fetchUser, getComment, logout, followUser } from '../../../helpers/index';
+import helpers from '../../../helpers/index';
+const fetchUser = helpers.fetchUser;
+const getComment = helpers.getComment;
+const logout = helpers.logout;
+const followUser = helpers.followUser;
+
 
 const RenderTabData = ({ currentTab, user, comments }) => {
 

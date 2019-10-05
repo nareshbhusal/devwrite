@@ -1,9 +1,10 @@
 import React from 'react';
 import styles from './UserInfo.module.css';
-import { editUser } from '../../../helpers/index';
 import { Link } from 'react-router-dom';
 import UserIcon from '../../UserIcon/UserIcon';
 import authContext from '../../../contexts/authContext';
+import helpers from '../../../helpers/index';
+const editUser = helpers.editUser;
 
 const avatarSize=17;
 

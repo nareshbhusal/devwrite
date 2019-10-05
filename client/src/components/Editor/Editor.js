@@ -1,11 +1,15 @@
 import React from 'react';
 import styles from './Editor.module.css';
-import { fetchPost, createPost, editPost } from '../../helpers';
+import helpers from '../../helpers';
 import history from '../../history';
 
 import Logo from '../Logo/Logo';
 import themeIcon from '../../assets/theme.png';
 import themeIconLight from '../../assets/themeLight.png';
+
+const fetchPost = helpers.fetchPost;
+const createPost = helpers.createPost;
+const editPost = helpers.editPost;
 
 class Editor extends React.Component{
     state = {

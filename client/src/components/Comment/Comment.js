@@ -8,7 +8,8 @@ import ContentEditable from 'react-contenteditable';
 import UserIcon from '../UserIcon/UserIcon';
 
 import authContext from '../../contexts/authContext';
-import { fetchAvatar } from '../../helpers';
+import helpers from '../../helpers';
+const fetchAvatar = helpers.fetchAvatar;
 
 class Comment extends React.Component{
 

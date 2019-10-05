@@ -1,7 +1,8 @@
 import React from 'react';
 import styles from './Login.module.css';
 
-import { loginUser } from '../../../helpers/index';
+import helpers from '../../../helpers/index';
+const loginUser = helpers.loginUser;
 
 class Login extends React.Component{
 

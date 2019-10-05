@@ -2,20 +2,34 @@ import React from 'react';
 import styles from './PostActions.module.css';
 import { useAlert } from 'react-alert';
 import { Link } from 'react-router-dom';
-import { likePost } from '../../../helpers/index';
+import helpers from '../../../helpers/index';
 
-const postActions = ({ id, savePost, deletePost, liked, saved, likedBy, isAuthor, user }) => {
+let likePost = helpers.likePost;
+let savePost = helpers.savePost;
+let deletePost = helpers.deletePost;
+
+const postActions = ({ id, liked, saved, likedBy, reFetchPostData }) => {
     const alert = useAlert();
-    const likePostt = async() => {
-        // const { id } = this.state;
-        const res = await likePost(id);
-        alert.show(res.err);
-        // await this.fetchPostData(id);
+
+    const like = async() => {
+        await likePost(id, alert);
+        await reFetchPostData(id);
     }
+
+    const dlt = async() => {
+        await deletePost(id, alert);
+        await reFetchPostData(id);
+    }
+
+    const save = async() => {
+        await savePost(id, alert);
+        await reFetchPostData(id);
+    }
+
     return (
         <div className={styles.actions}>
             <div className={styles.like}>
-                <button title={liked ? "Unlike" : "Like"} className={styles.likeButton} onClick={likePostt}>
+                <button title={liked ? "Unlike" : "Like"} className={styles.likeButton} onClick={like}>
                     <i className={`fa fa-heart${liked ? '' : '-o'}`}></i>
                 </button>
                 
@@ -30,14 +44,14 @@ const postActions = ({ id, savePost, deletePost, liked, saved, likedBy, isAuthor
                 <Link title="Edit post" to={`/editor/${id}`} className={styles.editButton}>
                     <i className="fa fa-edit"></i>
                 </Link>
-                <button title="Delete post" className={styles.deleteButton} onClick={()=>deletePost(id)}>
+                <button title="Delete post" className={styles.deleteButton} onClick={dlt}>
                     <i className="fa fa-trash-o"></i>
                 </button>
             </div>
 
             {/*  */}
 
-            <button title={saved ? "Unsave" : 'Save'} className={styles.saveButton} onClick={savePost}>
+            <button title={saved ? "Unsave" : 'Save'} className={styles.saveButton} onClick={save}>
                 <i className={`fa fa-bookmark${saved ? '' : '-o'}`}></i>
             </button>
         </div>

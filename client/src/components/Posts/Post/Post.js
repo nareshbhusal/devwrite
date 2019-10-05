@@ -4,11 +4,15 @@ import styles from './Post.module.css';
 import { Link } from 'react-router-dom';
 import history from '../../../history';
 import authContext from '../../../contexts/authContext';
-import { fetchPost, savePost, deletePost, likePost } from '../../../helpers/index';
 
 import PostActions from '../../PostPage/PostActions/PostActions';
 import UserIcon from '../../UserIcon/UserIcon';
 
+import helpers from '../../../helpers/index';
+const fetchPost = helpers.fetchPost;
+const savePost = helpers.savePost;
+const deletePost = helpers.deletePost;
+const likePost = helpers.likePost;
 
 class Post extends React.Component {
 
@@ -109,7 +113,8 @@ class Post extends React.Component {
                     })}
                 </p>
                 
-                <PostActions { ...this.state } savePost={this.savePost} likePost={this.likePost} deletePost={deletePost}/>
+                <PostActions { ...this.state } 
+                    reFetchPostData={this.updatePostData}/>
 
             </article>
         );

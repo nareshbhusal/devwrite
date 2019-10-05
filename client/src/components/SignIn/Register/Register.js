@@ -1,10 +1,10 @@
 import React from 'react';
 import styles from './Register.module.css';
 
-import { createUser } from '../../../helpers/index';
+import helpers from '../../../helpers/index';
+const createUser = helpers.createUser;
 
 class Register extends React.Component{
-
     state = {
         name: '',
         email: '',

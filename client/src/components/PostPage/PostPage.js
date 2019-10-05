@@ -1,15 +1,18 @@
 import React from 'react';
 import styles from './PostPage.module.css';
-
-import { fetchPost, likePost, savePost, deletePost, followUser, fetchUser } from '../../helpers';
 import { Link } from 'react-router-dom';
 import textVersion from 'textversionjs';
 
 import PostActions from './PostActions/PostActions';
 import UserIcon from '../UserIcon/UserIcon';
 import Comment from '../Comment/Comment';
-
 import authContext from '../../contexts/authContext';
+
+import helpers from '../../helpers';
+const fetchPost = helpers.fetchPost;
+const fetchUser = helpers.fetchUser;
+const followUser = helpers.followUser;
+
 
 const RenderDiscussion = ({ context, post, fetchPostData }) => {
         
@@ -54,23 +57,11 @@ class PostPage extends React.Component {
         await this.isAuthorFollowed();
     }
 
-    likePost = async() => {
-        const { id } = this.state;
-        await likePost(id);
-        await this.fetchPostData(id);
-    }
-
-    savePost = async() => {
-        const { id } = this.state;
-        await savePost(id);
-        await this.fetchPostData(id);
-    }
-
     fetchPostData = async (id=this.props.id) => {
         if (!this._isMounted) {
             return;
         }
-        await this.setState({ error: '' });
+        await this.setState({ err: '' });
         const post = await fetchPost(id);
         await this.setState({ ...post });
         await this.isAuthorFollowed();
@@ -113,9 +104,9 @@ class PostPage extends React.Component {
     }
 
     render(){
-        const { username, user, date, readingTime, title, body, tags, error, isAuthorFollowed, photo } = this.state;
-        if (error) {
-            return <p style={{margin: '4rem 0'}}>{this.state.error}</p>
+        const { username, user, date, readingTime, title, body, tags, err, isAuthorFollowed, photo } = this.state;
+        if (err) {
+            return <p style={{margin: '4rem 0'}}>{this.state.err}</p>
         }
         if (!title) {
             return <p>Loading...</p>
@@ -165,7 +156,8 @@ class PostPage extends React.Component {
 
                 {this.renderTags(tags)}
 
-                <PostActions { ...this.state } likePost={this.likePost} savePost={this.savePost} deletePost={deletePost}/>
+                <PostActions { ...this.state } 
+                    reFetchPostData={this.fetchPostData}/>
                 <div className={styles.breakLine}></div>
                 <RenderDiscussion context={context} 
                     post={this.state} 
