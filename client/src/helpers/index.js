@@ -1,6 +1,8 @@
 import devwrite from '../devwrite';
 import history from '../history';
 import textVersion from 'textversionjs';
+import { useAlert } from 'react-alert'
+
 
 export const fetchAvatar = async(id) => {
     try {
@@ -77,8 +79,10 @@ export const likePost = async(id) => {
         console.log(res.data);
 
     } catch(err) {
+        console.log(err.response)
         alert(err.response.data.err);
         console.log(err.response.data.err);
+        return err.response.data;
     }
 }
 
