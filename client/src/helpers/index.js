@@ -1,15 +1,14 @@
 import devwrite from '../devwrite';
 import history from '../history';
 import textVersion from 'textversionjs';
-import _ from 'underscore';
 
-const handleError = (err, alert) => {
+const handleError = (err, alert=window.alert) => {
     let error;
     error = { err: 'Server error!' }
     if (err.response){
         error = err.response.data;
     }
-    alert.error(error.err);
+    alert(error.err);
     return error;
 }
 
@@ -38,71 +37,71 @@ const helpers= {
             return post;
             
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert=window.alert);
         }
     },
     
-    createPost: async(postData, alert) => {
+    createPost: async(postData, alert=window.alert) => {
         try {
             const res = await devwrite.post(`posts`, {
                 ...postData
             });
-            alert.success(res.data.msg);
+            // alert.success(res.data.msg);
             return res.data;
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     
-    editPost: async(id, postData, alert) => {
+    editPost: async(id, postData, alert=window.alert) => {
         try {
             const res = await devwrite.put(`posts/${id}`, {
                 ...postData
             });
-            alert.success(res.data.msg);
+            // alert.success(res.data.msg);
             return res.data;
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     
-    deletePost: async(id, alert) => {
+    deletePost: async(id, alert=window.alert) => {
         if (confirm('Do you want to delete this post')) {
             try {
                 const res = await devwrite.delete(`posts/${id}`);
                 alert.success(res.data.msg);
             } catch(err) {
-                return handleError(err, alert);
+                return handleError(err, alert.error);
             }
         }
     },
     
-    likePost: async(id, alert) => {
+    likePost: async(id, alert=window.alert) => {
         try {
             const res = await devwrite.post(`posts/${id}/like`);
             return res.data;
 
         } catch(err){
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     
-    savePost: async(id, alert) => {
+    savePost: async(id, alert=window.alert) => {
         try {
             const res = await devwrite.post(`posts/${id}/save`);
             console.log(res.data);
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     
-    getComment: async(postId, commentId, alert) => {
+    getComment: async(postId, commentId, alert=window.alert) => {
         try {
             const res = await devwrite.get(`posts/${postId}/comment/${commentId}`);
             console.log(res.data);
             return res.data;
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     
@@ -115,7 +114,7 @@ const helpers= {
             user.error = '';
             return user;
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     
@@ -129,34 +128,33 @@ const helpers= {
         }
     },
     
-    loginUser: async (data, alert) => {
+    loginUser: async (data, alert=window.alert) => {
         try {
             const res = await devwrite.post(`login`, {
                 ...data
             });
-            console.log(res.data);
             alert.success(res.data.msg);
-            // history.goBack();
+            history.goBack();
     
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     
-    logout: async (data, alert) => {
+    logout: async (data, alert=window.alert) => {
         try {
             const res = await devwrite.post(`logout`, {
                 ...data
             });
-            alert.success(res.data.msg);
+            // alert.success(res.data.msg);
             return res.data;
     
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     
-    createUser: async(data, alert) => {
+    createUser: async(data, alert=window.alert) => {
         try {
             const res = await devwrite.post(`users`, {
                 ...data
@@ -165,7 +163,7 @@ const helpers= {
             history.goBack();
             // return res.data;
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     
@@ -175,7 +173,7 @@ const helpers= {
             alert.success(res.data.msg);
             return res.data;
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     
@@ -185,16 +183,16 @@ const helpers= {
             alert.success(res.data.msg);
             return res.data;
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     
-    followUser: async(id, alert) => {
+    followUser: async(id, alert=window.alert) => {
         try {
             const res = await devwrite.post(`users/${id}/follow`)
-            alert.success(res.data.msg);
+            // alert.success(res.data.msg);
         } catch(err) {
-            return handleError(err, alert);
+            return handleError(err, alert.error);
         }
     },
     

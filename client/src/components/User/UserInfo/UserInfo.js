@@ -5,6 +5,7 @@ import UserIcon from '../../UserIcon/UserIcon';
 import authContext from '../../../contexts/authContext';
 import helpers from '../../../helpers/index';
 const editUser = helpers.editUser;
+import { useAlert } from 'react-alert';
 
 const avatarSize=17;
 
@@ -12,14 +13,14 @@ const userInfo = (props) => {
     let { id, ownProfile, editing, name, about, website, following, followers, createdAt, followed, logout, toggleEdit, followUser } = props;
     const photo = props.photo;
     let [avatarURL, setAvatarURL] = React.useState(photo);
-
+    const alert = useAlert();
     const userContext =  React.useContext(authContext);
 
     const onSubmitHandler = async(id) => {
         const name = nameRef.current.innerText;
         const website = websiteRef.current.innerText;
         const about = aboutRef.current.innerText;
-        const res = await editUser({ id, name, about, website, photo: avatarURL });
+        const res = await editUser({ id, name, about, website, photo: avatarURL }, alert);
         if (res.msg) {
             toggleEdit();
         }

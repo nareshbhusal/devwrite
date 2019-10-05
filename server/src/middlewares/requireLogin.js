@@ -4,12 +4,10 @@ const clearHeaderCache = (res) => {
     res.header('Cache-Control', 'no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0');
 }
 
-
 const requireLogin = async (req, res, next) => {
 
     const authError = {err: 'Please login or signup first!'};
     const serverError = { err: 'Server error: Something went wrong checking authorization' };
-
     let loggedIn;
     
     try {
@@ -18,7 +16,6 @@ const requireLogin = async (req, res, next) => {
     } catch(err) {
         return res.status(500).send(serverError);
     }
-
     if (loggedIn) {
         clearHeaderCache(res);
         return next();

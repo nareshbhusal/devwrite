@@ -98,7 +98,6 @@ class Posts extends React.Component{
 
     async componentDidMount() {
         this._isMounted=true;
-        console.log('mount')
         await this.determineSorting();
         this.enableInfiniteScroll();
         await this.fetchPosts();
@@ -109,7 +108,7 @@ class Posts extends React.Component{
     }
     
     render() {
-        const { sortOrder, t, tag, loading, posts, search } = this.state;
+        const { sortOrder, t, tag, loading, posts } = this.state;
         return (
             <div className={styles.container}>
                 <Sort sortOrder={sortOrder} t={t} tag={tag} />
