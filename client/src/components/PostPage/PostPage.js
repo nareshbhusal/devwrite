@@ -13,7 +13,6 @@ const fetchPost = helpers.fetchPost;
 const fetchUser = helpers.fetchUser;
 const followUser = helpers.followUser;
 
-
 const RenderDiscussion = ({ context, post, fetchPostData }) => {
         
     const { id, title, username, comments } = post;
@@ -22,6 +21,7 @@ const RenderDiscussion = ({ context, post, fetchPostData }) => {
         username: context.name,
         userId: context.id
     }
+    console.log(post.comments);
     return (
         <section id="discussion" className={styles.discussion}>
             <h2 className={styles.discussionHeading}>

@@ -3,6 +3,20 @@ const getPost = require('../../controllers/post/getPost');
 const updateUser = require('../../controllers/user/updateUser');
 const updatePost = require('../../controllers/post/updatePost');
 
+const generateCommentId = (comments) => {
+    // generate id 1 greater than the comment with greatest id
+       // except if the max id is infinite -- edge case
+    const commentsIds = comments.map(comment => {
+        if (isFinite(comment.id)){
+            return comment.id
+        }
+        return 0;
+    });
+    const maxCommentId = Math.max(...commentsIds) || 1;
+    const newId = maxCommentId + 1;
+    return newId;
+}
+
 // @param comment is the comment text body
 
 const postComment = async (comment, postId,  userId) => {
@@ -14,19 +28,15 @@ const postComment = async (comment, postId,  userId) => {
         comments = JSON.parse(comments);
     }
     comments = comments || [];
-    const commentId = Math.max(...comments.map(comment => {
-        return comment.id
-    })) +1;
-
     const newComment = {
         body: comment,
         createdAt: new Date().getTime(),
-        id: commentId,
         username: user.name,
         postTitle: post.title,
         postId,
         userId
     }
+    newComment.id = generateCommentId(comments);
 
     // Push this to user table's commentedPosts column
     comments.push(newComment);
@@ -39,7 +49,6 @@ const postComment = async (comment, postId,  userId) => {
     if (typeof(postComments) === "string") {
         postComments = JSON.parse(postComments);
     }
-
     postComments = postComments || [];
 
     postComments.push(newComment);

@@ -21,14 +21,14 @@ const RenderTabData = ({ currentTab, user, comments }) => {
     let savedPosts = user.savedPosts || [];
     let likedPosts = user.likedPosts || [];
 
-    // provision for filtering duplicates
-    posts = [...new Set(posts)];
-    posts = [...new Set(savedPosts)];
-    posts = [...new Set(likedPosts)];
-
     if (!posts) {
         return <Loader />
     }
+    // provision for filtering duplicates
+    posts = [...new Set(posts)];
+    savedPosts = [...new Set(savedPosts)];
+    likedPosts = [...new Set(likedPosts)];
+
     if (currentTab==='posts') {
         return (
             <div className={styles.userPosts}>
@@ -43,7 +43,6 @@ const RenderTabData = ({ currentTab, user, comments }) => {
             <div className={styles.usercomments}>
                 {comments.map(comment => {
                     const key = `${comment.id}${comment.postId}`;
-                    console.log(key);
                     return <UserComment key={key} comment={comment}/>
                 })}
             </div>

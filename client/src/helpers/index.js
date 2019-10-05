@@ -98,7 +98,6 @@ const helpers= {
     getComment: async(postId, commentId, alert=window.alert) => {
         try {
             const res = await devwrite.get(`posts/${postId}/comment/${commentId}`);
-            console.log(res.data);
             return res.data;
         } catch(err) {
             return handleError(err, alert=()=>{console.log});
@@ -111,6 +110,7 @@ const helpers= {
                 body
             });
             console.log(res.data);
+            return res.data;
         } catch(err) {
             handleError(err);
         }
@@ -123,6 +123,17 @@ const helpers= {
             handleError(err);
         }
     },
+
+    editComment: async({ body, postId, commentId }) => {
+        try {
+            await devwrite.put(`posts/${postId}/comment/${id}`, {
+                body
+            });
+        } catch(err) {
+            handleError(err);
+        }
+    },
+
     deleteComment: async({ id, postId })=>{
         try {
             const res = await devwrite.delete(`posts/${postId}/comment/${id}`);

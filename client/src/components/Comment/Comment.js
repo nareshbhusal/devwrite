@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './Comment.module.css';
 
 import { Link } from 'react-router-dom';
-import devwrite from '../../devwrite';
 
 import ContentEditable from 'react-contenteditable';
 import UserIcon from '../UserIcon/UserIcon';
@@ -11,6 +10,7 @@ import authContext from '../../contexts/authContext';
 import helpers from '../../helpers';
 const fetchAvatar = helpers.fetchAvatar;
 const postComment = helpers.postComment;
+const editComment = helpers.editComment;
 const likeComment = helpers.likeComment;
 const deleteComment = helpers.deleteComment;
 
@@ -59,6 +59,12 @@ class Comment extends React.Component{
         }
         await this.props.reFetchPost(postId);
     }
+    submitUpdatedComment = async() => {
+        const { body, postId, id } = this.state;
+
+        await editComment({ body, postId, id });
+        await this.setState({ editing: false });
+    }
 
     deleteComment = async() => {
         if (confirm('Are you sure you want to delete this comment?')){
@@ -74,21 +80,6 @@ class Comment extends React.Component{
         await this.props.reFetchPost(postId);
     }
 
-    submitUpdatedComment = async() => {
-        try {
-            const { body, postId, id } = this.state;
-
-            const res = await devwrite.put(`posts/${postId}/comment/${id}`, {
-                body
-            });
-            console.log(res.data);
-            await this.setState({ editing: false });
-
-        } catch(err) {
-            console.log(err.response.data.err);
-            alert(err.response.data.err); // alert error
-        }
-    }
 
     isCommentAuthor = () => {
         const context = this.context || {};
@@ -146,7 +137,7 @@ class Comment extends React.Component{
         await this.setState({ body: value });
     };
     async componentDidUpdate() {
-        await this.setStateData()
+        await this.setStateData();
     }
 
     setStateData = async () => {

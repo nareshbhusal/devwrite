@@ -16,7 +16,7 @@ const getComment = async(req, res) => {
 
         const comment = postComments.find(postComment => {
             return postComment.id === commentId;
-        })
+        });
 
         if (comment) {
             return res.status(200).send(comment);
