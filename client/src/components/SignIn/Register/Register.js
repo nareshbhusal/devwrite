@@ -1,40 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './Register.module.css';
-
+import { useAlert } from 'react-alert';
 import helpers from '../../../helpers/index';
 const createUser = helpers.createUser;
 
-class Register extends React.Component{
-    state = {
-        name: '',
-        email: '',
-        password:''
-    }
 
-    onSubmitHandler = async(e) => {
+const register = () => {
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const alert = useAlert();
+
+    const handleNameInput = e => {
+        setName(e.target.value);
+    }
+    const handleEmailInput = e => {
+        setEmail(e.target.value);
+    }
+    const handlePasswordInput = e => {
+        setPassword(e.target.value);
+    }
+    const onSubmitHandler = async e => {
         e.preventDefault();
-        await createUser(this.state);
-        
+        createUser({ name, email, password }, alert);
     }
 
-    onChangeHandler = async (e) => {
-        const { name, value } = e.target;
-        await this.setState({ [name]: value });
-    }
-
-    render() {
-        return (
-            <form onSubmit={this.onSubmitHandler} className={styles.form}>
-                <h1 className={styles.heading}>
-                    Create account!
-                </h1>
-                <input value={this.state.name} onChange={this.onChangeHandler} className={styles.input} name="name" type="text" placeholder="Full name"/>
-                <input value={this.state.email} onChange={this.onChangeHandler} className={styles.input} name="email" type="email" placeholder="Email address"/>
-                <input value={this.state.password} onChange={this.onChangeHandler} className={styles.input} name="password" type="password" placeholder="Password" />
-                <input className={styles.input} type="submit" value="Register"/>
-            </form>
-        );
-    }
+    return (
+        <form onSubmit={onSubmitHandler} className={styles.form}>
+            <h1 className={styles.heading}>
+                Create account!
+            </h1>
+            <input value={name} onChange={handleNameInput} className={styles.input} name="name" type="text" placeholder="Full name"/>
+            <input value={email} onChange={handleEmailInput} className={styles.input} name="email" type="email" placeholder="Email address"/>
+            <input value={password} onChange={handlePasswordInput} className={styles.input} name="password" type="password" placeholder="Password" />
+            <input className={styles.input} type="submit" value="Register"/>
+        </form>
+    );
 }
 
-export default Register;
+export default register;

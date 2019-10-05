@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './Login.module.css';
+import { useAlert } from 'react-alert';
 
 import helpers from '../../../helpers/index';
 const loginUser = helpers.loginUser;
@@ -7,6 +8,7 @@ const loginUser = helpers.loginUser;
 const login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const alert = useAlert();
 
     const handleEmailInput = e => {
         setEmail(e.target.value);
@@ -14,9 +16,9 @@ const login = () => {
     const handlePasswordInput = e => {
         setPassword(e.target.value);
     }
-    onSubmitHandler = async(e) => {
+    const onSubmitHandler = async e => {
         e.preventDefault();
-        loginUser(this.state);
+        loginUser({ email, password }, alert);
     }
 
     return (
