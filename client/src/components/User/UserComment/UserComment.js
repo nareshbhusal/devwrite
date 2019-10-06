@@ -4,8 +4,8 @@ import styles from './UserComment.module.css';
 import { Link } from 'react-router-dom';
 
 const userComment = (props) => {
-    const { postTitle, username, userId, postId, id, createdAt, body, err } = props.comment;
-    if (err) {
+    const { postTitle, username, userId, postId, id, createdAt, body, err, deleted } = props.comment;
+    if (err || deleted) {
         return null;
     }
     return (

@@ -24,7 +24,6 @@ const RenderTabData = ({ currentTab, user }) => {
     if (!posts) {
         return <Loader />
     }
-    console.log(user);
     // provision for filtering duplicates
     posts = [...new Set(posts)];
     savedPosts = [...new Set(savedPosts)];
@@ -104,10 +103,18 @@ class UserPage extends React.Component{
 
     fetchUserComments = async() => {
         const userComments = this.state.user.commentedPosts || [];
-        const comments = await Promise.all(userComments.map(async userComment => {
+        let comments = await Promise.all(userComments.map(async userComment => {
             return await getComment(userComment.postId, userComment.id);
         }));
+        comments = comments.filter(comment => {
+            return comment.deleted
+        })
         await this.setState({ comments });
+    }
+
+    switchTabTo = async(tab) => {
+        await this.setState({ currentTab: tab });
+        await this.fetchUser();
     }
 
     renderTabs() {
@@ -115,17 +122,17 @@ class UserPage extends React.Component{
 
         return (
             <div className={styles.tabs}>
-                <button ref={this.postsRef} className={"active"} onClick={()=>this.setState({ currentTab: 'posts' })}>
+                <button ref={this.postsRef} className={"active"} onClick={()=>this.switchTabTo('posts')}>
                     Posts
                 </button>
-                <button ref={this.commentsRef} onClick={()=>this.setState({ currentTab: 'comments' })}>
+                <button ref={this.commentsRef} onClick={()=>this.switchTabTo('comments')}>
                     Comments
                 </button>
-                <button ref={this.likesRef} onClick={()=>this.setState({ currentTab: 'likes' })}>
+                <button ref={this.likesRef} onClick={()=>this.switchTabTo('likes')}>
                     Likes
                 </button>
                 {isOwner ? 
-                <button ref={this.savedRef} onClick={()=>this.setState({ currentTab: 'saved' })}>
+                <button ref={this.savedRef} onClick={()=>this.switchTabTo('saved')}>
                     Saved
                 </button>
                 : null

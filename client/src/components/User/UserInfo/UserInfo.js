@@ -7,7 +7,7 @@ import helpers from '../../../helpers/index';
 const editUser = helpers.editUser;
 import { useAlert } from 'react-alert';
 
-const avatarSize=17;
+const avatarSize=20;
 
 const userInfo = (props) => {
     let { id, ownProfile, editing, name, about, website, following, followers, createdAt, followed, logout, toggleEdit, followUser } = props;

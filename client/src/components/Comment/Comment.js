@@ -1,12 +1,9 @@
 import React from 'react';
 import styles from './Comment.module.css';
-
 import { Link } from 'react-router-dom';
-
+import authContext from '../../contexts/authContext';
 import ContentEditable from 'react-contenteditable';
 import UserIcon from '../UserIcon/UserIcon';
-
-import authContext from '../../contexts/authContext';
 import helpers from '../../helpers';
 const fetchAvatar = helpers.fetchAvatar;
 const getComment = helpers.getComment;
@@ -16,7 +13,6 @@ const likeComment = helpers.likeComment;
 const deleteComment = helpers.deleteComment;
 
 const RenderTimeInfo = ({ createdAt, editedAt, isEditor })=> {
-
     if(isEditor) {
         return null;
     }

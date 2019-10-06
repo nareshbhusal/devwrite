@@ -1,5 +1,5 @@
 import React from 'react';
-
+import styles from './Main.module.css';
 import Nav from '../Nav/Nav';
 import UserPage from '../User/UserPage/UserPage';
 import PostPage from '../PostPage/PostPage';
@@ -11,11 +11,8 @@ import qs from 'qs';
 import helpers from '../../helpers/index';
 import authContext from '../../contexts/authContext';
 
-import styles from './Main.module.css';
-
 const getCurrentUser = helpers.getCurrentUser;
 const getTagsCloud = helpers.getTagsCloud;
-
 
 class Main extends React.Component{
 
