@@ -126,7 +126,8 @@ const userInfo = (props) => {
                 </button>
                 }
             </div>
-            <UserIcon editing={editing}
+            <UserIcon key={id}
+            editing={editing}
             onChangeHandler={setAvatarURL} 
             avatarURL={avatarURL} name={name} 
             id={id} size={avatarSize}/>

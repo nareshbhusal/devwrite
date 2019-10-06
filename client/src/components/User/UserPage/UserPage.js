@@ -14,16 +14,17 @@ const logout = helpers.logout;
 const followUser = helpers.followUser;
 
 
-const RenderTabData = ({ currentTab, user, comments }) => {
+const RenderTabData = ({ currentTab, user }) => {
 
     let { posts } = user;
-    comments = comments || [];
+    let comments = user.commentedPosts || [];
     let savedPosts = user.savedPosts || [];
     let likedPosts = user.likedPosts || [];
 
     if (!posts) {
         return <Loader />
     }
+    console.log(user);
     // provision for filtering duplicates
     posts = [...new Set(posts)];
     savedPosts = [...new Set(savedPosts)];
@@ -43,7 +44,7 @@ const RenderTabData = ({ currentTab, user, comments }) => {
             <div className={styles.usercomments}>
                 {comments.map(comment => {
                     const key = `${comment.id}${comment.postId}`;
-                    return <UserComment key={key} comment={comment}/>
+                    return <UserComment key={comment.createdAt} comment={comment}/>
                 })}
             </div>
         );
@@ -210,7 +211,8 @@ class UserPage extends React.Component{
             <div className={styles.container}>
                 <div className={styles.wrapper}>
                     {user.name ? 
-                        <UserInfo { ...user } 
+                        <UserInfo key={user.id}
+                        { ...user } 
                         ownProfile={ownProfile} 
                         logout={this.logoutHandler} 
                         toggleEdit={this.toggleEdit} 

@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 const userComment = (props) => {
     const { postTitle, username, userId, postId, id, createdAt, body, err } = props.comment;
     if (err) {
-        // return <p style={{color: 'pink'}}>{err}</p>;
         return null;
     }
     return (

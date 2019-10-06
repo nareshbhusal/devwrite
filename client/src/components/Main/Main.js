@@ -71,12 +71,12 @@ class Main extends React.Component{
         if (postId) {
             return (
                 <main className={styles.main}>
-                    <PostPage className={styles.postpage} id={postId}/>
+                    <PostPage key={`post${postId}`} className={styles.postpage} id={postId}/>
                 </main>
             );
 
         } else if (userId) {
-            return <UserPage match={this.props.match} location={this.props.location} />
+            return <UserPage key={`user${userId}`} match={this.props.match} location={this.props.location} />
 
         } else {
             const query = qs.parse(this.props.location.search, {

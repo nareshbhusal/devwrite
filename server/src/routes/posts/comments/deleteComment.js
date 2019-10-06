@@ -22,6 +22,8 @@ const deleteComment = async (req, res) => {
             return res.status(400).send({err: 'Wait, that\'s illegal...'});
         }
         comments.splice(commentIndex, 1);
+        const commentToDelete = comments[commentIndex];
+        comments[commentIndex] = { ...commentToDelete, deleted: true };
         comments = JSON.stringify(comments);
 
         await updatePost({ id: postid }, { comments });

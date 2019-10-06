@@ -9,6 +9,7 @@ import UserIcon from '../UserIcon/UserIcon';
 import authContext from '../../contexts/authContext';
 import helpers from '../../helpers';
 const fetchAvatar = helpers.fetchAvatar;
+const getComment = helpers.getComment;
 const postComment = helpers.postComment;
 const editComment = helpers.editComment;
 const likeComment = helpers.likeComment;
@@ -38,48 +39,58 @@ const RenderTimeInfo = ({ createdAt, editedAt, isEditor })=> {
     );
 }
 
-
 class Comment extends React.Component{
 
     static contextType = authContext;
-
-    _isMounted=true;
+    
     state = {
         editing: false,
         body: ''
     }
-
+    _isMounted=true;
     bodyRef = React.createRef();
 
     submitComment = async() => {
         const { body, postId } = this.state;
         const res = await postComment({ body, postId });
-        if (!res.err){
+        // if (!res.err){
             this.setState({ editing: false, body: '' });
-        }
-        await this.props.reFetchPost(postId);
+            await this.props.reFetchPostData(postId);
+        // }
     }
     submitUpdatedComment = async() => {
         const { body, postId, id } = this.state;
 
-        await editComment({ body, postId, id });
-        await this.setState({ editing: false });
+        const res = await editComment({ body, postId, id });
+        if (!res.err){
+            this.setState({ editing: false, body: '' });
+            await this.fetchComment();
+        }
+    }
+    fetchComment = async() => {
+        if (!this.props.comment.body){
+            return;
+        }
+        let { postId, id } = this.props.comment;
+        const res = await getComment(postId, id);
+        const { body, isLiked, userId, likes, createdAt, username, err, deleted } = res;
+        const photo = await fetchAvatar(userId);
+        await this.setState({ body, postId, isLiked, userId, id, likes, createdAt, username, err, deleted, photo });
     }
 
     deleteComment = async() => {
         if (confirm('Are you sure you want to delete this comment?')){
             const { id, postId } = this.state;
             await deleteComment({ id, postId });
-            await this.props.reFetchPost(postId);
+            await this.fetchComment();
         }
     }
 
     likeComment = async() => {
         const { id, postId } = this.state;
         await likeComment({ id, postId });
-        await this.props.reFetchPost(postId);
+        await this.fetchComment();
     }
-
 
     isCommentAuthor = () => {
         const context = this.context || {};
@@ -92,7 +103,7 @@ class Comment extends React.Component{
         if (!this.props.comment.body) {
             return (
                 <div className={styles.authbuttons}>
-                    <button onClick={this.submitComment} className={styles.submitButton}>
+                    <button onClick={()=>this.submitComment()} className={styles.submitButton}>
                         submit
                     </button>
                 </div>
@@ -132,28 +143,18 @@ class Comment extends React.Component{
     }
 
     handleChange = async e => {
-
         const value = e.target.value;
         await this.setState({ body: value });
     };
-    async componentDidUpdate() {
-        await this.setStateData();
-    }
-
-    setStateData = async () => {
-        let { body, createdAt, id, postId, userId, isLiked, likedBy, username } = this.props.comment;
-        likedBy=likedBy || [];
-        const likes = likedBy.length;
-        body = body || '';
-        const isEditor = !body;
-        const photo = await fetchAvatar(userId);
-        if (likes !==this.state.likes || isLiked !==this.state.isLiked) {
-            await this.setState({ body, postId, isLiked, userId, id, isEditor, likes, createdAt, username, photo });
-        }
-    }
 
     componentDidMount = async() => {
-        await this.setStateData();
+        let { body, postId } = this.props.comment;
+        body=body || '';
+        const isEditor = !body;
+        const context = this.context || {};
+        const { photo, username } = context;
+        await this.setState({ isEditor, photo, username, postId });
+        await this.fetchComment();
     }
     componentWillUnmount() {
         this._isMounted = false;
@@ -183,8 +184,10 @@ class Comment extends React.Component{
 
     render() {
         
-        let { username, userId, body, isLiked, likes, isEditor, photo } = this.state;
-
+        let { username, userId, body, isLiked, likes, isEditor, photo, err, deleted } = this.state;
+        if (err || deleted){
+            return null;
+        }
         return(
             <article className={styles.container+` post`}>
 

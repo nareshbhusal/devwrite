@@ -16,9 +16,9 @@ const helpers= {
 
     fetchAvatar: async(id) => {
         try {
-            const res = await devwrite.get(`users/${id}`);
-            const user = res.data;
-            return user.photo;
+            const res = await devwrite.get(`users/${id}/avatar`);
+            const photo = res.data;
+            return photo;
         } catch(err) {
             return '';
         }
@@ -124,11 +124,12 @@ const helpers= {
         }
     },
 
-    editComment: async({ body, postId, commentId }) => {
+    editComment: async({ body, postId, id }) => {
         try {
-            await devwrite.put(`posts/${postId}/comment/${id}`, {
+            const res = await devwrite.put(`posts/${postId}/comment/${id}`, {
                 body
             });
+            return res.data;
         } catch(err) {
             handleError(err);
         }

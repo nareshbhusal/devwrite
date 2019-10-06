@@ -21,23 +21,22 @@ const RenderDiscussion = ({ context, post, fetchPostData }) => {
         username: context.name,
         userId: context.id
     }
-    console.log(post.comments);
     return (
         <section id="discussion" className={styles.discussion}>
             <h2 className={styles.discussionHeading}>
                 Responses to "{textVersion(title)}" by {username}
             </h2>
-            <Comment comment={editorCommentData} />
+            <Comment reFetchPostData={fetchPostData} comment={editorCommentData} />
             <div className={styles.comments}>
 
                 {!comments.length ? 
                 <h2>No responses</h2> : null}
 
                 {comments.reverse().map(comment => {
+                    const key = `${comment.id}${comment.userId}${comment.createdAt}`
                     return (
-                        <Comment key={comment.id} 
-                            comment={comment} 
-                            reFetchPost={fetchPostData}/>
+                        <Comment key={key} 
+                        comment={comment} />
                     );
                 })}
             </div>
