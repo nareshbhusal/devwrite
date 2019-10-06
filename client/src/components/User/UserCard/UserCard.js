@@ -24,21 +24,23 @@ class userCard extends React.Component {
     }
 
     render() {
-        let { id, name, about, website, createdAt, followed } = this.state;
+        let { id, name, about, website, createdAt, followed, photo } = this.state;
         about = about || '';
         website = website ||'';
         const description = about || `Member since ${createdAt}`;
 
         return (
-            <article onClick={()=>history.push(`/user/${id}`)} className={styles.container}>
-                <UserIcon className={styles.usericon} name={name} id={id}/>
+            <article className={styles.container}>
+                <UserIcon className={styles.usericon} name={name} id={id} avatarURL={photo}/>
                 <div className={styles.info}>
                     <Link to={`/user/${id}`} className={styles.name}>
                         {name}
                     </Link>
-                    <p className={styles.about}>
+                    <br />
+                    <Link to={`/user/${id}`} className={styles.about}>
                         {description}
-                    </p>
+                    </Link>
+                    <br />
                     <button onClick={()=>this.follow(id)} className={styles.followButton}>
                         { followed ? 'Unfollow' : 'Follow'}
                     </button>

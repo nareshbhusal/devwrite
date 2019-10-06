@@ -6,6 +6,10 @@ const followUser = async(req, res) => {
         const followerId = parseInt(req.session.user.id);
         const followeeId = parseInt(req.params.id);
 
+        if (followeeId===followerId){
+            return res.status(400).send({ err: "Can't follow yourself （πーπ）" });
+        }
+
         // Add followerId to the followee user's followers column
         const followee = await getUser({ id: followeeId });
         const followers = followee.followers || [];

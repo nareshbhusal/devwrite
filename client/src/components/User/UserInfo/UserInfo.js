@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './UserInfo.module.css';
 import { Link } from 'react-router-dom';
 import UserIcon from '../../UserIcon/UserIcon';
+import Loader from '../../Loader/Loader';
 import authContext from '../../../contexts/authContext';
 import helpers from '../../../helpers/index';
 const editUser = helpers.editUser;
@@ -11,7 +12,7 @@ const avatarSize=20;
 
 const userInfo = (props) => {
     let { id, ownProfile, editing, name, about, website, following, followers, createdAt, followed, logout, toggleEdit, followUser } = props;
-    const photo = props.photo;
+    const photo = props.photo || '';
     let [avatarURL, setAvatarURL] = React.useState(photo);
     const alert = useAlert();
     const userContext =  React.useContext(authContext);
@@ -42,6 +43,9 @@ const userInfo = (props) => {
         background: 'rgba(0,0,0,0.7)',
         color: '#fff'
     };
+    if (!name){
+        return <Loader />;
+    }
     return (
         <section className={styles.container}>
             <div className={styles.info}>

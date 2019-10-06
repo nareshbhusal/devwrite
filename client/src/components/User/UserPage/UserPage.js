@@ -190,19 +190,19 @@ class UserPage extends React.Component{
         }
     }
 
-    async componentDidMount(){
-        this._isMounted=true;
-        this.updateTabsStyle();
-        await this.fetchData();
-    }
-    componentWillUnmount() {
-        this._isMounted = false;
-    }
-
     fetchData = async () => {
         const userId = parseInt(this.props.match.params.userId);
         await this.fetchUser(userId);
         await this.fetchUserComments();
+    }
+    async componentDidMount(){
+        this._isMounted=true;
+        this.updateTabsStyle();
+        const userId = parseInt(this.props.match.params.userId);
+        await this.fetchUser(userId);
+    }
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     render(){
@@ -217,16 +217,13 @@ class UserPage extends React.Component{
         return (
             <div className={styles.container}>
                 <div className={styles.wrapper}>
-                    {user.name ? 
-                        <UserInfo key={user.id}
-                        { ...user } 
-                        ownProfile={ownProfile} 
-                        logout={this.logoutHandler} 
-                        toggleEdit={this.toggleEdit} 
-                        editing={editing} 
-                        followUser={this.followUser} />
-                    :
-                    <Loader />}
+                    <UserInfo key={user.id}
+                    { ...user } 
+                    ownProfile={ownProfile} 
+                    logout={this.logoutHandler} 
+                    toggleEdit={this.toggleEdit} 
+                    editing={editing} 
+                    followUser={this.followUser} />
                     {
                     toShowNetwork ? 
                     this.renderNetwork()
