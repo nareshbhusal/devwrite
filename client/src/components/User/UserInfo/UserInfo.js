@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styles from './UserInfo.module.css';
 import { Link } from 'react-router-dom';
 import UserIcon from '../../UserIcon/UserIcon';
@@ -11,9 +11,13 @@ import { useAlert } from 'react-alert';
 const avatarSize=20;
 
 const userInfo = (props) => {
-    let { id, ownProfile, name, about, website, following, followers, createdAt, followed, logout, followUser } = props;
+    let { id, ownProfile, name, 
+        about, website, following, followers, 
+        createdAt, followed, logout, followUser 
+    } = props;
+
     const photo = props.photo || '';
-    let [avatarURL, setAvatarURL] = React.useState(photo);
+    let [avatarURL, setAvatarURL] = useState(photo);
     const [editing, toggleEdit] = useState(false);
     const alert = useAlert();
     const userContext =  React.useContext(authContext);

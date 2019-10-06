@@ -62,6 +62,7 @@ class PostPage extends React.Component {
         }
         await this.setState({ err: '' });
         const post = await fetchPost(id);
+        // console.log(post);
         await this.setState({ ...post });
         await this.isAuthorFollowed();
         const isAuthor = this.isAuthor();
@@ -73,6 +74,7 @@ class PostPage extends React.Component {
         const { id } = this.props;
         await this.setState({ id: id });
         await this.fetchPostData(id);
+        window.scrollTo(0, 0)
     }
     componentWillUnmount() {
         this._isMounted = false;

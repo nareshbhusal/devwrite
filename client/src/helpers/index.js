@@ -7,6 +7,7 @@ const handleError = (err, alert=window.alert) => {
     if (err.response){
         error = err.response.data;
     }
+    console.log(error.err);
     alert(error.err);
     return error;
 }
@@ -147,7 +148,7 @@ const helpers= {
         try {
             const res = await devwrite.get(`users/${id}`);
             const user = res.data;
-            user.error = '';
+            user.err = '';
             return user;
         } catch(err) {
             return handleError(err, alert=()=>{console.log});

@@ -3,7 +3,7 @@ import React from 'react';
 let alertStyle = {
   backgroundColor: '#151515',
   color: 'white',
-  padding: '1rem',
+  padding: '1rem 2rem',
   borderRadius: '3px',
   display: 'flex',
   justifyContent: 'space-between',
@@ -11,6 +11,7 @@ let alertStyle = {
   boxShadow: '0px 3px 2px 2px rgba(0, 0, 0, 0.03)',
   boxShadow: '0 2px 1.5rem 0 rgba(0,0,0,.3)',
   fontFamily: 'Arial',
+  fontSize: '1.9rem',
   boxSizing: 'border-box',
   writable: true
 }

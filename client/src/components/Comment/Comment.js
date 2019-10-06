@@ -78,7 +78,7 @@ class Comment extends React.Component{
         if (confirm('Are you sure you want to delete this comment?')){
             const { id, postId } = this.state;
             await deleteComment({ id, postId });
-            await this.props.reFetchPostData();
+            await this.fetchComment();
         }
     }
 
@@ -148,7 +148,8 @@ class Comment extends React.Component{
         body=body || '';
         const isEditor = !body;
         const context = this.context || {};
-        const { photo, username } = context;
+        const { photo, name } = context;
+        const username=name;
         await this.setState({ isEditor, photo, username, postId });
         await this.fetchComment();
     }

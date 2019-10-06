@@ -23,6 +23,11 @@ class Post extends React.Component {
             return;
         }
         const postData = await fetchPost(this.state.id);
+        let comments = postData.comments || [];
+        comments = comments.filter(comment => {
+            return !comment.deleted;
+        })
+        postData.commentCount = comments.length;
         await this.setState({ ...postData });
     }
 

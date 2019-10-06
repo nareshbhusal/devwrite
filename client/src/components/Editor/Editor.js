@@ -59,7 +59,7 @@ class Editor extends React.Component{
 
     onSubmitHandler = async() => {
         const { postId } = this.props.match.params;
-        const { title, body, tags } = this.state;
+        let { title, body, tags } = this.state;
         let res;
         if(postId) {
             res = await editPost(postId, {

@@ -8,7 +8,7 @@ import AlertTemplate from './alertTemplate';
 // config for react-alet
 const options = {
     position: positions.BOTTOM_CENTER,
-    timeout: 2000,
+    timeout: 3000,
     offset: '3rem',
     transition: transitions.FADE
   }

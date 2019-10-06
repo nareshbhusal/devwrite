@@ -13,7 +13,6 @@ const getComment = helpers.getComment;
 const logout = helpers.logout;
 const followUser = helpers.followUser;
 
-
 const RenderTabData = ({ currentTab, user }) => {
 
     let { posts } = user;
@@ -43,7 +42,7 @@ const RenderTabData = ({ currentTab, user }) => {
             <div className={styles.usercomments}>
                 {comments.map(comment => {
                     const key = `${comment.id}${comment.postId}`;
-                    return <UserComment key={comment.createdAt} comment={comment}/>
+                    return <UserComment key={comment.createdAt} comment={comment} getComment={getComment} />
                 })}
             </div>
         );
@@ -88,6 +87,7 @@ class UserPage extends React.Component{
     }
     fetchUser = async (userId) => {
         const user = await fetchUser(userId);
+        user.id =userId;
         await this.setState({ user });
     }
 
@@ -201,13 +201,13 @@ class UserPage extends React.Component{
     }
 
     render(){
-        const { currentTab, user, error } = this.state;
+        const { currentTab, user, err } = this.state;
         const context = this.context || {};
         
         const ownProfile = context.id == user.id;
         const toShowNetwork = this.toRenderNetworkProfiles();
-        if (error) {
-            return <div>{error}</div>
+        if (user.err) {
+            return <div className={styles.err}>{user.err}</div>
         }
         return (
             <div className={styles.container}>

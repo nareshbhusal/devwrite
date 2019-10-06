@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './UserComment.module.css';
-
 import { Link } from 'react-router-dom';
 
 const userComment = (props) => {
-    const { postTitle, username, userId, postId, id, createdAt, body, err, deleted } = props.comment;
+    useEffect(() => {
+        (async () => {
+            const { postId, id } = props.comment;
+            let commentData = await getComment(postId, id);
+            commentData = commentData || {};
+            setComment(commentData);
+        })();
+    }, [])
+    const getComment = props.getComment;
+    let [comment, setComment] = useState({postId: props.comment.postId, id: props.comment.id});
+    const { err, deleted, postId, id, userId, postTitle, username, createdAt, body } = comment;
     if (err || deleted) {
         return null;
     }

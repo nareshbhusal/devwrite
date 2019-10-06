@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styles from './UserIcon.module.css';
 
-const userIcon = ({ name = 'anon', id, size=4, avatarURL, onChangeHandler, editing }) => {
-
+const userIcon = ({ name, id, size=4, avatarURL, onChangeHandler, editing }) => {
+    name = name || 'anon';
     let initials = name[0].toString().toUpperCase();
     initials = name.split(' ').length > 1 ? initials + name.split(' ')[name.split(' ').length - 1][0].toUpperCase() : initials;
 

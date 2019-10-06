@@ -30,7 +30,6 @@ const postComment = async (comment, postId,  userId) => {
     if (typeof(comments)==='string') {
         comments = JSON.parse(comments);
     }
-    comments = comments || [];
     const newComment = {
         body: comment,
         createdAt: new Date().getTime(),
@@ -40,9 +39,8 @@ const postComment = async (comment, postId,  userId) => {
         userId
     }
     newComment.id = generateCommentId(comments);
-
     // Push this to user table's commentedPosts column
-    comments.push(newComment);
+    comments.push({id: newComment.id, postId: newComment.postId});
 
     comments = JSON.stringify(comments);
     await updateUser(userId, { commentedPosts: comments });
@@ -52,7 +50,6 @@ const postComment = async (comment, postId,  userId) => {
     if (typeof(postComments) === "string") {
         postComments = JSON.parse(postComments);
     }
-    postComments = postComments || [];
 
     postComments.push(newComment);
     postComments = JSON.stringify(postComments);
