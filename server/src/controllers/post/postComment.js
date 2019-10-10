@@ -6,6 +6,9 @@ const updatePost = require('../../controllers/post/updatePost');
 const generateCommentId = (comments) => {
     // generate id 1 greater than the comment with greatest id
        // except if the max id is infinite -- edge case
+    if(!comments.length){
+	return 1;
+    }
     const commentsIds = comments.map(comment => {
         if (isFinite(comment.id)){
             return comment.id

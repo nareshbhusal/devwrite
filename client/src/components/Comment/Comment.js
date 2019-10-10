@@ -78,7 +78,7 @@ class Comment extends React.Component{
         if (confirm('Are you sure you want to delete this comment?')){
             const { id, postId } = this.state;
             await deleteComment({ id, postId });
-            await this.fetchComment();
+            await this.props.reFetchPostData();
         }
     }
 

@@ -36,14 +36,14 @@ const RenderDiscussion = ({ context, post, fetchPostData }) => {
                     const key = `${comment.id}${comment.userId}${comment.createdAt}`
                     return (
                         <Comment key={key} 
-                        comment={comment} />
+                        comment={comment}
+                        reFetchPostData={fetchPostData} />
                     );
                 })}
             </div>
         </section>
     );
 }
-
 
 class PostPage extends React.Component {
 
@@ -62,7 +62,6 @@ class PostPage extends React.Component {
         }
         await this.setState({ err: '' });
         const post = await fetchPost(id);
-        console.log(post.comments);
         await this.setState({ ...post });
         await this.isAuthorFollowed();
         const isAuthor = this.isAuthor();
