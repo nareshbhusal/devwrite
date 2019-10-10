@@ -77,12 +77,7 @@ class UserPage extends React.Component{
     _isMounted=false;
     state = {
         currentTab: 'posts',
-        user: {},
-        editing: false,
-    }
-
-    toggleEdit = async() => {
-        await this.setState({ editing: !this.state.editing });
+        user: {}
     }
 
     logoutHandler = async() => {
@@ -206,7 +201,7 @@ class UserPage extends React.Component{
     }
 
     render(){
-        const { currentTab, user, error, editing } = this.state;
+        const { currentTab, user, error } = this.state;
         const context = this.context || {};
         
         const ownProfile = context.id == user.id;
@@ -221,8 +216,6 @@ class UserPage extends React.Component{
                     { ...user } 
                     ownProfile={ownProfile} 
                     logout={this.logoutHandler} 
-                    toggleEdit={this.toggleEdit} 
-                    editing={editing} 
                     followUser={this.followUser} />
                     {
                     toShowNetwork ? 

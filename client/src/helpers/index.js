@@ -1,6 +1,5 @@
 import devwrite from '../devwrite';
 import history from '../history';
-import textVersion from 'textversionjs';
 
 const handleError = (err, alert=window.alert) => {
     let error;
@@ -30,8 +29,6 @@ const helpers= {
         try {
             const res = await devwrite.get(`posts/${id}`);
             const post = res.data;
-            post.title = textVersion(post.title);
-            post.body = textVersion(post.body);
             const photo = await helpers.fetchAvatar(post.user);
             post.photo = photo;
             return post;
@@ -115,12 +112,12 @@ const helpers= {
             handleError(err);
         }
     },
-    likeComment: async({ id, postId })=> {
+    likeComment: async({ id, postId }, alert=window.alert)=> {
         try {
             const res = await devwrite.post(`posts/${postId}/comment/${id}/like`);
             console.log(res.data);
         } catch(err) {
-            handleError(err);
+            handleError(err, alert);
         }
     },
 
@@ -206,7 +203,7 @@ const helpers= {
         }
     },
     
-    editUser: async({ id, name, about, website, photo }) => {
+    editUser: async({ id, name, about, website, photo }, alert=window.alert) => {
         try {
             const res = await devwrite.put(`users/${id}`, { name, about, website, photo });
             alert.success(res.data.msg);

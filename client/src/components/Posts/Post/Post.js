@@ -1,17 +1,15 @@
 import React from 'react';
 import styles from './Post.module.css';
-
 import { Link } from 'react-router-dom';
 import history from '../../../history';
 import authContext from '../../../contexts/authContext';
-
+import textVersion from 'textversionjs';
 import PostActions from '../../PostPage/PostActions/PostActions';
 import UserIcon from '../../UserIcon/UserIcon';
 
 import helpers from '../../../helpers/index';
 const fetchPost = helpers.fetchPost;
 const savePost = helpers.savePost;
-const deletePost = helpers.deletePost;
 const likePost = helpers.likePost;
 
 class Post extends React.Component {
@@ -98,10 +96,10 @@ class Post extends React.Component {
                     </div>
                 </div>
                 <h2 className={styles.title}>
-                    {title}
+                    {textVersion(title)}
                 </h2>
                 <p className={styles.body}>
-                    {`${body.slice(0, 115)} ${body.length > 115 ? '...' : ''}`}
+                    {`${textVersion(body).slice(0, 115)} ${body.length > 115 ? '...' : ''}`}
                 </p>
                 <Link to={`/post/${postId}`} 
                     className={styles.readmore}>

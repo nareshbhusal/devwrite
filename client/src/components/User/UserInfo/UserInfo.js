@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './UserInfo.module.css';
 import { Link } from 'react-router-dom';
 import UserIcon from '../../UserIcon/UserIcon';
@@ -11,9 +11,10 @@ import { useAlert } from 'react-alert';
 const avatarSize=20;
 
 const userInfo = (props) => {
-    let { id, ownProfile, editing, name, about, website, following, followers, createdAt, followed, logout, toggleEdit, followUser } = props;
+    let { id, ownProfile, name, about, website, following, followers, createdAt, followed, logout, followUser } = props;
     const photo = props.photo || '';
     let [avatarURL, setAvatarURL] = React.useState(photo);
+    const [editing, toggleEdit] = useState(false);
     const alert = useAlert();
     const userContext =  React.useContext(authContext);
 
@@ -23,7 +24,7 @@ const userInfo = (props) => {
         const about = aboutRef.current.innerText;
         const res = await editUser({ id, name, about, website, photo: avatarURL }, alert);
         if (res.msg) {
-            toggleEdit();
+            toggleEdit(false);
         }
         // refresh auth
         userContext.reEvaluateAuth();
@@ -104,7 +105,7 @@ const userInfo = (props) => {
                 <React.Fragment>
                     <div className={styles.authButtons}>
                         <button className={styles.editButton} 
-                            onClick={toggleEdit}>
+                            onClick={()=>toggleEdit(!editing)}>
                             {editing ? 'Cancel' : 'Edit'}
                         </button>
                         {editing ?

@@ -62,6 +62,7 @@ class PostPage extends React.Component {
         }
         await this.setState({ err: '' });
         const post = await fetchPost(id);
+        console.log(post.comments);
         await this.setState({ ...post });
         await this.isAuthorFollowed();
         const isAuthor = this.isAuthor();
@@ -111,7 +112,6 @@ class PostPage extends React.Component {
             return <p>Loading...</p>
         }
         const context = this.context || {};
-
         return (
             <div className={styles.container}>
 
@@ -149,9 +149,9 @@ class PostPage extends React.Component {
                     </div>
                 </div>
 
-                <p className={styles.body} 
+                <div className={styles.body} 
                     dangerouslySetInnerHTML={{__html: body}}>
-                </p>
+                </div>
 
                 {this.renderTags(tags)}
 
