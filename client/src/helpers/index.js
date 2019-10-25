@@ -7,7 +7,6 @@ const handleError = (err, alert=window.alert) => {
     if (err.response){
         error = err.response.data;
     }
-    console.log(error.err);
     alert(error.err);
     return error;
 }

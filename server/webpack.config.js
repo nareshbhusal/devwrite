@@ -40,5 +40,5 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin(envKeys),
     new NodemonPlugin()
-    ]
+  ]
 }

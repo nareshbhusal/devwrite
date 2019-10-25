@@ -1,6 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin =  require('html-webpack-plugin');
+const HtmlWebpackHarddiskPlugin = require('html-webpack-harddisk-plugin');
 const dotenv = require('dotenv');
 
 const envPath = `${process.env.NODE_ENV.toLowerCase() || 'production'}.env`
@@ -43,11 +44,13 @@ const config = {
             template : './src/index.html',
             filename: 'index.html'
         }),
+        new HtmlWebpackHarddiskPlugin(),
         new webpack.DefinePlugin(envKeys)
     ],
     devtool: 'source-map',
     devServer: {
-        historyApiFallback: true
+        historyApiFallback: true,
+        hot: true
     }
 }
 

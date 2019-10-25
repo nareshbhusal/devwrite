@@ -9,7 +9,6 @@ const app = express();
 const uuid = require('uuid');
 const path = require('path');
 
-//import routes
 const routes = require('./routes/index');
 const clientPath = path.join(__dirname, '../../client');
 
@@ -18,11 +17,11 @@ require('dotenv').config({ path: path.resolve(__dirname, `/${process.env.NODE_EN
 // create redis client
 let client = redis.createClient();
 client.on('connect', () => {
-    console.log('Redis connected')
+    console.log('Redis connected');
 })
 
 // configure middlewares
-app.use(express.json())
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors({ credentials: true, origin: true }));
 
@@ -46,15 +45,14 @@ db.authenticate()
     .then(() => console.log('database connected'))
     .catch(err => console.log('SOMETHING WRONG WITH DATABASE', err));
 
-// Set routes
+    
+app.use(routes);
+
 if (process.env.NODE_ENV==='production'){
     app.use(express.static(path.join(clientPath, 'dist')));
-
-    app.get('', (req, res)=> {
+    
+    app.get('/*', (req, res)=> {
         return res.sendFile(path.join(clientPath, 'dist/index.html'));
     });
 }
-
-app.use(routes);
-
 module.exports = app;
