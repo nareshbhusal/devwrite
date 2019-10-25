@@ -7,6 +7,7 @@ const cors = require('cors');
 const db = require('./config/database');
 const app = express();
 const uuid = require('uuid');
+const path = require('path');
 
 //import routes
 const routes = require('./routes/index');

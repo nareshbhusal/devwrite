@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "dev": "NODE_ENV=DEVELOPMENT webpack --mode development --watch",
-    "build": "rm -rf dist && NODE_ENV=PRODUCTION webpack --mode production",
+    "prod": "rm -rf dist && NODE_ENV=PRODUCTION webpack --mode production --watch",
     "test": "jest --verbose --runInBand --watchAll"
   },
   "babel": {
