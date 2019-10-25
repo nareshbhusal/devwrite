@@ -1,13 +1,23 @@
 {
-  "name": "mediumclone",
+  "name": "repass",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "engines": {
+    "node": "10.16.3",
+    "npm": "6.9.0"
+  },
   "scripts": {
-    "server": "cd server && npm run dev",
-    "client": "cd client && npm run start"
+    "dev": "concurrently \"npm run dev-server\" \"npm run dev-client\"",
+    "prod": "cd server && npm run prod",
+    "dev-server": "cd server && npm run dev",
+    "dev-client": "cd client && npm run start",
+    "test-server": "cd server && npm run test"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "concurrently": "^4.1.2"
+  }
 }

@@ -21,6 +21,8 @@
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^3.0.6",
+    "cd": "^0.3.3",
+    "client": "file:../client",
     "connect-pg-simple": "^6.0.1",
     "connect-redis": "^3.4.2",
     "cookie-parser": "^1.4.4",

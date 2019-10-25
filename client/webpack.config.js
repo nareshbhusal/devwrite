@@ -1,5 +1,15 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin =  require('html-webpack-plugin');
+const dotenv = require('dotenv');
+
+const envPath = `${process.env.NODE_ENV.toLowerCase() || 'production'}.env`
+const env = dotenv.config({ path: envPath }).parsed;
+const envKeys = Object.keys(env).reduce((prev, next) => {
+  prev[`process.env.${next}`] = JSON.stringify(env[next]);
+  return prev;
+}, {});
+
 
 const config = {
 
@@ -32,7 +42,8 @@ const config = {
         new HtmlWebpackPlugin ({
             template : './src/index.html',
             filename: 'index.html'
-        })
+        }),
+        new webpack.DefinePlugin(envKeys)
     ],
     devtool: 'source-map',
     devServer: {

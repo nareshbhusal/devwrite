@@ -10,6 +10,9 @@ const uuid = require('uuid');
 
 //import routes
 const routes = require('./routes/index');
+const clientPath = path.join(__dirname, '../../client');
+
+require('dotenv').config({ path: path.resolve(__dirname, `/${process.env.NODE_ENV.toLowerCase()}.env`) });
 
 // create redis client
 let client = redis.createClient();
@@ -37,16 +40,19 @@ app.use(session({
     }
 }));
 
-
 // Initialize database
 db.authenticate()
     .then(() => console.log('database connected'))
     .catch(err => console.log('SOMETHING WRONG WITH DATABASE', err));
 
 // Set routes
-app.get('', (req, res)=>{
-    return res.status(201).send(req.session);
-})
+if (process.env.NODE_ENV==='production'){
+    app.use(express.static(path.join(clientPath, 'dist')));
+
+    app.get('', (req, res)=> {
+        return res.sendFile(path.join(clientPath, 'dist/index.html'));
+    });
+}
 
 app.use(routes);
 

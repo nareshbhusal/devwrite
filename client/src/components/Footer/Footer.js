@@ -5,8 +5,8 @@ import githubLogo from '../../assets/github-logo.png';
 
 const footer =()=>{
     const year = new Date().getUTCFullYear();
-    const personalWebsite = "https://github.com/nareshsharma123";
-    const repoLink = "https://github.com/nareshsharma123/devwrite";
+    const personalWebsite = "https://github.com/nareshbhusal";
+    const repoLink = "https://github.com/nareshbhusal/devwrite";
     return (
         <div className={styles.container}>
             <p>
