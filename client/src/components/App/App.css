@@ -18,8 +18,8 @@ body {
 }
 
 button:focus, a:focus, input:focus{
-    border: 1px dotted currentColor !important;
-    outline: none;
+    outline: 1px dotted currentColor !important;
+    border: none;
 }
 
 @media(max-width: 750px){
