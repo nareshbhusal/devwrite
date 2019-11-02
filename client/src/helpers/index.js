@@ -58,7 +58,7 @@ const helpers= {
             // alert.success(res.data.msg);
             return res.data;
         } catch(err) {
-            return handleError(err, alert.error);
+            return handleError(err, alert);
         }
     },
     

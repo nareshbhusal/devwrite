@@ -212,7 +212,8 @@ class UserPage extends React.Component{
         return (
             <div className={styles.container}>
                 <div className={styles.wrapper}>
-                    <UserInfo key={user.id}
+                    <UserInfo 
+                    key={user.id}
                     { ...user } 
                     ownProfile={ownProfile} 
                     logout={this.logoutHandler} 

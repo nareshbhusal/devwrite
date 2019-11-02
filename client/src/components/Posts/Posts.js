@@ -70,8 +70,9 @@ class Posts extends React.Component{
     }
 
     reachedNearBottom() {
+        // returns true if user has scrolled to bottom
         const scrollAtPercentHeight = 85;
-        var D = document;
+        const D = document;
         const docHeight =  Math.max(
             D.body.scrollHeight, D.documentElement.scrollHeight,
             D.body.offsetHeight, D.documentElement.offsetHeight,
