@@ -1,13 +1,20 @@
 .container{
+    width: 100%;
+    background-color: rgba(0,0,0,0.02);
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: center;
+}
+
+.wrapper{
     display: flex;
     border: none;
-    border-bottom: 1px solid #ccc;
     align-self: flex-start;
     align-items: center;
     justify-content: space-between;
     padding: 0 1.5rem;
     width: 100%;
-    background-color: rgba(0,0,0,0.02);
+    max-width: 1500px;
 }
 
 .search{
@@ -72,15 +79,24 @@
     .container{
         padding: 0 0.3rem;
     }
+    .wrapper{
+        padding: 0 1rem;
+    }
 }
 
 @media(max-width: 365px){
+    .container{
+        padding: 0 0.2rem;
+    }
+    .wrapper{
+        padding: 0 0.5rem;
+    }
     .writeIcon, .signInIcon{
-        margin: 0.15rem;
+        margin: 0.1rem;
         font-size: 1.6rem;
     }
     .right{
-        margin-right: 0.5rem;
+        margin-right: 0.2rem;
     }
     .writeLink{
         margin: 0 1rem;

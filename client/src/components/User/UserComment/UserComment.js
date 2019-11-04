@@ -13,7 +13,8 @@ const userComment = (props) => {
     }, [])
     const getComment = props.getComment;
     let [comment, setComment] = useState({postId: props.comment.postId, id: props.comment.id});
-    const { err, deleted, postId, id, userId, postTitle, username, createdAt, body } = comment;
+    let { err, deleted, postId, id, userId, postTitle, username, createdAt, body } = comment;
+    postTitle=postTitle || '';
     if (err || deleted) {
         return null;
     }
@@ -23,10 +24,10 @@ const userComment = (props) => {
                 <Link className={styles.username} to={`/user/${userId}`}>
                     {username}
                 </Link>
-                commented on
+                on
                 <Link to={`/post/${postId}`}>
                     <p className={styles.title} 
-                        dangerouslySetInnerHTML={{__html: postTitle}}>
+                        dangerouslySetInnerHTML={{__html: postTitle.slice(0, 15)}}>
                     </p>
                 </Link>
                 <p className={styles.date}>

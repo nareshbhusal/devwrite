@@ -25,7 +25,6 @@
 @media(max-width: 730px) {
     .posts{
         margin: 0 2rem;
-        width: 75%;
     }
     .sidebar{
         margin: 2rem;
@@ -46,15 +45,27 @@
         padding: 1rem;
     }
     .sidebar{
-        margin-left: 1rem;
+        margin-left: 0.5rem;
     }
     .posts{
-        width: 100%;
+        margin: 0 1rem;
     }
 }
 
 @media(max-width: 550px){
     .sidebar{
         display: none;
+    }
+}
+
+@media(max-width: 365px){
+    .posts{
+        margin: 0 0.25rem;
+    }
+}
+
+@media(max-width: 350px){
+    .posts{
+        margin: 0 0.15rem;
     }
 }

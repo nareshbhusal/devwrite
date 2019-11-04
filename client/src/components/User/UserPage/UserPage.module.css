@@ -15,11 +15,13 @@
 .wrapper{
     display: flex;
     flex-direction: column;
-    width: 750px;
-    max-width: 90%;
-    min-width: 300px;
+    padding: 1.5rem;
     align-items: center;
-    margin-top: 2rem;
+    margin-top: 1.5rem;
+    align-self: center;
+    min-width: 300px;
+    width: 100%;
+    max-width: 1400px;
 }
 
 .tabs{

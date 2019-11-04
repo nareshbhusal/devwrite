@@ -4,6 +4,7 @@ let alertStyle = {
   backgroundColor: '#151515',
   color: 'white',
   padding: '1rem 2rem',
+  margin: '2.5rem 0',
   borderRadius: '3px',
   display: 'flex',
   justifyContent: 'space-between',
@@ -11,8 +12,9 @@ let alertStyle = {
   boxShadow: '0px 3px 2px 2px rgba(0, 0, 0, 0.03)',
   boxShadow: '0 2px 1.5rem 0 rgba(0,0,0,.3)',
   fontFamily: 'Arial',
-  fontSize: '1.9rem',
+  fontSize: '1.8rem',
   boxSizing: 'border-box',
+  width: '100%',
   writable: true
 }
 
@@ -20,7 +22,9 @@ let errorStyle = {
   border: '1px solid #ebccd1',
   backgroundColor: '#f2dede',
   color: '#a94442',
-  writable: true
+  writable: true,
+  maxWidth: '90vw !important',
+  width: '330px'
 }
 
 let successStyle = {

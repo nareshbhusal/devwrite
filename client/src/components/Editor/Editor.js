@@ -155,31 +155,34 @@ class Editor extends React.Component{
         const { theme } = this.state;
         return (
             <div className={styles.container + ` ${theme==='light' ? styles.light : styles.dark}`}>
-                {this.renderTopBar()}
-                <div className={styles.editor}>
-                    
-                    <h1 className={styles.title}
-                        contentEditable
-                        name="title"
-                        ref={this.titleRef}
-                        placeholder="Title"
-                        onInput={this.handleChange}
-                        onBlur={this.handleChange}>
-                    </h1>
+                <div className={styles.wrapper}>
 
-                    <p className={styles.body}
-                        contentEditable
-                        placeholder="Write your story"
-                        name="body"
-                        ref={this.bodyRef}
-                        onInput={this.handleChange}
-                        onBlur={this.handleChange}>
-                    </p>
+                    {this.renderTopBar()}
+                    <div className={styles.editor}>
+                        
+                        <h1 className={styles.title}
+                            contentEditable
+                            name="title"
+                            ref={this.titleRef}
+                            placeholder="Title"
+                            onInput={this.handleChange}
+                            onBlur={this.handleChange}>
+                        </h1>
 
-                    <input value={this.state.tags} 
-                        onChange={this.tagsChangeHandler} 
-                        placeholder="Add upto 5 tags seperated by space" 
-                        type="text" name="tags" className={styles.tags}/>
+                        <p className={styles.body}
+                            contentEditable
+                            placeholder="Write your story"
+                            name="body"
+                            ref={this.bodyRef}
+                            onInput={this.handleChange}
+                            onBlur={this.handleChange}>
+                        </p>
+
+                        <input value={this.state.tags} 
+                            onChange={this.tagsChangeHandler} 
+                            placeholder="Add upto 5 tags seperated by space" 
+                            type="text" name="tags" className={styles.tags}/>
+                    </div>
                 </div>
             </div>
         );

@@ -1,9 +1,10 @@
 
 .container{
     background-color: #fff;
-    width: 95%;
-    max-width: 800px;
     min-height: 100vh;
+    align-self: center;
+    width: 100%;
+    max-width: 1500px;
 }
 
 .info{

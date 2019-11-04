@@ -7,6 +7,12 @@
     overflow: hidden;
 }
 
+.wrapper{
+    align-self: center;
+    width: 100%;
+    max-width: 1500px;
+}
+
 .container.dark{
     background-color: #222222;
 }

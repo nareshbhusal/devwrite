@@ -18,26 +18,28 @@ const Nav = (props) => {
 
     return (
         <div className={styles.container}>
-            <Logo className={styles.logo} />
-            <input onInput={searchHandler} placeholder="search" className={styles.search} name="query" />
-            <div className={styles.right}>
-                <Link title="write a post" className={styles.writeLink} to="/editor">
-                    <i className={`fa fa-edit ${styles.writeIcon}`}></i>
-                    <span>write a post</span>
-                </Link>
-                {user.name ? 
-
-                    <UserIcon className={styles.UserIcon} 
-                    name={user.name} 
-                    avatarURL={user.photo}
-                    id={user.id}/>
-                    :
-                    <Link title="signin" className={styles.signinLink} to="/signin">
-                        <i className={`fa fa-sign-in ${styles.signInIcon}`}></i>
-                        <span>Sign in</span>
+            <div className={styles.wrapper}>
+                <Logo className={styles.logo} />
+                <input onInput={searchHandler} placeholder="search" className={styles.search} name="query" />
+                <div className={styles.right}>
+                    <Link title="write a post" className={styles.writeLink} to="/editor">
+                        <i className={`fa fa-edit ${styles.writeIcon}`}></i>
+                        <span>write a post</span>
                     </Link>
-                }
-                
+                    {user.name ? 
+
+                        <UserIcon className={styles.UserIcon} 
+                        name={user.name} 
+                        avatarURL={user.photo}
+                        id={user.id}/>
+                        :
+                        <Link title="signin" className={styles.signinLink} to="/signin">
+                            <i className={`fa fa-sign-in ${styles.signInIcon}`}></i>
+                            <span>Sign in</span>
+                        </Link>
+                    }
+                </div>
+
             </div>
         </div>
     );

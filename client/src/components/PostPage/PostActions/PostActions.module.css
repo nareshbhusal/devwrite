@@ -58,6 +58,7 @@
 .like{
     color: #000;
     margin: 0 0.8rem;
+    margin-left: 0;
     font-size: 1.4rem;
     display: flex;
     align-items: center;
@@ -79,10 +80,17 @@
     .container{
         margin: 1.2rem 0;
     }
-    .authButtons{
-        margin: 0 1.5rem;
-    }
+
     .editButton, .deleteButton{
         margin-right: 1rem;
+    }
+}
+
+@media(max-width: 500px){
+    .container{
+        margin: 1rem 0;
+    }
+    .like{
+        margin: 0 0.5rem;
     }
 }
