@@ -228,7 +228,7 @@ const helpers= {
             const res = await devwrite.post(`users/${id}/follow`)
             // alert.success(res.data.msg);
         } catch(err) {
-            return handleError(err, alert.error);
+            return handleError(err, alert);
         }
     },
     
