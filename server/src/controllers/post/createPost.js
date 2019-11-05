@@ -8,11 +8,11 @@ const registerTags = require('../tag/registerTags');
 
 const parseTags = (post) => {
     let tags = post.tags || '';
+    console.log('*********', tags);
     if (!tags) {
         return [];
     }
-    console.log('*********', tags);
-    return tags;
+    return tags.split(' ');
 }
 
 const createPost = async (post, userId) => {
