@@ -1,6 +1,6 @@
 # DevWrite
-
-[See live](devwrite.nareshbhusal.com)
+DevWrite is a blogging platform for developers.
+[See live](http://devwrite.nareshbhusal.com)
 
 ## Goal
 I developed devwrite and [repass](https://github.com/repass) to learn server side development with nodejs. The goal was to play around with and learn different aspects of server side development by adding a bunch of features.
@@ -57,18 +57,21 @@ npm run prod
 
 ## Features
 
-### Users can - 
+#### Users can - 
   * Create and edit posts and comments
   * Like posts and comments
   * Save posts
   * Follow other users
   * Edit their info to add bio, website and avatar image
  
-### Sorting
+#### Sorting
 Posts can be sorted by ```new``` or ```top```.
 
-### Search
+#### Search
 Search gives an ability to search posts by keywords in title of the posts.
 
-### Tag
+#### Tag
 Tag-cloud on the right side in the desktop view is the list of most used tags. You can filter posts with tags.
+
+#### Infinite scrolling
+Scrolling to the bottom automatically fetches new posts.
