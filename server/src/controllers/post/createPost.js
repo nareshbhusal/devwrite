@@ -11,7 +11,8 @@ const parseTags = (post) => {
     if (!tags) {
         return [];
     }
-    return tags.split(' ');
+    console.log('*********', tags);
+    return tags;
 }
 
 const createPost = async (post, userId) => {

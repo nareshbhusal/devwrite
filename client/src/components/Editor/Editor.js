@@ -60,6 +60,7 @@ class Editor extends React.Component{
     onSubmitHandler = async() => {
         const { postId } = this.props.match.params;
         let { title, body, tags } = this.state;
+        console.log(tags)
         let res;
         if(postId) {
             res = await editPost(postId, {
@@ -143,8 +144,11 @@ class Editor extends React.Component{
         await this.retrieveLocalStorage();
 
         if (postId) {
+            // editing a retrieved post
             await this.setState({ title: '', body: '', tags:'' });
             const post = await fetchPost(postId);
+            post.tags = post.tags || '';
+            post.tags = post.tags.join(' ');
             await this.setState({ ...post });
         }
         this.titleRef.current.innerHTML = this.state.title;

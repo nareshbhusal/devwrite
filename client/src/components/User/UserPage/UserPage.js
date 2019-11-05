@@ -49,17 +49,19 @@ const RenderTabData = ({ currentTab, user }) => {
     } else if (currentTab==='likes') {
         return (
             <div className={styles.likedposts}>
-                {likedPosts.map(postId => {
+                {likedPosts.length ? likedPosts.map(postId => {
                     return <Post key={postId} id={postId} />
-                })}
+                }) 
+                : <p>No posts liked yet.</p>}
             </div>
         )
     } else if (currentTab==='saved'){
         return (
             <div className={styles.savedposts}>
-                {savedPosts.map(postId => {
+                {savedPosts.length ? savedPosts.map(postId => {
                     return <Post key={postId} id={postId} />
-                })}
+                })
+                : <p>No posts saved yet.</p>}
             </div>
         );
     }
@@ -86,6 +88,7 @@ class UserPage extends React.Component{
         }
     }
     fetchUser = async (userId) => {
+        // alert(userId);
         const user = await fetchUser(userId);
         user.id =userId;
         await this.setState({ user });
@@ -108,8 +111,10 @@ class UserPage extends React.Component{
     }
 
     switchTabTo = async(tab) => {
+        // alert(tab);
         await this.setState({ currentTab: tab });
-        await this.fetchUser();
+        const userId = this.state.user.id;
+        await this.fetchUser(userId);
     }
 
     renderTabs() {
@@ -192,6 +197,8 @@ class UserPage extends React.Component{
     }
     async componentDidMount(){
         this._isMounted=true;
+        // scroll to top
+        window.scrollTo(0, 0);
         this.updateTabsStyle();
         const userId = parseInt(this.props.match.params.userId);
         await this.fetchUser(userId);
