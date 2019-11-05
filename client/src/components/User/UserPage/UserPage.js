@@ -54,7 +54,8 @@ const RenderTabData = ({ currentTab, user }) => {
                 }) 
                 : <p>No posts liked yet.</p>}
             </div>
-        )
+        );
+
     } else if (currentTab==='saved'){
         return (
             <div className={styles.savedposts}>

@@ -5,7 +5,9 @@ const getPost = async (data) => {
     const post = await Post.findOne({
         where: { ...data }
     });
-    post.title = textVersion(post.title);
+    if(post.title){
+        post.title = textVersion(post.title);
+    }
     return post;
 }
 
