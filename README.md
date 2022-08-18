@@ -1,6 +1,10 @@
 # DevWrite
 DevWrite is a blogging platform for developers.
-[See live](http://devwrite.nareshbhusal.com)
+[~~See live~~](http://devwrite.nareshbhusal.com)
+
+[devwrite.webm](https://user-images.githubusercontent.com/45526441/185385976-3f93536a-7e74-4833-907f-a2a59949cd4f.webm)
+
+**Note**: This project was created in 2019, when I was relatively new to web development, the quality reflects that.
 
 ## Goal
 I developed devwrite and [repass](https://github.com/repass) to learn server side development with nodejs. The goal was to play around with and learn different aspects of server side development by adding a bunch of features.
